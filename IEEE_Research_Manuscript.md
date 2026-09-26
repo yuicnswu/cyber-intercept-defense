@@ -1,8 +1,5 @@
 # A Privacy-Preserving Edge-Cloud Architecture for Pre-Transaction Semantic Intent Extraction in Authorized Push Payment Fraud
 
-**Authors:** [Your Name / Team]  
-**Affiliation:** [Your University / Institution]  
-**Date:** September 2026
 
 ---
 
