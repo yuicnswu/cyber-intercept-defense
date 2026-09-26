@@ -1,5 +1,4 @@
-# Edge-Cloud Scam Defense Architecture
-**
+# Edge-Cloud Scam Defense Architecture**
 
 **Project:** Edge-Cloud Semantic Intent Observer
 **Format:** Deep Technical & Market Review
