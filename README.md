@@ -1,5 +1,5 @@
-# Detailed System Review: Edge-Cloud Scam Defense Architecture
-*(MIT CSAIL Technical Rigor meets TechCrunch Market Disruption)*
+# Edge-Cloud Scam Defense Architecture
+**
 
 **Project:** Edge-Cloud Semantic Intent Observer
 **Format:** Deep Technical & Market Review
@@ -41,7 +41,7 @@ To rigorously validate the proposed architecture, we define five orthogonal eval
 
 ---
 
-## 1. Core Innovation & Market Disruption (The "TechCrunch" Angle)
+## 1. Core Innovation & Market Disruption 
 **The Market Problem:** Authorized Push Payment (APP) fraud is a multi-billion dollar crisis. Legacy systems operate on *post-transaction* anomaly detection. 
 **The Disruptive Innovation:** This architecture shifts the paradigm from post-transaction reaction to **pre-transaction semantic intervention**. By running SLMs locally, the system detects psychological coercion *before* the user hits transfer, creating a massive moat for FinTech liability reduction.
 
