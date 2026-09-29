@@ -335,7 +335,7 @@ details p,details .body{margin:0;padding:0 16px 14px 34px;color:var(--muted)}
 <div class='card' style='background: rgba(14,165,233,0.1); border-color: var(--cyan);'>
 <div class='h' style='font-size: 1.25rem; margin-bottom: 12px;'>👁️ อาวุธที่ 1: SEW-BFAR (อัลกอริทึมมองภาพรวม)</div>
 <p style='margin-bottom: 12px;'>Aegis ไม่ประเมินข้อความแบบแยกส่วน แต่มองเห็น "ภาพรวม" ของทั้งบทสนทนา</p>
-<p>ใช้อัลกอริทึม <b>Sequential Probability Ratio Test (SPRT)</b> คำนวณความเสี่ยงสะสม (Cumulative Risk) เมื่อมิจฉาชีพสร้างความกดดันถึงจุดวิกฤต Aegis จะแทรกแซงทันทีด้วย <b>Bayesian UI</b> ก่อนที่เงินจะออกจากบัญชี</p>
+<p>ใช้อัลกอริทึม <b>Sequential Probability Ratio Test (SPRT)</b> คำนวณความเสี่ยงสะสม (Cumulative Risk) เมื่อมิจฉาชีพสร้างความกดดันถึงจุดวิกฤต Aegis จะแทรกแซงทันทีด้วย <b>Bayesian UI</b> พร้อมกลไก <b>หน่วงเวลา (Action Delay)</b> เพื่อดึงสติผู้ใช้ก่อนที่เงินจะออกจากบัญชี</p>
 </div>
 <div class='card' style='background: rgba(16,185,129,0.1); border-color: var(--emerald);'>
 <div class='h' style='font-size: 1.25rem; margin-bottom: 12px;'>🛡️ อาวุธที่ 2: CSU (ประตูล็อกความปลอดภัย 6 ชั้น)</div>
@@ -354,7 +354,7 @@ details p,details .body{margin:0;padding:0 16px 14px 34px;color:var(--muted)}
 <div class='arch' style='display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px;'>
 <div class='layer'><div class='ln'>1. Interaction</div><div>การโต้ตอบ<div class='dim' style='font-size:13px'>ผู้ใช้รับข้อความจากผู้โจมตี</div></div></div>
 <div class='layer'><div class='ln'>2. Risk_t (SPRT)</div><div>ประเมินความเสี่ยง<div class='dim' style='font-size:13px'>คำนวณความเสี่ยงสะสมตามลำดับเวลา (SEW-BFAR)</div></div></div>
-<div class='layer'><div class='ln'>3. Intervention</div><div>การแทรกแซง<div class='dim' style='font-size:13px'>แสดงคำเตือน (Explainable UI) ณ จุดที่เหมาะสมที่สุด</div></div></div>
+<div class='layer'><div class='ln'>3. Intervention</div><div>การแทรกแซง & หน่วงเวลา<div class='dim' style='font-size:13px'>แสดงคำเตือนพร้อม <b>หน่วงเวลา (Action Delay)</b> เพื่อดึงสติผู้ใช้จากการถูกควบคุม</div></div></div>
 <div class='layer'><div class='ln'>4. Outcome</div><div>ผลลัพธ์<div class='dim' style='font-size:13px'>บันทึกการตัดสินใจของผู้ใช้เป็น Ground Truth</div></div></div>
 <div class='layer' style='border-color: rgba(245,184,61,0.5);'><div class='ln' style='color: var(--amber)'>5. Concept Drift</div><div>พบลวดลายใหม่<div class='dim' style='font-size:13px'>ผู้โจมตีเปลี่ยนกลยุทธ์ (ตรวจจับด้วย JS Divergence)</div></div></div>
 <div class='layer' style='border-color: rgba(167,139,250,0.5);'><div class='ln' style='color: var(--violet)'>6. Learn</div><div>เรียนรู้ต่อเนื่อง<div class='dim' style='font-size:13px'>โมเดลรีเทรนด้วยข้อมูลใหม่ + Replay Buffer ป้องกันการลืม</div></div></div>
