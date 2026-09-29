@@ -28,6 +28,8 @@ The contributions of this paper are sixfold:
 5. **Controlled User Study:** We present results from an IRB-approved between-subjects experiment ($N \ge 90$) measuring whether our Bayesian Cooling-Off UI significantly reduces risky transfer completion rates compared to standard Android warnings and a no-warning control [6, 13].
 6. **Certified Safe Continual Learning (Aegis CSU):** We introduce a formal update protocol guaranteeing that each retrained model version is **strictly non-regressive** — it must provably match or exceed the incumbent on all safety metrics before it is permitted to replace the active defender. This ensures Aegis learns new scam strategies continuously without ever degrading user protection [23, 24].
 
+**Central Research Question:** *Can a compact language model continually adapt to emerging adversarial scam strategies while preserving prior knowledge and improving the timing of intervention, without increasing harmful false alarms?*
+
 ## II. Related Work
 
 ### A. Post-Transaction Fraud Detection
@@ -228,7 +230,11 @@ We measure **tactic drift** by computing the Jensen-Shannon divergence between t
 
 ## IX. Aegis Certified Safe Update (CSU) Protocol
 
-Scam tactics evolve continuously. A static model will degrade as adversaries discover new evasion strategies. However, naïvely retraining introduces a critical risk: **catastrophic forgetting** [23], where learning new attack patterns erases the model's ability to detect previously known ones. Aegis addresses this with the **Certified Safe Update (CSU)** protocol — a formal gate that ensures every model update is provably safer before it is allowed to protect users.
+Scam tactics evolve continuously. A static model will degrade as adversaries discover new evasion strategies. We formalize this lifecycle as an 8-step safety-gated continuous adaptation loop:
+
+$$ \text{Interaction} \rightarrow \text{Risk}_t \rightarrow \text{Intervention} \rightarrow \text{Outcome} \rightarrow \text{Drift} \rightarrow \text{Learn} \rightarrow \text{Safety Gate} \rightarrow \text{Updated Aegis} $$
+
+However, naïvely executing the *Learn* phase introduces a critical risk: **catastrophic forgetting** [25], where learning new attack patterns erases the model's ability to detect previously known ones. Aegis addresses this with the **Certified Safe Update (CSU)** protocol — a formal safety gate adapting safe policy improvement frameworks [26, 27] to ensure every model update is provably safer before it is deployed.
 
 ### A. The Safety Invariant
 
@@ -330,7 +336,11 @@ Manual adversarial testing is insufficient for capturing the scale of modern APP
 
 ## XI. Evaluation Metrics
 
-We define seven orthogonal metrics spanning Security, Systems, HCI, and Safe Deployment:
+To empirically validate the Monotonic Safety Theorem and quantify Aegis's performance, our primary experimental baseline is a three-way comparison:
+
+$$ \text{Static Model} \quad \text{vs} \quad \text{Continual Learning (Naive)} \quad \text{vs} \quad \text{Aegis (CSU)} $$
+
+This isolates the exact contribution of our architecture: the Static Model acts as the control for baseline retention, Naive Continual Learning demonstrates the catastrophic forgetting failure state, and Aegis proves that adaptation and retention can coexist safely. We evaluate this using seven orthogonal metrics spanning Security, Systems, HCI, and Safe Deployment:
 
 | # | Metric | Target | Method |
 |---|--------|--------|--------|
