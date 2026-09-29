@@ -25,11 +25,12 @@
   <!-- Nav -->
   <nav class="fixed top-0 w-full z-50 glass-panel border-b-0 rounded-none border-t-0 border-l-0 border-r-0 border-b border-gray-800 px-6 py-4 flex justify-between items-center">
     <div class="font-bold text-xl tracking-wider">AEGIS <span class="text-blue-400">V10</span></div>
-    <div class="hidden md:flex space-x-8 text-sm font-medium text-gray-400">
+    <div class="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-400">
       <a href="#problem" class="hover:text-white transition">The Problem</a>
       <a href="#algorithm" class="hover:text-white transition">The Algorithm</a>
       <a href="#safety-gate" class="hover:text-white transition">Safety Gate</a>
       <a href="#architecture" class="hover:text-white transition">Architecture</a>
+      <a href="app-demo.html" class="px-5 py-2 bg-blue-500/10 text-blue-400 border border-blue-500/30 rounded-full hover:bg-blue-500/20 transition shadow-[0_0_10px_rgba(59,130,246,0.2)]">Launch Demo</a>
     </div>
   </nav>
 
@@ -44,8 +45,11 @@
     <p class="text-xl md:text-2xl text-gray-400 max-w-3xl mb-12 gs-reveal">
       Safety-Gated Continual Adaptation for Sequential Scam Intervention under Adversarial Concept Drift.
     </p>
-    <div class="flex space-x-4 gs-reveal">
+    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 gs-reveal">
       <a href="#problem" class="px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-semibold transition shadow-lg shadow-blue-500/30">Read the Story</a>
+      <a href="app-demo.html" class="px-8 py-4 bg-transparent border border-gray-600 hover:border-gray-400 text-white rounded-full font-semibold transition flex items-center justify-center">
+        Launch Interactive Demo <span class="ml-2">→</span>
+      </a>
     </div>
   </section>
 
@@ -180,6 +184,19 @@
           <p class="text-sm text-gray-400">An autonomous GPT-4 agent that constantly writes new Thai evasion patterns to attack Aegis, forcing it to evolve.</p>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- Live Demo CTA -->
+  <section class="py-32 px-6 relative border-t border-gray-800">
+    <div class="max-w-4xl mx-auto text-center gs-reveal">
+      <h2 class="text-4xl md:text-5xl font-bold mb-6">Experience <span class="text-gradient">Aegis.</span></h2>
+      <p class="text-xl text-gray-400 mb-10">
+        Try the fully interactive Sentinel-Edge simulator. Attack the system with adversarial text, test the Bayesian UI, and see the algorithms in real-time.
+      </p>
+      <a href="app-demo.html" class="inline-block px-10 py-5 bg-white text-black hover:bg-gray-200 rounded-full font-bold text-lg transition shadow-[0_0_30px_rgba(255,255,255,0.2)]">
+        Launch Interactive Demo
+      </a>
     </div>
   </section>
 
