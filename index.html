@@ -3,7 +3,7 @@
 <head>
 <meta charset='UTF-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'>
-<title>Aegis V10: Safety-Gated Continual Adaptation</title>
+<title>Aegis V10: การป้องกันสแกมแบบปรับตัวต่อเนื่อง</title>
 <meta name='description' content='ข้อเสนอโครงการวิจัย: การประเมินการตรวจจับการหลอกลวงภาษาไทยบนอุปกรณ์ ด้วยเกณฑ์ความทันเวลาและความทนทานต่อการหลบเลี่ยง'>
 <link rel='preconnect' href='https://fonts.googleapis.com'>
 <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
@@ -236,7 +236,7 @@ details p,details .body{margin:0;padding:0 16px 14px 34px;color:var(--muted)}
 <body>
 
 <header class='top'>
-<div class='brand'>Aegis V10: Safety-Gated Continual Adaptation<small>MIT Ph.D. Scientific Formulation · Sequential Scam Intervention</small></div>
+<div class='brand'>Aegis V10: การป้องกันสแกมแบบปรับตัวต่อเนื่อง (Safety-Gated Continual Adaptation)<small>ข้อเสนอโครงร่างวิทยานิพนธ์ระดับปริญญาเอก · MIT Scientific Formulation</small></div>
 <div class='tabs' role='tablist'>
 <button role='tab' aria-selected='true' data-view='slides'>สไลด์</button>
 <button role='tab' aria-selected='false' data-view='demo'>เดโม</button>
@@ -261,9 +261,9 @@ details p,details .body{margin:0;padding:0 16px 14px 34px;color:var(--muted)}
 <div class='kicker'>01 / 08 · 0:00–0:45</div>
 <div class='hero'>
 <div>
-<h2>Scammers Adapt. <br><em>We Evolve.</em></h2>
-<p class='lead'>A static model trained today is obsolete tomorrow. Aegis continuously learns new adversarial tactics without forgetting the past.</p>
-<div class='rq'>Can a compact language model continually adapt to adversarial concept drift<br><span class='muted'>while preserving prior knowledge and improving intervention timing?</span></div>
+<h2>คนร้ายปรับตัวตลอดเวลา<br><em>เราจึงต้องวิวัฒนาการตาม</em></h2>
+<p class='lead'>โมเดลที่ฝึกวันนี้ พรุ่งนี้ก็ล้าสมัย Aegis ถูกออกแบบให้เรียนรู้กลยุทธ์ใหม่ของคนร้าย (Concept Drift) ได้อย่างต่อเนื่อง โดยมีกลไกป้องกันไม่ให้หลงลืมวิธีการป้องกันรูปแบบเดิม</p>
+<div class='rq'>โมเดลภาษาขนาดเล็กสามารถปรับตัวรับมือ <b>"Concept Drift"</b> ของคนร้ายได้อย่างต่อเนื่องหรือไม่<br><span class='muted'>โดยไม่เกิดปัญหา Catastrophic Forgetting และไม่เพิ่มอัตราการเตือนผิด (FPR)</span></div>
 </div>
 <div>
 <div class='phone' aria-label='ภาพจำลองหน้าจอโทรศัพท์'>
@@ -283,7 +283,7 @@ details p,details .body{margin:0;padding:0 16px 14px 34px;color:var(--muted)}
 
 <section class='slide' id='s2'><div class='wrap'>
 <div class='kicker'>02 / 08 · 0:45–1:45</div>
-<h2>The Catastrophic Flaw: <em>Catastrophic Forgetting</em> vs <span style='color:var(--amber)'>Concept Drift</span></h2>
+<h2>ข้อบกพร่องร้ายแรง: การลืมข้อมูล (Forgetting) vs <span style='color:var(--amber)'>การเปลี่ยนกลยุทธ์ (Drift)</span></h2>
 <div><div class='seg' id='s2Seg'><button class='on' data-m='sys'>สิ่งที่ระบบเห็น</button><button data-m='bel'>สิ่งที่ผู้ใช้เชื่อ</button></div><span class='hint2'>สลับมุมมอง</span></div>
 <div class='chain'>
 <div class='step'><div class='n'>01</div><div class='h'>ติดต่อ</div><div class='sees' data-sys='ผู้ให้บริการข้อความเห็น: ข้อความจากผู้ส่งใหม่' data-bel='“ธนาคารติดต่อมาจริง ๆ”'></div></div>
@@ -292,8 +292,8 @@ details p,details .body{margin:0;padding:0 16px 14px 34px;color:var(--muted)}
 <div class='step tb'><span class='tbl'>ขอบเขตความไว้วางใจ</span><div class='n'>04</div><div class='h'>โอนเงิน</div><div class='sees' data-sys='ธนาคารเห็น: ธุรกรรมที่ยืนยันตัวตนถูกต้อง' data-bel='“ฉันกำลังปกป้องเงินของตัวเอง”'></div></div>
 </div>
 <div class='grid2' style='margin-top:18px'>
-<div class='card'><h3>The Drift Problem</h3><p>Scammers constantly adapt using LLMs (Concept Drift). Static rule-based systems freeze and fail immediately against Zero-Day attacks.</p></div>
-<div class='card'><h3>The Forgetting Problem</h3><p>If you naively retrain an AI on new scams, it suffers from Catastrophic Forgetting—it learns the new tricks but forgets how to stop old ones.</p></div>
+<div class='card'><h3>ปัญหาที่ 1 · Concept Drift</h3><p>คนร้ายปรับเปลี่ยนข้อความหลบเลี่ยงตลอดเวลา ระบบที่ใช้โมเดลตายตัว (Static Model) จะล้มเหลวทันทีเมื่อเจอกับการโจมตีรูปแบบใหม่ (Zero-Day)</p></div>
+<div class='card'><h3>ปัญหาที่ 2 · Catastrophic Forgetting</h3><p>หากปล่อยให้ AI เรียนรู้กลวิธีใหม่ไปเรื่อยๆ โดยไม่มีการควบคุม โมเดลจะจำรูปแบบใหม่ได้ แต่จะเกิดอาการ "ลืม" วิธีป้องกันสแกมรูปแบบเก่าไปอย่างสิ้นเชิง</p></div>
 </div>
 <div class='callout'><b>ขอบเขตงานนี้:</b> ประเมิน <i>เนื้อหา</i> ของการสื่อสาร ณ จุดที่ผู้ใช้ยังเปลี่ยนการตัดสินใจได้</div>
 <div class='src'>ที่มา: ธนาคารแห่งประเทศไทย — <a href='https://www.bot.or.th/th/research-and-publications/articles-and-publications/articles/article-20260511.html' target='_blank' rel='noopener'>อัพเดท patch ภัยการเงินไทยปี 69</a></div>
@@ -317,32 +317,33 @@ details p,details .body{margin:0;padding:0 16px 14px 34px;color:var(--muted)}
 
 <section class='slide' id='s4'><div class='wrap'>
 <div class='kicker'>04 / 08 · 3:00–4:15</div>
-<h2>The Scientific Baseline & <em>Evaluation</em></h2>
+<h2>ระเบียบวิธีวิจัย และ<em>กลุ่มควบคุม (Baselines)</em></h2>
 <div class='grid3'>
-<div class='card rqcard' tabindex='0'><div class='h'>Baseline 1 · Static Model</div><p>A frozen baseline model. It remembers all legacy scams perfectly, but fails completely against new, adaptive evasion attacks.</p><div class='hyp'>Failure Mode: High Retention, Low Adaptation</div><div class='tap'>คลิก: ดูผลการทดลอง</div><div class='alt'>Concept Drift bypasses this model completely.</div></div>
-<div class='card rqcard' tabindex='0'><div class='h'>Baseline 2 · Naive Continual Learning</div><p>A model that immediately retrains on new scams. It catches the new attacks, but completely forgets old scam strategies.</p><div class='hyp'>Failure Mode: Catastrophic Forgetting</div><div class='tap'>คลิก: ดูผลการทดลอง</div><div class='alt'>Creates massive false positives and misses legacy attacks.</div></div>
-<div class='card rqcard' tabindex='0'><div class='h'>Baseline 3 · Aegis V10 (CSU)</div><p>Uses the Certified Safe Update protocol to guarantee adaptation to new scams while mathematically bounding forgetting.</p><div class='hyp'>Result: Monotonic Safety Theorem</div><div class='tap'>คลิก: ดูผลการทดลอง</div><div class='alt'>High Adaptation AND High Retention. Safe for production.</div></div>
+<div class='card rqcard' tabindex='0'><div class='h'>Baseline 1 · Static Model</div><p>โมเดลแบบคงที่ จดจำสแกมรูปแบบเก่าได้สมบูรณ์แบบ แต่ล้มเหลวอย่างสิ้นเชิงเมื่อเจอกลยุทธ์ใหม่ของคนร้าย</p><div class='hyp'>ข้อบกพร่อง: High Retention, Low Adaptation</div><div class='tap'>คลิก: ดูความล้มเหลว</div><div class='alt'>ถูกหลบเลี่ยงได้ง่ายเมื่อเกิด Concept Drift</div></div>
+<div class='card rqcard' tabindex='0'><div class='h'>Baseline 2 · Naive Continual</div><p>โมเดลที่เรียนรู้สิ่งใหม่ตลอดเวลา จับสแกมใหม่ได้ดี แต่เกิดปัญหาการลืมข้อมูลเก่า (Catastrophic Forgetting)</p><div class='hyp'>ข้อบกพร่อง: สร้าง False Positives จำนวนมาก</div><div class='tap'>คลิก: ดูความล้มเหลว</div><div class='alt'>สูญเสียความสามารถในการป้องกันการโจมตีรูปแบบดั้งเดิม</div></div>
+<div class='card rqcard' tabindex='0'><div class='h'>Baseline 3 · Aegis V10 (CSU)</div><p>ใช้โปรโตคอล Certified Safe Update การันตีด้วยคณิตศาสตร์ว่าโมเดลจะฉลาดขึ้น และไม่มีวันแย่ลงในทุกมิติความปลอดภัย</p><div class='hyp'>ผลลัพธ์: Monotonic Safety Theorem</div><div class='tap'>คลิก: ดูผลลัพธ์</div><div class='alt'>High Adaptation และ High Retention พร้อมใช้งานจริง</div></div>
 </div>
 <div class='contrib'>
-<div class='card key'><b>C1: SEW-BFAR</b><p>Sequential Probability Ratio Test (SPRT) to calculate cumulative risk.</p></div>
-<div class='card'><b>C2: Aegis CSU</b><p>Safety-Gated Continual Learning to prevent catastrophic forgetting.</p></div>
-<div class='card'><b>C3: OpenVINO</b><p>On-device edge inference running under 300ms latency.</p></div>
-<div class='card'><b>C4: Metaflow</b><p>DAG orchestration enforcing the 6-gate bootstrap statistical test.</p></div>
+<div class='card key'><b>C1: SEW-BFAR</b><p>ใช้อัลกอริทึม SPRT ประเมินความเสี่ยงสะสมตลอดบทสนทนา ไม่ใช่แค่รายข้อความ</p></div>
+<div class='card'><b>C2: Aegis CSU</b><p>ประตูล็อกความปลอดภัย 6 ชั้น ป้องกันโมเดลทำงานถดถอยก่อนอัปเดต (Anti-Forgetting)</p></div>
+<div class='card'><b>C3: OpenVINO</b><p>บีบอัดและรัน SLM ภาษาไทยบนอุปกรณ์ (Edge) ด้วยความหน่วง &lt; 300ms</p></div>
+<div class='card'><b>C4: Metaflow</b><p>ควบคุม Pipeline การเรียนรู้และตรวจสอบความปลอดภัยแบบ DAG อัตโนมัติ</p></div>
 </div>
 </div></section>
 
 <section class='slide' id='s5'><div class='wrap'>
 <div class='kicker'>05 / 08 · 4:15–5:15</div>
-<h2>The 8-Step <em>Core Loop</em></h2>
+<h2>วงจรการทำงาน 8 ขั้นตอน <em>(Core Loop)</em></h2>
 <div><span class='label'>Aegis Lifecycle & Metaflow Orchestration</span> <button class='btn pri' id='flowBtn' style='margin-left:8px'>▶ ดูการไหลของข้อมูล</button></div>
-<div class='arch'>
-<div class='layer'><div class='dim'>ข้อมูลเข้า</div><div>เฉพาะช่องทางที่ได้รับอนุญาต เช่น ข้อความที่ผู้ใช้ส่งมาตรวจ<div class='pl'>“ธนาคารแจ้ง: บัญชีมีความเสี่ยง กรุณาโอนเงินไปบัญชีปลอดภัยทันที”</div></div></div>
-<div class='flow'>↓</div>
-<div class='layer'><div class='ln'>ชั้น 1 · บนอุปกรณ์</div><div>กฎ + ข้อมูลภัย + โมเดลภาษาไทย<div class='dim' style='font-size:13px'>ประเมินรูปแบบภาษา: การแอบอ้างอำนาจ · การเร่งรัด · การขอข้อมูลลับ</div><div class='pl'>สัญญาณ: แอบอ้างอำนาจ ✓ · เร่งรัด ✓ · ขอโอนเงิน ✓</div></div></div>
-<div class='flow'>↓ <span>ส่งเฉพาะสัญญาณ ไม่ส่งเนื้อหาดิบ</span></div>
-<div class='layer'><div class='ln'>ชั้น 2 · ส่วนกลาง</div><div>ชื่อเสียงโดเมน · สัญญาณแคมเปญ<div class='dim' style='font-size:13px'>ข้อมูลที่เครื่องเดียวไม่มี</div><div class='pl'>รับเฉพาะสัญญาณ → ตรวจกับข้อมูลแคมเปญที่รู้จัก</div></div></div>
-<div class='flow'>↓</div>
-<div class='layer l3'><div class='ln'>ชั้น 3 · นโยบาย</div><div>เตือน / ให้ตรวจสอบผ่านช่องทางทางการ / เพิ่มขั้นยืนยัน<div class='bank'>การระงับธุรกรรม = ระบบควบคุมความเสี่ยงของธนาคารเท่านั้น</div><div class='pl'>ผลลัพธ์: แสดงคำเตือนพร้อมเหตุผลก่อนหน้าจอโอนเงิน</div></div></div>
+<div class='arch' style='display: grid; grid-template-columns: 1fr 1fr; gap: 16px;'>
+<div class='layer'><div class='ln'>1. Interaction</div><div>การโต้ตอบ<div class='dim' style='font-size:13px'>ผู้ใช้รับข้อความจากผู้โจมตี</div></div></div>
+<div class='layer'><div class='ln'>2. Risk_t (SPRT)</div><div>ประเมินความเสี่ยง<div class='dim' style='font-size:13px'>คำนวณความเสี่ยงสะสมตามลำดับเวลา</div></div></div>
+<div class='layer'><div class='ln'>3. Intervention</div><div>การแทรกแซง<div class='dim' style='font-size:13px'>แสดงคำเตือน (Bayesian UI) ณ จุดที่เหมาะสมที่สุด</div></div></div>
+<div class='layer'><div class='ln'>4. Outcome</div><div>ผลลัพธ์<div class='dim' style='font-size:13px'>บันทึกการตัดสินใจของผู้ใช้</div></div></div>
+<div class='layer' style='border-color: rgba(245,184,61,0.5);'><div class='ln' style='color: var(--amber)'>5. Concept Drift</div><div>พบลวดลายใหม่<div class='dim' style='font-size:13px'>ผู้โจมตีเปลี่ยนกลยุทธ์ (JS Divergence > Threshold)</div></div></div>
+<div class='layer' style='border-color: rgba(167,139,250,0.5);'><div class='ln' style='color: var(--violet)'>6. Learn</div><div>เรียนรู้ต่อเนื่อง<div class='dim' style='font-size:13px'>โมเดลรีเทรนด้วยข้อมูลใหม่ + Replay Buffer ป้องกันการลืม</div></div></div>
+<div class='layer l3' style='grid-column: 1 / -1; border-color: rgba(52,211,153,0.8);'><div class='ln' style='font-size: 14px;'>7. Safety Gate (CSU Protocol)</div><div>ประตูล็อกความปลอดภัย 6 มิติ<div class='dim' style='font-size:13px'>โมเดลใหม่ต้องสอบผ่านสถิติ 6 ข้อ (เช่น ห้ามเกิด False Positives เพิ่มขึ้น) หากตกแม้แต่ข้อเดียว จะถูกปฏิเสธทันที</div></div></div>
+<div class='layer l3' style='grid-column: 1 / -1; background: rgba(52,211,153,0.1);'><div class='ln' style='font-size: 16px;'>8. Updated Aegis</div><div>อัปเดตโมเดล<div class='dim' style='font-size:13px'>ผู้ใช้ได้รับการปกป้องจากระบบที่ฉลาดขึ้น โดยไม่มีผลข้างเคียง (Monotonic Safety)</div></div></div>
 </div>
 <div class='src'>ตัวอย่างการไหลเพื่ออธิบายการออกแบบ ไม่ใช่ระบบที่ทำงานจริง · แนวทางคล้ายกันใน <a href='https://blog.google/security/using-ai-to-stop-tech-support-scams-in/' target='_blank' rel='noopener'>Chrome + Gemini Nano</a> · ข้อจำกัดสิทธิข้ามแอป: <a href='https://source.android.com/docs/security/app-sandbox' target='_blank' rel='noopener'>Android Application Sandbox</a></div>
 </div></section>
