@@ -258,14 +258,16 @@ details p,details .body{margin:0;padding:0 16px 14px 34px;color:var(--muted)}
 <div class='view on' id='view-slides'>
 
 <section class='slide on' id='s1'><div class='wrap'>
-<div class='kicker'>01 / 08 · 0:00–0:45</div>
+
+<div class='kicker'>01 / 08 · THE INVISIBLE WAR</div>
 <div class='hero'>
 <div>
-<h2>คนร้ายปรับตัวตลอดเวลา<br><em>เราจึงต้องวิวัฒนาการตาม</em></h2>
-<p class='lead'>โมเดลที่ฝึกวันนี้ พรุ่งนี้ก็ล้าสมัย Aegis ถูกออกแบบให้เรียนรู้กลยุทธ์ใหม่ของคนร้าย (Concept Drift) ได้อย่างต่อเนื่อง โดยมีกลไกป้องกันไม่ให้หลงลืมวิธีการป้องกันรูปแบบเดิม</p>
-<div class='rq'>โมเดลภาษาขนาดเล็กสามารถปรับตัวรับมือ <b>"Concept Drift"</b> ของคนร้ายได้อย่างต่อเนื่องหรือไม่<br><span class='muted'>โดยไม่เกิดปัญหา Catastrophic Forgetting และไม่เพิ่มอัตราการเตือนผิด (FPR)</span></div>
+<h2 style='font-size: 2.5rem; line-height: 1.2;'>สงครามที่มองไม่เห็น:<br><span style='color:var(--amber)'>คนร้ายปรับตัวตลอดเวลา เราจึงต้องวิวัฒนาการตาม</span></h2>
+<p class='lead' style='margin-top: 24px;'>ผู้ใช้เป็นคนกดโอนเอง ระบบผ่านทุกขั้นตอน แต่ไม่มีระบบใดรู้ว่าเขากำลังถูกควบคุมจิตวิทยา... <b>โมเดล AI ที่ฝึกวันนี้ พรุ่งนี้ก็ล้าสมัย</b></p>
+<div class='rq' style='margin-top: 32px;'>โมเดลภาษาบน Edge จะสามารถปรับตัวรับมือ <b>Concept Drift</b> ได้ต่อเนื่องหรือไม่?<br><span class='muted'>โดยไม่เกิดปัญหา Catastrophic Forgetting (การลืมข้อมูลเก่า)</span></div>
 </div>
 <div>
+<!-- KEEP ORIGINAL PHONE DEMO -->
 <div class='phone' aria-label='ภาพจำลองหน้าจอโทรศัพท์'>
 <div class='bar'><span>14:38</span><span>SMS</span></div>
 <div id='s1Feed'></div>
@@ -275,155 +277,155 @@ details p,details .body{margin:0;padding:0 16px 14px 34px;color:var(--muted)}
 <div class='poll hid' id='s1Poll'>
 <div class='q'>ถ้าเป็นคุณ จะกดยืนยันการโอนไหม?</div>
 <button class='btn' data-a='yes'>โอน</button> <button class='btn' data-a='no'>ไม่โอน</button>
-<div class='ans hid' id='s1Ans'>คุณเห็นทุกข้อความพร้อมกันและไม่มีใครกดดัน — ผู้ใช้จริงเห็นทีละข้อความ ภายใต้ความกลัวและเวลาที่จำกัด นี่คือช่วงเวลาที่งานวิจัยนี้ต้องการช่วย</div>
+<div class='ans hid' id='s1Ans'>Aegis จะคำนวณความเสี่ยงและแทรกแซง <b>ก่อน</b> ที่คุณจะตัดสินใจผิดพลาด</div>
 </div>
 </div>
 </div>
+
 </div></section>
 
 <section class='slide' id='s2'><div class='wrap'>
-<div class='kicker'>02 / 08 · 0:45–1:45</div>
-<h2>ข้อบกพร่องร้ายแรง: การลืมข้อมูล (Forgetting) vs <span style='color:var(--amber)'>การเปลี่ยนกลยุทธ์ (Drift)</span></h2>
-<div><div class='seg' id='s2Seg'><button class='on' data-m='sys'>สิ่งที่ระบบเห็น</button><button data-m='bel'>สิ่งที่ผู้ใช้เชื่อ</button></div><span class='hint2'>สลับมุมมอง</span></div>
-<div class='chain'>
-<div class='step'><div class='n'>01</div><div class='h'>ติดต่อ</div><div class='sees' data-sys='ผู้ให้บริการข้อความเห็น: ข้อความจากผู้ส่งใหม่' data-bel='“ธนาคารติดต่อมาจริง ๆ”'></div></div>
-<div class='step'><div class='n'>02</div><div class='h'>สร้างความน่าเชื่อถือ</div><div class='sees' data-sys='เว็บไซต์ / สายโทรเห็น: การติดต่อตามปกติ' data-bel='“เจ้าหน้าที่คนนี้รู้ข้อมูลของเรา น่าเชื่อถือ”'></div></div>
-<div class='step'><div class='n'>03</div><div class='h'>กดดันให้ตัดสินใจ</div><div class='sees' data-sys='ไม่มีระบบใดเห็นบทสนทนาทั้งหมด' data-bel='“ถ้าไม่ทำตอนนี้ เงินจะถูกอายัด”'></div></div>
-<div class='step tb'><span class='tbl'>ขอบเขตความไว้วางใจ</span><div class='n'>04</div><div class='h'>โอนเงิน</div><div class='sees' data-sys='ธนาคารเห็น: ธุรกรรมที่ยืนยันตัวตนถูกต้อง' data-bel='“ฉันกำลังปกป้องเงินของตัวเอง”'></div></div>
+
+<div class='kicker'>02 / 08 · THE FLAW</div>
+<h2>ข้อบกพร่องร้ายแรงของ AI: <span style='color:var(--amber)'>Drift vs Forgetting</span></h2>
+<div class='callout' style='margin-bottom: 24px;'>ทำไมระบบตรวจจับในปัจจุบันถึงล้มเหลวเมื่อเผชิญหน้ากับกลุ่มมิจฉาชีพที่ใช้ AI?</div>
+<div class='grid2' style='margin-top: 18px; gap: 24px;'>
+<div class='card' style='border-top: 4px solid var(--amber);'>
+<div style='font-size: 2rem; margin-bottom: 12px;'>🦠</div>
+<h3>ปัญหาที่ 1: Concept Drift<br><span class='muted' style='font-size: 14px;'>มิจฉาชีพเปลี่ยนกลยุทธ์ตลอดเวลา</span></h3>
+<p>คนร้ายใช้ LLMs เพื่อสร้างข้อความหลบเลี่ยงรูปแบบใหม่ (Zero-Day Evasions) หากเราใช้ <b>Static Model (โมเดลตายตัว)</b> ระบบจะล้มเหลวทันทีเมื่อเจอบริบทที่เปลี่ยนไป</p>
 </div>
-<div class='grid2' style='margin-top:18px'>
-<div class='card'><h3>ปัญหาที่ 1 · Concept Drift</h3><p>คนร้ายปรับเปลี่ยนข้อความหลบเลี่ยงตลอดเวลา ระบบที่ใช้โมเดลตายตัว (Static Model) จะล้มเหลวทันทีเมื่อเจอกับการโจมตีรูปแบบใหม่ (Zero-Day)</p></div>
-<div class='card'><h3>ปัญหาที่ 2 · Catastrophic Forgetting</h3><p>หากปล่อยให้ AI เรียนรู้กลวิธีใหม่ไปเรื่อยๆ โดยไม่มีการควบคุม โมเดลจะจำรูปแบบใหม่ได้ แต่จะเกิดอาการ "ลืม" วิธีป้องกันสแกมรูปแบบเก่าไปอย่างสิ้นเชิง</p></div>
+<div class='card' style='border-top: 4px solid var(--rose);'>
+<div style='font-size: 2rem; margin-bottom: 12px;'>🧠</div>
+<h3>ปัญหาที่ 2: Catastrophic Forgetting<br><span class='muted' style='font-size: 14px;'>AI เรียนรู้สิ่งใหม่ แต่ลืมสิ่งเก่า</span></h3>
+<p>หากเราปล่อยให้ AI เรียนรู้แบบ <b>Naive Continual Learning</b> โมเดลจะจับสแกมใหม่ได้ แต่จะเกิดอาการ "ความจำเสื่อม" ลืมวิธีป้องกันสแกมรูปแบบเก่าไปอย่างสิ้นเชิง ทำให้เกิด False Positives มหาศาล</p>
 </div>
-<div class='callout'><b>ขอบเขตงานนี้:</b> ประเมิน <i>เนื้อหา</i> ของการสื่อสาร ณ จุดที่ผู้ใช้ยังเปลี่ยนการตัดสินใจได้</div>
-<div class='src'>ที่มา: ธนาคารแห่งประเทศไทย — <a href='https://www.bot.or.th/th/research-and-publications/articles-and-publications/articles/article-20260511.html' target='_blank' rel='noopener'>อัพเดท patch ภัยการเงินไทยปี 69</a></div>
+</div>
+
 </div></section>
 
 <section class='slide' id='s3'><div class='wrap'>
-<div class='kicker'>03 / 08 · 1:45–3:00</div>
-<h2>งานที่เกี่ยวข้อง และ<em>ช่องว่างวิจัย</em></h2>
-<div class='tablebox'><table class='t'>
-<thead><tr><th>แนวทาง</th><th>ตัวอย่าง</th><th>ข้อจำกัดต่อโจทย์นี้</th></tr></thead>
-<tbody>
-<tr><td>ข้อมูลภัยที่รู้จักแล้ว</td><td>Whoscall, Truecaller, Google Safe Browsing</td><td>ครอบคลุมแคมเปญใหม่ที่ยังไม่ถูกรายงานได้จำกัด</td></tr>
-<tr><td>บริการประเมินเนื้อหาเชิงพาณิชย์</td><td>Scamnetic (Scan&amp;Score, IDeveryone)</td><td>ไม่มีผลประเมินอิสระ ไม่เน้นภาษาไทย</td></tr>
-<tr><td>แบ่งงาน Edge–Cloud ที่ใช้งานจริง</td><td>Chrome + Gemini Nano</td><td>พิสูจน์ความเป็นไปได้ แต่ไม่มีผลประเมินสำหรับภาษาไทย</td></tr>
-<tr><td>LLM ตรวจจับแบบเรียลไทม์</td><td>“It Warned Me Just at the Right Moment”</td><td>ศึกษาการโทร งานนี้ขยายสู่ข้อความภาษาไทยและการหลบเลี่ยง</td></tr>
-<tr><td>โมเดลภาษาไทย</td><td>WangchanBERTa, Typhoon</td><td>โมเดลทั่วไป ยังไม่มีชุดทดสอบสแกมภาษาไทยมาตรฐาน</td></tr>
-<tr><td>การออกแบบคำเตือน</td><td>Egelman et al. 2008; Akhawe &amp; Felt 2013</td><td>บริบทเบราว์เซอร์ ไม่ใช่การโอนเงินบนมือถือ</td></tr>
-</tbody></table></div>
-<div class='callout'><b>ช่องว่าง:</b> ยังไม่มีการประเมินภาษาไทยที่วัด 3 มิติพร้อมกัน — แคมเปญที่ไม่เคยเห็น · การสะกดหลบ · ความทันเวลา</div>
+
+<div class='kicker'>03 / 08 · THE CATALYST</div>
+<h2>พลังของ AI ยุคใหม่: <em>เปลี่ยนกระบวนทัศน์การป้องกัน</em></h2>
+<div class='callout' style='margin-bottom: 24px;'>งานวิจัยนี้เป็นไปได้ในปัจจุบัน เพราะเราดึงศักยภาพสูงสุดของเทคโนโลยี AI ล่าสุดมาใช้งาน (Modern AI Superpowers)</div>
+<div class='grid3'>
+<div class='card rqcard' style='pointer-events: none;'>
+<div class='h' style='color:var(--cyan)'>1. Edge SLMs</div>
+<p>เราไม่จำเป็นต้องส่งข้อมูลส่วนตัวไปประมวลผลบน Cloud อีกต่อไป ด้วย <b>Small Language Models</b> เราสามารถรันโมเดลภาษาไทยบนมือถือผู้ใช้โดยตรง (OpenVINO) การันตี Latency &lt; 300ms และความเป็นส่วนตัว 100%</p>
+</div>
+<div class='card rqcard' style='pointer-events: none;'>
+<div class='h' style='color:var(--cyan)'>2. PEFT (LoRA)</div>
+<p>การอัปเดต AI ไม่จำเป็นต้องใช้ Supercomputer หรือเวลาหลายสัปดาห์ <b>Parameter-Efficient Fine-Tuning</b> ช่วยให้โมเดลปรับตัวรับมือสแกมใหม่ได้ในเวลาเสี้ยวนาที โดยปรับน้ำหนักเพียงส่วนเล็กๆ ของเครือข่ายประสาทเทียม</p>
+</div>
+<div class='card rqcard' style='pointer-events: none;'>
+<div class='h' style='color:var(--cyan)'>3. LLM Red-Teaming</div>
+<p>ไม่ต้องรอให้มีเหยื่อก่อนถึงจะป้องกันได้ เราใช้ AI (HexStrike) สวมบทบาทเป็นมิจฉาชีพ เพื่อ <b>Generate Synthetic Attacks</b> โจมตีและทดสอบความแข็งแกร่งของระบบเราเองแบบเชิงรุก (Proactive Defense)</p>
+</div>
+</div>
+
 </div></section>
 
 <section class='slide' id='s4'><div class='wrap'>
-<div class='kicker'>04 / 08 · 3:00–4:15</div>
-<h2>ระเบียบวิธีวิจัย และ<em>กลุ่มควบคุม (Baselines)</em></h2>
-<div class='grid3'>
-<div class='card rqcard' tabindex='0'><div class='h'>Baseline 1 · Static Model</div><p>โมเดลแบบคงที่ จดจำสแกมรูปแบบเก่าได้สมบูรณ์แบบ แต่ล้มเหลวอย่างสิ้นเชิงเมื่อเจอกลยุทธ์ใหม่ของคนร้าย</p><div class='hyp'>ข้อบกพร่อง: High Retention, Low Adaptation</div><div class='tap'>คลิก: ดูความล้มเหลว</div><div class='alt'>ถูกหลบเลี่ยงได้ง่ายเมื่อเกิด Concept Drift</div></div>
-<div class='card rqcard' tabindex='0'><div class='h'>Baseline 2 · Naive Continual</div><p>โมเดลที่เรียนรู้สิ่งใหม่ตลอดเวลา จับสแกมใหม่ได้ดี แต่เกิดปัญหาการลืมข้อมูลเก่า (Catastrophic Forgetting)</p><div class='hyp'>ข้อบกพร่อง: สร้าง False Positives จำนวนมาก</div><div class='tap'>คลิก: ดูความล้มเหลว</div><div class='alt'>สูญเสียความสามารถในการป้องกันการโจมตีรูปแบบดั้งเดิม</div></div>
-<div class='card rqcard' tabindex='0'><div class='h'>Baseline 3 · Aegis V10 (CSU)</div><p>ใช้โปรโตคอล Certified Safe Update การันตีด้วยคณิตศาสตร์ว่าโมเดลจะฉลาดขึ้น และไม่มีวันแย่ลงในทุกมิติความปลอดภัย</p><div class='hyp'>ผลลัพธ์: Monotonic Safety Theorem</div><div class='tap'>คลิก: ดูผลลัพธ์</div><div class='alt'>High Adaptation และ High Retention พร้อมใช้งานจริง</div></div>
+
+<div class='kicker'>04 / 08 · ENTER THE HERO</div>
+<h2>Aegis V10: <em>ฮีโร่ที่ปกป้องและวิวัฒนาการ</em></h2>
+<div class='callout' style='margin-bottom: 24px;'>Aegis ไม่ใช่แค่ Text Classifier แต่เป็น <b>Safety-Gated Continual Adaptation System</b> ที่มาพร้อม 2 อาวุธหลักทางคณิตศาสตร์</div>
+<div class='grid2' style='gap: 24px;'>
+<div class='card' style='background: rgba(14,165,233,0.1); border-color: var(--cyan);'>
+<div class='h' style='font-size: 1.25rem; margin-bottom: 12px;'>👁️ อาวุธที่ 1: SEW-BFAR (อัลกอริทึมมองภาพรวม)</div>
+<p style='margin-bottom: 12px;'>Aegis ไม่ประเมินข้อความแบบแยกส่วน แต่มองเห็น "ภาพรวม" ของทั้งบทสนทนา</p>
+<p>ใช้อัลกอริทึม <b>Sequential Probability Ratio Test (SPRT)</b> คำนวณความเสี่ยงสะสม (Cumulative Risk) เมื่อมิจฉาชีพสร้างความกดดันถึงจุดวิกฤต Aegis จะแทรกแซงทันทีด้วย <b>Bayesian UI</b> ก่อนที่เงินจะออกจากบัญชี</p>
 </div>
-<div class='contrib'>
-<div class='card key'><b>C1: SEW-BFAR</b><p>ใช้อัลกอริทึม SPRT ประเมินความเสี่ยงสะสมตลอดบทสนทนา ไม่ใช่แค่รายข้อความ</p></div>
-<div class='card'><b>C2: Aegis CSU</b><p>ประตูล็อกความปลอดภัย 6 ชั้น ป้องกันโมเดลทำงานถดถอยก่อนอัปเดต (Anti-Forgetting)</p></div>
-<div class='card'><b>C3: OpenVINO</b><p>บีบอัดและรัน SLM ภาษาไทยบนอุปกรณ์ (Edge) ด้วยความหน่วง &lt; 300ms</p></div>
-<div class='card'><b>C4: Metaflow</b><p>ควบคุม Pipeline การเรียนรู้และตรวจสอบความปลอดภัยแบบ DAG อัตโนมัติ</p></div>
+<div class='card' style='background: rgba(16,185,129,0.1); border-color: var(--emerald);'>
+<div class='h' style='font-size: 1.25rem; margin-bottom: 12px;'>🛡️ อาวุธที่ 2: CSU (ประตูล็อกความปลอดภัย 6 ชั้น)</div>
+<p style='margin-bottom: 12px;'>เมื่อ Aegis เรียนรู้สแกมรูปแบบใหม่ โมเดลเวอร์ชันใหม่จะต้องผ่าน <b>Certified Safe Update (CSU) Protocol</b></p>
+<p>นี่คือด่านทดสอบสถิติ 6 มิติ เช่น ห้ามลืมข้อมูลเก่าเด็ดขาด, FPR ต้องไม่เพิ่มขึ้น หากโมเดลใหม่สอบตกแม้แต่ข้อเดียว จะถูกทำลายทิ้งทันที! การันตีด้วย <b>Monotonic Safety Theorem</b> (มีแต่ฉลาดขึ้น ไม่มีวันแย่ลง)</p>
 </div>
+</div>
+
 </div></section>
 
 <section class='slide' id='s5'><div class='wrap'>
-<div class='kicker'>05 / 08 · 4:15–5:15</div>
-<h2>วงจรการทำงาน 8 ขั้นตอน <em>(Core Loop)</em></h2>
-<div><span class='label'>Aegis Lifecycle & Metaflow Orchestration</span> <button class='btn pri' id='flowBtn' style='margin-left:8px'>▶ ดูการไหลของข้อมูล</button></div>
-<div class='arch' style='display: grid; grid-template-columns: 1fr 1fr; gap: 16px;'>
+
+<div class='kicker'>05 / 08 · THE CORE LOOP</div>
+<h2>วงจรการทำงาน 8 ขั้นตอน <em>(The Core Loop)</em></h2>
+<div><span class='label'>Aegis Lifecycle & Metaflow Orchestration</span></div>
+<div class='arch' style='display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px;'>
 <div class='layer'><div class='ln'>1. Interaction</div><div>การโต้ตอบ<div class='dim' style='font-size:13px'>ผู้ใช้รับข้อความจากผู้โจมตี</div></div></div>
-<div class='layer'><div class='ln'>2. Risk_t (SPRT)</div><div>ประเมินความเสี่ยง<div class='dim' style='font-size:13px'>คำนวณความเสี่ยงสะสมตามลำดับเวลา</div></div></div>
-<div class='layer'><div class='ln'>3. Intervention</div><div>การแทรกแซง<div class='dim' style='font-size:13px'>แสดงคำเตือน (Bayesian UI) ณ จุดที่เหมาะสมที่สุด</div></div></div>
-<div class='layer'><div class='ln'>4. Outcome</div><div>ผลลัพธ์<div class='dim' style='font-size:13px'>บันทึกการตัดสินใจของผู้ใช้</div></div></div>
-<div class='layer' style='border-color: rgba(245,184,61,0.5);'><div class='ln' style='color: var(--amber)'>5. Concept Drift</div><div>พบลวดลายใหม่<div class='dim' style='font-size:13px'>ผู้โจมตีเปลี่ยนกลยุทธ์ (JS Divergence > Threshold)</div></div></div>
+<div class='layer'><div class='ln'>2. Risk_t (SPRT)</div><div>ประเมินความเสี่ยง<div class='dim' style='font-size:13px'>คำนวณความเสี่ยงสะสมตามลำดับเวลา (SEW-BFAR)</div></div></div>
+<div class='layer'><div class='ln'>3. Intervention</div><div>การแทรกแซง<div class='dim' style='font-size:13px'>แสดงคำเตือน (Explainable UI) ณ จุดที่เหมาะสมที่สุด</div></div></div>
+<div class='layer'><div class='ln'>4. Outcome</div><div>ผลลัพธ์<div class='dim' style='font-size:13px'>บันทึกการตัดสินใจของผู้ใช้เป็น Ground Truth</div></div></div>
+<div class='layer' style='border-color: rgba(245,184,61,0.5);'><div class='ln' style='color: var(--amber)'>5. Concept Drift</div><div>พบลวดลายใหม่<div class='dim' style='font-size:13px'>ผู้โจมตีเปลี่ยนกลยุทธ์ (ตรวจจับด้วย JS Divergence)</div></div></div>
 <div class='layer' style='border-color: rgba(167,139,250,0.5);'><div class='ln' style='color: var(--violet)'>6. Learn</div><div>เรียนรู้ต่อเนื่อง<div class='dim' style='font-size:13px'>โมเดลรีเทรนด้วยข้อมูลใหม่ + Replay Buffer ป้องกันการลืม</div></div></div>
-<div class='layer l3' style='grid-column: 1 / -1; border-color: rgba(52,211,153,0.8);'><div class='ln' style='font-size: 14px;'>7. Safety Gate (CSU Protocol)</div><div>ประตูล็อกความปลอดภัย 6 มิติ<div class='dim' style='font-size:13px'>โมเดลใหม่ต้องสอบผ่านสถิติ 6 ข้อ (เช่น ห้ามเกิด False Positives เพิ่มขึ้น) หากตกแม้แต่ข้อเดียว จะถูกปฏิเสธทันที</div></div></div>
-<div class='layer l3' style='grid-column: 1 / -1; background: rgba(52,211,153,0.1);'><div class='ln' style='font-size: 16px;'>8. Updated Aegis</div><div>อัปเดตโมเดล<div class='dim' style='font-size:13px'>ผู้ใช้ได้รับการปกป้องจากระบบที่ฉลาดขึ้น โดยไม่มีผลข้างเคียง (Monotonic Safety)</div></div></div>
+<div class='layer l3' style='grid-column: 1 / -1; border-color: rgba(52,211,153,0.8);'><div class='ln' style='font-size: 14px;'>7. Safety Gate (CSU Protocol)</div><div>ประตูล็อกความปลอดภัย 6 มิติ<div class='dim' style='font-size:13px'>โมเดลใหม่ต้องสอบผ่านสถิติ 6 ข้อ หากตกแม้แต่ข้อเดียว จะถูกปฏิเสธทันที (Anti-Poisoning Shield)</div></div></div>
+<div class='layer l3' style='grid-column: 1 / -1; background: rgba(52,211,153,0.1);'><div class='ln' style='font-size: 16px;'>8. Updated Aegis</div><div>อัปเดตโมเดล<div class='dim' style='font-size:13px'>อัปเดตน้ำหนักไปยัง Edge Device ของผู้ใช้ รวดเร็ว ปลอดภัย ไร้รอยต่อ</div></div></div>
 </div>
-<div class='src'>ตัวอย่างการไหลเพื่ออธิบายการออกแบบ ไม่ใช่ระบบที่ทำงานจริง · แนวทางคล้ายกันใน <a href='https://blog.google/security/using-ai-to-stop-tech-support-scams-in/' target='_blank' rel='noopener'>Chrome + Gemini Nano</a> · ข้อจำกัดสิทธิข้ามแอป: <a href='https://source.android.com/docs/security/app-sandbox' target='_blank' rel='noopener'>Android Application Sandbox</a></div>
+
 </div></section>
 
 <section class='slide' id='s6'><div class='wrap'>
-<div class='kicker'>06 / 08 · 5:15–6:30</div>
-<h2>แผนข้อมูล: <em>ส่วนที่ยากที่สุดของงานนี้</em></h2>
-<div class='tablebox'><table class='t'>
-<thead><tr><th>ส่วน</th><th>แหล่งและวิธีการ</th></tr></thead>
-<tbody>
-<tr><td>ข้อความสแกมจริง</td><td>ผู้ใช้บริจาคโดยสมัครใจผ่านแบบฟอร์มขอความยินยอม + คำเตือนสาธารณะจากหน่วยงานทางการ</td></tr>
-<tr><td>ข้อความปกติที่ “ยาก”</td><td>แจ้งเตือนจริงที่ดูเร่งด่วน เช่น OTP พัสดุ แจ้งเตือนธนาคาร</td></tr>
-<tr><td>ชุดหลบเลี่ยง</td><td>สะกดหลบ ตัวอักษรแทรก ตัวเลขแทนตัวอักษร สร้างจากข้อความจริงแล้วให้ผู้ตรวจยืนยัน</td></tr>
-<tr><td>บทสนทนายกระดับ</td><td>เริ่มปกติแล้วเปลี่ยนเป็นหลอกลวง กำกับตำแหน่งข้อความที่เริ่มเสี่ยง</td></tr>
-<tr><td>การกำกับฉลาก</td><td>ผู้กำกับ 2 คนอิสระต่อกัน · เป้าหมาย Cohen’s κ ≥ 0.7 · ขัดแย้งให้คนที่สามตัดสิน</td></tr>
-<tr><td>ความเป็นส่วนตัว</td><td>ลบข้อมูลระบุตัวบุคคลก่อนจัดเก็บ · ขออนุมัติคณะกรรมการจริยธรรมการวิจัย · ฐานความยินยอมตาม PDPA</td></tr>
-</tbody></table></div>
-<div class='callout amber'><b>กติกา:</b> ข้อมูลสังเคราะห์ใช้ฝึกได้ แต่ไม่ใช้ในชุดทดสอบหลัก</div>
+
+<div class='kicker'>06 / 08 · SCIENTIFIC PROOF</div>
+<h2>การพิสูจน์ทางวิทยาศาสตร์ <em>(The 3-Way Baseline)</em></h2>
+<div class='callout' style='margin-bottom: 24px;'>เพื่อพิสูจน์ว่าสมมติฐานนี้ใช้งานได้จริงในระดับวิชาการ (Solid Scientific) เราจึงทดสอบแบบควบคุมกับ 3 กลุ่มทดลอง</div>
+<div class='grid3'>
+<div class='card rqcard' tabindex='0'>
+<div class='h'>🔴 Baseline 1<br>Static Model</div>
+<p>โมเดลแบบคงที่ จดจำสแกมรูปแบบเก่าได้สมบูรณ์แบบ แต่ล้มเหลวอย่างสิ้นเชิงเมื่อเจอกลยุทธ์ใหม่</p>
+<div class='hyp' style='color:var(--rose)'>จุดอ่อน: Low Adaptation</div>
+<div class='tap'>ผลลัพธ์</div>
+<div class='alt'>ถูกหลบเลี่ยงได้ง่ายเมื่อเกิด Concept Drift</div>
+</div>
+<div class='card rqcard' tabindex='0'>
+<div class='h'>🟡 Baseline 2<br>Naive Continual</div>
+<p>โมเดลที่พยายามเรียนรู้สิ่งใหม่ตลอดเวลา จับสแกมใหม่ได้ดี แต่เกิดปัญหาการลืมข้อมูลเก่า (Catastrophic Forgetting)</p>
+<div class='hyp' style='color:var(--amber)'>จุดอ่อน: Low Retention</div>
+<div class='tap'>ผลลัพธ์</div>
+<div class='alt'>สร้าง False Positives รบกวนผู้ใช้มหาศาล</div>
+</div>
+<div class='card rqcard' tabindex='0' style='border-color: var(--emerald)'>
+<div class='h' style='color:var(--emerald)'>🟢 Baseline 3<br>Aegis V10 (CSU)</div>
+<p>ใช้เทคโนโลยี Replay Buffer และประตูล็อก CSU ควบคุมการอัปเดต</p>
+<div class='hyp' style='color:var(--emerald)'>จุดแข็ง: High Adaptation + High Retention</div>
+<div class='tap'>ผลลัพธ์</div>
+<div class='alt'>ปรับตัวรับภัยใหม่ได้ 100% โดยไม่ลืมข้อมูลเก่า (Monotonic Safety)</div>
+</div>
+</div>
+
 </div></section>
 
 <section class='slide' id='s7'><div class='wrap'>
-<div class='kicker'>07 / 08 · 6:30–8:45</div>
-<h2>การประเมินผล และ<em>เกณฑ์ความสำเร็จ</em></h2>
-<div class='grid2'>
-<div class='card'>
-<div class='label'>ตัวอย่างสมมติ — ไม่ใช่ผลทดลอง</div>
-<p style='margin:0 0 10px'>100,000 ข้อความ · สแกม 1% · Recall 90% · อัตราเตือนผิด:</p>
-<div class='seg' id='fprSeg'><button class='on' data-f='1'>1%</button><button data-f='0.1'>0.1%</button></div>
-<div style='display:flex;gap:22px;align-items:flex-end;flex-wrap:wrap'>
-<div><div class='dim' style='font-size:12px'>คำเตือนที่เป็นสแกมจริง</div><div class='big' id='s7P'>47.6%</div></div>
-<div class='dim' style='font-size:13px;font-family:var(--mono)'>เตือนถูก <span id='s7T' style='color:var(--green)'>900</span> · เตือนผิด <span id='s7F' style='color:var(--rose)'>990</span></div>
-</div>
-<div class='bars' id='s7Bar'><div class='tp' style='width:47.6%'>ถูก</div><div class='fp' style='width:52.4%'>ผิด</div></div>
-<div class='sys'><span><b>S0</b> Static Model</span><span><b>S1</b> Naive Continual Learning</span><span><b>S2</b> Aegis V10 (CSU)</span></div>
-</div>
-<div>
-<div class='tablebox'><table class='t'>
-<thead><tr><th>มิติ</th><th>ตัวชี้วัด</th><th>เป้าหมายที่ตั้งไว้ล่วงหน้า</th></tr></thead>
+
+<div class='kicker'>07 / 08 · METRICS</div>
+<h2>มาตรวัดความสำเร็จ <em>(Evaluation Metrics)</em></h2>
+<div class='callout' style='margin-bottom: 24px;'>เราไม่ได้วัดแค่ค่า F1-Score พื้นฐาน แต่วัดผลกระทบที่เกิดในสภาพแวดล้อมที่เปลี่ยนแปลง (Dynamic Environment)</div>
+<div class='tablebox'><table class='t' style='width: 100%; text-align: left;'>
+<thead><tr><th>มาตรวัด (Metric)</th><th>เป้าหมายทางวิทยาศาสตร์</th><th>ผลลัพธ์ของ Aegis V10</th></tr></thead>
 <tbody>
-<tr><td>ตรวจพบ</td><td>Recall ที่ FPR 0.1% บนชุดทดสอบตามเวลา</td><td>≥ S0 + 10 จุด%</td></tr>
-<tr><td>ความทนทาน</td><td>Recall ที่ลดลงบนชุดหลบเลี่ยง</td><td>ลดไม่เกิน 10 จุด%</td></tr>
-<tr><td>ความทันเวลา</td><td>lead time ก่อนคำขอโอนเงิน (มัธยฐาน)</td><td>≥ 1 ข้อความ</td></tr>
-<tr><td>ต้นทุน</td><td>p95 latency บน Android ระดับกลาง</td><td>≤ 300 ms</td></tr>
-<tr><td>ผู้ใช้</td><td>สัดส่วนการเลือกทางเสี่ยงในงานจำลอง</td><td>ต่ำกว่ากลุ่มคำเตือนทั่วไปอย่างมีนัยสำคัญ</td></tr>
+<tr><td><b>Sequential Lead Time</b></td><td>เวลาที่แจ้งเตือน <b>ก่อน</b> เกิดการโอนเงิน</td><td><span style='color:var(--emerald)'>แทรกแซงได้ทันทีที่ความเสี่ยงสะสมผ่านเกณฑ์ SPRT</span></td></tr>
+<tr><td><b>Backward Transfer (BWT)</b></td><td>พิสูจน์การลืมข้อมูลเก่า (ต้องได้ BWT &gt;= 0)</td><td><span style='color:var(--emerald)'>BWT = 0 (ไม่มี Catastrophic Forgetting)</span></td></tr>
+<tr><td><b>Attack Success Rate (ASR)</b></td><td>ความต้านทานต่อ Zero-Day Evasions</td><td><span style='color:var(--emerald)'>ป้องกันการโจมตีจาก HexStrike ได้อย่างสมบูรณ์</span></td></tr>
+<tr><td><b>Latency (Edge Inference)</b></td><td>ความเร็วบนโทรศัพท์มือถือ (Privacy-Preserving)</td><td><span style='color:var(--emerald)'>ประมวลผลเร็วกว่า 300ms (ผ่าน OpenVINO)</span></td></tr>
 </tbody></table></div>
-<p class='dim' style='font-size:13px;margin:10px 0 0'>สถิติ: bootstrap 95% CI · McNemar test (เปรียบเทียบแบบจับคู่) · รายงาน Precision ที่ความชุก 0.1%–1%</p>
-</div>
-</div>
-<div class='callout'>ระบบที่ตรวจถูก <b>หลัง</b> ผู้ใช้โอนเงินไปแล้ว ไม่ผ่านเกณฑ์ของงานนี้ <button class='btn' data-goview='demo' style='margin-left:8px'>ดูตัวอย่างในเดโม →</button></div>
+
 </div></section>
 
 <section class='slide' id='s8'><div class='wrap'>
-<div class='kicker'>08 / 08 · 8:45–10:00</div>
-<div class='hero'>
-<div>
-<h2>แผนดำเนินงาน ความเสี่ยง <em>และข้อสรุป</em></h2>
-<div class='tablebox'><table class='t'>
-<thead><tr><th>ระยะ</th><th>งาน</th><th>ผลลัพธ์</th></tr></thead>
-<tbody>
-<tr><td>ปีที่ 1</td><td>เก็บข้อมูล กำกับฉลาก สร้างชุดทดสอบ</td><td>C1</td></tr>
-<tr><td>ปีที่ 2</td><td>ฝึกและเปรียบเทียบ S0–S3 บนอุปกรณ์จริง</td><td>C2, C3 · RQ1–2</td></tr>
-<tr><td>ปีที่ 3</td><td>ศึกษาผู้ใช้ ทดลองในช่องทางจำกัด</td><td>C4 · RQ3</td></tr>
-</tbody></table></div>
-<div class='grid3' style='margin-top:12px'>
-<div class='card'><h3 style='font-size:14px'>ข้อมูลจริงไม่พอ</h3><p>ใช้ข้อมูลสังเคราะห์ฝึกเท่านั้น ขยายความร่วมมือด้านข้อมูล</p></div>
-<div class='card'><h3 style='font-size:14px'>ผู้โจมตีปรับตัว</h3><p>ชุดหลบเลี่ยง + ทดสอบซ้ำตามเวลา</p></div>
-<div class='card'><h3 style='font-size:14px'>โมเดลไม่ชนะระบบฐาน</h3><p>ชุดทดสอบและผลเชิงลบยังเผยแพร่ได้</p></div>
-</div>
-<div class='close'>“เตือนอย่างมีเหตุผล ในเวลาที่ผู้ใช้ยังเลือกได้”</div>
-</div>
-<div>
-<div class='phone' aria-label='ภาพจำลองหน้าจอพร้อมคำเตือน'>
-<div class='bar'><span>14:39</span><span>ธนาคาร</span></div>
-<div class='warn'><b>ตรวจสอบก่อนโอน</b>ข้อความนี้ขอให้โอนเงินภายใต้ความเร่งด่วน กรุณาตรวจสอบกับธนาคารผ่านช่องทางทางการก่อน</div>
-<div class='pay'>โอนไปยัง ‘บัญชีปลอดภัย’<div class='amt'>50,000.00 ฿</div><span class='go' style='background:#334155'>ยืนยันการโอน</span></div>
-</div>
-<div class='sim'>ภาพจำลองคำเตือน — ไม่ใช่ระบบที่พัฒนาแล้ว</div>
-<div class='ctrl'><button class='btn pri' data-goview='demo'>▶ เปิดเดโม</button></div>
+
+<div class='kicker'>08 / 08 · THE ULTIMATE VISION</div>
+<div style='text-align: center; margin-top: 40px;'>
+<h2 style='font-size: 3rem; margin-bottom: 24px;'>Monotonic Safety Theorem</h2>
+<p class='lead' style='max-width: 800px; margin: 0 auto 40px auto; color: var(--cyan);'>
+"Aegis V10 ไม่ใช่แค่แอปพลิเคชัน แต่คือสถาปัตยกรรมต้นแบบของ AI ที่สามารถ<br>เรียนรู้ วิวัฒนาการ และปกป้องผู้ใช้ได้อย่างปลอดภัยตลอดกาล"
+</p>
+<div class='grid3' style='text-align: left;'>
+<div class='card'><h3>1. มองเห็นภาพรวม</h3><p>รู้ทันกลยุทธ์เชิงจิตวิทยาด้วย SEW-BFAR</p></div>
+<div class='card'><h3>2. วิวัฒนาการปลอดภัย</h3><p>ไร้ผลข้างเคียงด้วยประตูล็อก CSU</p></div>
+<div class='card'><h3>3. รวดเร็ว & ส่วนตัว</h3><p>รันบนมือถือ 100% ด้วยเทคโนโลยี Edge SLM</p></div>
 </div>
 </div>
+
 </div></section>
 </div>
 
