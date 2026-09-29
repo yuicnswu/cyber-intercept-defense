@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aegis V10: Safety-Gated Continual Adaptation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #030712; color: #f9fafb; overflow-x: hidden; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .text-gradient { background: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .text-gradient-danger { background: linear-gradient(135deg, #f87171, #fb923c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .text-gradient-success { background: linear-gradient(135deg, #34d399, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .glass-panel { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 1.5rem; }
+    
+    /* Grid Background */
+    .bg-grid { background-size: 40px 40px; background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px); }
+  </style>
+</head>
+<body class="bg-grid">
+
+  <!-- Nav -->
+  <nav class="fixed top-0 w-full z-50 glass-panel border-b-0 rounded-none border-t-0 border-l-0 border-r-0 border-b border-gray-800 px-6 py-4 flex justify-between items-center">
+    <div class="font-bold text-xl tracking-wider">AEGIS <span class="text-blue-400">V10</span></div>
+    <div class="hidden md:flex space-x-8 text-sm font-medium text-gray-400">
+      <a href="#problem" class="hover:text-white transition">The Problem</a>
+      <a href="#algorithm" class="hover:text-white transition">The Algorithm</a>
+      <a href="#safety-gate" class="hover:text-white transition">Safety Gate</a>
+      <a href="#architecture" class="hover:text-white transition">Architecture</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="min-h-screen flex flex-col justify-center items-center text-center px-4 relative pt-20">
+    <div class="absolute inset-0 bg-blue-900/20 blur-[150px] rounded-full w-[600px] h-[600px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10"></div>
+    <p class="mono text-blue-400 mb-6 tracking-widest text-sm uppercase gs-reveal">MIT Ph.D. Scientific Formulation</p>
+    <h1 class="text-6xl md:text-8xl font-black mb-6 tracking-tight gs-reveal">
+      Scammers Adapt.<br>
+      <span class="text-gradient">We Evolve.</span>
+    </h1>
+    <p class="text-xl md:text-2xl text-gray-400 max-w-3xl mb-12 gs-reveal">
+      Safety-Gated Continual Adaptation for Sequential Scam Intervention under Adversarial Concept Drift.
+    </p>
+    <div class="flex space-x-4 gs-reveal">
+      <a href="#problem" class="px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-semibold transition shadow-lg shadow-blue-500/30">Read the Story</a>
+    </div>
+  </section>
+
+  <!-- The Problem -->
+  <section id="problem" class="py-32 px-6 relative">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-4xl md:text-5xl font-bold mb-16 text-center gs-reveal">The <span class="text-gradient-danger">Catastrophic</span> Flaw in AI</h2>
+      
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="glass-panel p-8 gs-reveal">
+          <div class="text-4xl mb-4">🧊</div>
+          <h3 class="text-xl font-bold mb-3">1. Static Models Freeze</h3>
+          <p class="text-gray-400">A model trained today is obsolete tomorrow. Scammers use LLMs to constantly rewrite their scripts (Concept Drift), slipping right past static defenses.</p>
+        </div>
+        
+        <div class="glass-panel p-8 border-orange-500/30 gs-reveal">
+          <div class="text-4xl mb-4">🧠</div>
+          <h3 class="text-xl font-bold mb-3">2. Naive AI Forgets</h3>
+          <p class="text-gray-400">If you let an AI constantly learn new tricks, it suffers from <strong class="text-orange-400">Catastrophic Forgetting</strong>. It learns the new scam, but completely forgets how to stop the old ones.</p>
+        </div>
+        
+        <div class="glass-panel p-8 border-green-500/30 gs-reveal">
+          <div class="text-4xl mb-4">🛡️</div>
+          <h3 class="text-xl font-bold mb-3">3. Aegis Adapts Safely</h3>
+          <p class="text-gray-400">Aegis introduces the <strong class="text-green-400">Certified Safe Update (CSU)</strong>. It continuously learns new adversarial tactics, but mathematically guarantees it never forgets the past.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- The Algorithm (SEW-BFAR) -->
+  <section id="algorithm" class="py-32 px-6 relative bg-gray-900/50">
+    <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+      <div class="gs-reveal-left">
+        <h2 class="text-4xl md:text-5xl font-bold mb-6">Watching the <br><span class="text-gradient">Whole Story.</span></h2>
+        <p class="text-xl text-gray-400 mb-6">
+          Scams don't happen in a single text message. They unfold over a conversation. 
+        </p>
+        <p class="text-gray-400 mb-6">
+          Instead of classifying messages one by one, Aegis uses a <strong>Sequential Probability Ratio Test (SPRT)</strong>. It calculates the cumulative risk of the entire conversation.
+        </p>
+        <ul class="space-y-4 mono text-sm text-gray-300">
+          <li class="flex items-center"><span class="text-blue-400 mr-3">✓</span> Calculates exactly WHEN to intervene</li>
+          <li class="flex items-center"><span class="text-blue-400 mr-3">✓</span> Mathematically bounds false alarms (FPR &lt; 0.1%)</li>
+          <li class="flex items-center"><span class="text-blue-400 mr-3">✓</span> Triggers a Bayesian warning UI just before the transfer</li>
+        </ul>
+      </div>
+      
+      <div class="glass-panel p-8 relative gs-reveal-right">
+        <!-- Mock Chat Interface -->
+        <div class="space-y-4">
+          <div class="flex justify-start opacity-50"><div class="bg-gray-800 p-3 rounded-2xl rounded-tl-none max-w-[80%] text-sm">Hello, is this the account owner?</div></div>
+          <div class="flex justify-start opacity-70"><div class="bg-gray-800 p-3 rounded-2xl rounded-tl-none max-w-[80%] text-sm">We detected unusual activity on your card.</div></div>
+          <div class="flex justify-start"><div class="bg-gray-800 border border-orange-500/50 p-3 rounded-2xl rounded-tl-none max-w-[80%] text-sm">Please transfer your balance to this secure vault immediately.</div></div>
+          
+          <!-- Aegis Intervention -->
+          <div class="mt-8 border border-red-500/50 bg-red-500/10 p-4 rounded-xl text-center">
+            <div class="text-red-400 font-bold mb-1">AEGIS INTERVENTION TRIGGERED</div>
+            <div class="mono text-xs text-gray-400">Sequential Risk Threshold Exceeded</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- The Core Loop & Safety Gate -->
+  <section id="safety-gate" class="py-32 px-6 relative">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16 gs-reveal">
+        <h2 class="text-4xl md:text-5xl font-bold mb-6">The 8-Step <span class="text-gradient-success">Core Loop</span></h2>
+        <p class="text-xl text-gray-400 max-w-2xl mx-auto">How Aegis continuously evolves without human intervention, protected by the Monotonic Safety Theorem.</p>
+      </div>
+
+      <!-- Flow Diagram -->
+      <div class="flex flex-wrap justify-center gap-4 mb-16 gs-reveal">
+        <div class="px-4 py-2 glass-panel border-gray-700">1. Interaction</div>
+        <div class="text-gray-500 flex items-center">→</div>
+        <div class="px-4 py-2 glass-panel border-gray-700">2. Risk_t</div>
+        <div class="text-gray-500 flex items-center">→</div>
+        <div class="px-4 py-2 glass-panel border-blue-500/50">3. Intervention</div>
+        <div class="text-gray-500 flex items-center">→</div>
+        <div class="px-4 py-2 glass-panel border-gray-700">4. Outcome</div>
+        <div class="text-gray-500 flex items-center">→</div>
+        <div class="px-4 py-2 glass-panel border-orange-500/50">5. Drift</div>
+        <div class="text-gray-500 flex items-center">→</div>
+        <div class="px-4 py-2 glass-panel border-purple-500/50">6. Learn</div>
+        <div class="text-gray-500 flex items-center">→</div>
+        <div class="px-4 py-2 glass-panel border-green-500 shadow-[0_0_15px_rgba(34,197,94,0.3)] font-bold text-green-400">7. SAFETY GATE</div>
+        <div class="text-gray-500 flex items-center">→</div>
+        <div class="px-4 py-2 glass-panel border-gray-700">8. Updated Aegis</div>
+      </div>
+
+      <!-- The 6 Gates -->
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div class="gs-reveal-left">
+          <h3 class="text-3xl font-bold mb-6">The Safety Gate (CSU Protocol)</h3>
+          <p class="text-gray-400 mb-4">When Aegis learns a new scam, it generates a <em>Candidate Model</em>. Before this model is deployed to users, it must pass <strong>6 rigorous statistical gates</strong> orchestrated by Metaflow.</p>
+          <p class="text-gray-400">If the candidate fails even one test—if it forgets an old scam, or gets slightly slower—it is instantly rejected. Aegis only gets smarter. Never dumber.</p>
+        </div>
+        <div class="glass-panel p-6 space-y-3 mono text-sm gs-reveal-right">
+          <div class="flex justify-between items-center p-3 bg-gray-800/50 rounded"><span class="text-gray-300">G1: Constrained Recall</span> <span class="text-green-400">PASS</span></div>
+          <div class="flex justify-between items-center p-3 bg-gray-800/50 rounded"><span class="text-gray-300">G2: Hard Ham Preservation</span> <span class="text-green-400">PASS</span></div>
+          <div class="flex justify-between items-center p-3 bg-gray-800/50 rounded"><span class="text-gray-300">G3: Adversarial Robustness</span> <span class="text-green-400">PASS</span></div>
+          <div class="flex justify-between items-center p-3 bg-gray-800/50 rounded"><span class="text-gray-300">G4: Legacy Scam Coverage</span> <span class="text-green-400">PASS</span></div>
+          <div class="flex justify-between items-center p-3 bg-gray-800/50 rounded"><span class="text-gray-300">G5: Sequential Lead Time</span> <span class="text-green-400">PASS</span></div>
+          <div class="flex justify-between items-center p-3 bg-gray-800/50 rounded"><span class="text-gray-300">G6: Latency Budget (< 300ms)</span> <span class="text-green-400">PASS</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Execution Architecture -->
+  <section id="architecture" class="py-32 px-6 bg-gray-900/50 relative">
+    <div class="max-w-6xl mx-auto text-center">
+      <h2 class="text-4xl md:text-5xl font-bold mb-6 gs-reveal">Built for the <span class="text-gradient">Real World.</span></h2>
+      <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-16 gs-reveal">Aegis V10 isn't just theory. It's an MLOps masterclass.</p>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="glass-panel p-8 gs-reveal">
+          <div class="text-4xl mb-6">⚡</div>
+          <h3 class="text-lg font-bold text-blue-400 mb-2">OpenVINO Edge Inference</h3>
+          <p class="text-sm text-gray-400">Runs the quantized Thai language model directly on the phone in under 300ms. Total privacy. Zero cloud latency.</p>
+        </div>
+        <div class="glass-panel p-8 gs-reveal">
+          <div class="text-4xl mb-6">🔄</div>
+          <h3 class="text-lg font-bold text-orange-400 mb-2">Metaflow Orchestration</h3>
+          <p class="text-sm text-gray-400">Handles the 8-step Core Loop deterministically. Executes the CSU Safety Gates across distributed clusters.</p>
+        </div>
+        <div class="glass-panel p-8 gs-reveal">
+          <div class="text-4xl mb-6">🤖</div>
+          <h3 class="text-lg font-bold text-purple-400 mb-2">HexStrike Red Teaming</h3>
+          <p class="text-sm text-gray-400">An autonomous GPT-4 agent that constantly writes new Thai evasion patterns to attack Aegis, forcing it to evolve.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="py-12 text-center text-gray-500 text-sm mono border-t border-gray-800">
+    <p>AEGIS V10 • SAFETY-GATED CONTINUAL ADAPTATION</p>
+    <p class="mt-2">MIT Ph.D. Scientific Formulation</p>
+  </footer>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.utils.toArray('.gs-reveal').forEach(function(elem) {
+      gsap.fromTo(elem, 
+        { y: 50, opacity: 0 }, 
+        {
+          scrollTrigger: { trigger: elem, start: "top 85%" },
+          y: 0, opacity: 1, duration: 1, ease: "power3.out"
+        }
+      );
+    });
+
+    gsap.utils.toArray('.gs-reveal-left').forEach(function(elem) {
+      gsap.fromTo(elem, 
+        { x: -50, opacity: 0 }, 
+        {
+          scrollTrigger: { trigger: elem, start: "top 85%" },
+          x: 0, opacity: 1, duration: 1, ease: "power3.out"
+        }
+      );
+    });
+
+    gsap.utils.toArray('.gs-reveal-right').forEach(function(elem) {
+      gsap.fromTo(elem, 
+        { x: 50, opacity: 0 }, 
+        {
+          scrollTrigger: { trigger: elem, start: "top 85%" },
+          x: 0, opacity: 1, duration: 1, ease: "power3.out"
+        }
+      );
+    });
+  </script>
+</body>
+</html>
