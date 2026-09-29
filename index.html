@@ -1,242 +1,857 @@
 <!DOCTYPE html>
-<html lang="en" class="dark scroll-smooth">
+<html lang='th'>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aegis V10: Safety-Gated Continual Adaptation</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: 'Inter', sans-serif; background: #030712; color: #f9fafb; overflow-x: hidden; }
-    .mono { font-family: 'JetBrains Mono', monospace; }
-    .text-gradient { background: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .text-gradient-danger { background: linear-gradient(135deg, #f87171, #fb923c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .text-gradient-success { background: linear-gradient(135deg, #34d399, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .glass-panel { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 1.5rem; }
-    
-    /* Grid Background */
-    .bg-grid { background-size: 40px 40px; background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px); }
-  </style>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>Aegis V10: Safety-Gated Continual Adaptation</title>
+<meta name='description' content='ข้อเสนอโครงการวิจัย: การประเมินการตรวจจับการหลอกลวงภาษาไทยบนอุปกรณ์ ด้วยเกณฑ์ความทันเวลาและความทนทานต่อการหลบเลี่ยง'>
+<link rel='preconnect' href='https://fonts.googleapis.com'>
+<link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
+<link href='https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap' rel='stylesheet'>
+<style>
+:root{--bg:#050a18;--panel:#0b1328;--panel2:#101b34;--line:#1f2d4d;--text:#e6edf7;--muted:#9aa9c4;--dim:#66758f;--cyan:#38d6f0;--amber:#f5b83d;--rose:#f2557a;--green:#34d399;--violet:#a78bfa;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:Prompt,system-ui,sans-serif;line-height:1.6}
+body{min-height:100vh;display:flex;flex-direction:column}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:var(--cyan)}
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 20px;background:rgba(5,10,24,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.prog{position:absolute;left:0;bottom:-1px;height:2px;background:var(--cyan);transition:width .35s ease}
+.brand{font-weight:600;font-size:14px;margin-right:auto;min-width:0}
+.brand small{display:block;color:var(--dim);font-weight:400;font-size:11px}
+.tabs{display:flex;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:3px}
+.tabs button{border:0;background:none;padding:6px 12px;border-radius:7px;font-size:13px;color:var(--muted)}
+.tabs button[aria-selected=true]{background:var(--cyan);color:#041018;font-weight:600}
+.tools{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12px}
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:6px 10px;font-size:12px;transition:border-color .15s,background .15s}
+.btn:hover{border-color:var(--cyan)}
+.btn:disabled{opacity:.35;cursor:default}
+.btn.pri{background:var(--cyan);color:#041018;border-color:var(--cyan);font-weight:600}
+.btn.on{border-color:var(--cyan);background:rgba(56,214,240,.14);color:var(--cyan)}
+.clock{padding:6px 10px;border-radius:8px;background:var(--panel);border:1px solid var(--line);min-width:64px;text-align:center}
+.pace{font-size:11px;padding:3px 8px;border-radius:999px;border:1px solid var(--line);color:var(--dim)}
+.pace.ok{color:var(--green);border-color:rgba(52,211,153,.4)}
+.pace.late{color:var(--rose);border-color:rgba(242,85,122,.45)}
+.pace.early{color:var(--cyan);border-color:rgba(56,214,240,.4)}
+main{flex:1}
+.view{display:none}.view.on{display:block}
+.slide{display:none}.slide.on{display:block}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{opacity:0;transform:scale(.96) translateY(6px)}100%{opacity:1;transform:none}}
+.slide.on .wrap>*,.slide.on .grid3>*,.slide.on .chain>*,.slide.on .contrib>*,.slide.on .arch>*,.slide.on .hero>*>*{animation:rise .45s ease-out both}
+.slide.on .wrap>*:nth-child(2),.slide.on .grid3>*:nth-child(2),.slide.on .chain>*:nth-child(2),.slide.on .contrib>*:nth-child(2),.slide.on .arch>*:nth-child(2),.slide.on .hero>*>*:nth-child(2){animation-delay:.08s}
+.slide.on .wrap>*:nth-child(3),.slide.on .grid3>*:nth-child(3),.slide.on .chain>*:nth-child(3),.slide.on .contrib>*:nth-child(3),.slide.on .arch>*:nth-child(3),.slide.on .hero>*>*:nth-child(3){animation-delay:.16s}
+.slide.on .wrap>*:nth-child(4),.slide.on .chain>*:nth-child(4),.slide.on .contrib>*:nth-child(4),.slide.on .arch>*:nth-child(4),.slide.on .hero>*>*:nth-child(4){animation-delay:.24s}
+.slide.on .wrap>*:nth-child(n+5),.slide.on .arch>*:nth-child(n+5){animation-delay:.32s}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 24px 130px}
+.kicker{font-family:var(--mono);font-size:12px;color:var(--cyan);letter-spacing:.06em;margin-bottom:6px}
+h2{font-size:clamp(24px,3.2vw,38px);line-height:1.25;margin:0 0 10px;font-weight:600}
+h2 em{font-style:normal;color:var(--cyan)}
+h3{font-size:17px;margin:0 0 8px;font-weight:600}
+.lead{color:var(--muted);font-size:clamp(15px,1.5vw,18px);max-width:820px;margin:0 0 22px}
+.label{display:inline-block;font-size:12px;padding:3px 10px;border-radius:999px;border:1px solid rgba(245,184,61,.5);color:var(--amber);background:rgba(245,184,61,.08);margin-bottom:14px}
+.hint2{font-size:12px;color:var(--dim);margin-left:8px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.card p{margin:0;color:var(--muted);font-size:14px}
+.callout{margin-top:18px;border:1px solid rgba(56,214,240,.45);background:rgba(56,214,240,.07);border-radius:12px;padding:12px 16px;font-size:15px}
+.callout b{color:var(--cyan)}
+.callout.amber{border-color:rgba(245,184,61,.5);background:rgba(245,184,61,.07)}
+.callout.amber b{color:var(--amber)}
+.muted{color:var(--muted)}.dim{color:var(--dim)}
+.src{margin-top:14px;font-size:12px;color:var(--dim)}
+table.t{width:100%;border-collapse:collapse;font-size:14px;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.t th{text-align:left;font-weight:600;font-size:12px;color:var(--cyan);background:var(--panel2);padding:9px 12px;border-bottom:1px solid var(--line)}
+.t td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--muted)}
+.t td:first-child{color:var(--text)}
+.t tr:last-child td{border-bottom:0}
+.t tbody tr{transition:background .15s}
+.t tbody tr:hover{background:var(--panel2)}
+.num{font-family:var(--mono);text-align:right!important;white-space:nowrap}
+.tablebox{overflow-x:auto;border-radius:12px}
+.hero{display:grid;grid-template-columns:1.25fr .75fr;gap:28px;align-items:center}
+.phone{width:270px;max-width:100%;margin:0 auto;border-radius:34px;border:8px solid #1b2744;background:#070d1c;padding:16px 14px 18px;box-shadow:0 20px 50px rgba(0,0,0,.5);min-height:360px}
+.phone .bar{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--dim);margin-bottom:10px}
+.bubble{background:var(--panel2);border:1px solid var(--line);border-radius:14px 14px 14px 4px;padding:10px 12px;font-size:13px;margin-bottom:10px;animation:pop .35s ease-out both}
+.bubble .from{font-size:10px;color:var(--dim);font-family:var(--mono);margin-bottom:4px}
+.bubble.req{border-color:rgba(242,85,122,.55)}
+.pay{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:12px;animation:pop .35s ease-out both}
+.pay .amt{font-family:var(--mono);font-size:18px;color:var(--text);margin:4px 0 8px}
+.pay .go{display:block;text-align:center;padding:8px;border-radius:9px;background:#1d4ed8;color:#fff;font-weight:600}
+.warn{border:1px solid rgba(245,184,61,.6);background:rgba(245,184,61,.1);border-radius:12px;padding:10px 12px;font-size:12px;margin-bottom:10px}
+.slide.on .warn{animation:pop .5s ease-out .6s both}
+.warn b{color:var(--amber);display:block;margin-bottom:2px}
+.sim{text-align:center;font-size:11px;color:var(--amber);margin-top:10px}
+.hid{display:none!important}
+.typing{display:inline-flex;gap:4px;padding:10px 12px;background:var(--panel2);border:1px solid var(--line);border-radius:14px;margin-bottom:10px}
+.typing i{width:6px;height:6px;border-radius:50%;background:var(--dim);animation:blink 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes blink{0%,100%{opacity:.25}50%{opacity:1}}
+.ctrl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px;justify-content:center}
+.poll{margin-top:14px;text-align:center}
+.poll .q{font-weight:600;margin-bottom:8px}
+.poll .ans{margin-top:10px;font-size:14px;color:var(--muted);max-width:420px;margin-left:auto;margin-right:auto}
+.rq{font-size:clamp(17px,1.9vw,22px);border-left:3px solid var(--cyan);padding:6px 0 6px 16px;margin:18px 0}
+.chain{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:8px 0 6px}
+.step{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;transition:border-color .2s}
+.step .n{font-family:var(--mono);font-size:11px;color:var(--dim)}
+.step .h{font-weight:600;margin:2px 0 8px}
+.step .sees{font-size:13px;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px;min-height:48px}
+.step .bel{color:var(--amber)}
+.step.tb{border:1.5px dashed var(--amber);background:rgba(245,184,61,.06)}
+.step.tb .tbl{position:absolute;top:-11px;right:10px;font-size:11px;background:var(--bg);color:var(--amber);padding:0 6px}
+.step:not(:last-child)::after{content:'→';position:absolute;right:-12px;top:40%;color:var(--dim)}
+.seg{display:inline-flex;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:3px;margin-bottom:12px}
+.seg button{border:0;background:none;padding:6px 12px;border-radius:7px;font-size:13px;color:var(--muted)}
+.seg button.on{background:var(--panel2);color:var(--text);box-shadow:inset 0 0 0 1px var(--cyan)}
+.rqcard{border-left:3px solid var(--cyan);cursor:pointer;transition:transform .15s,border-color .15s}
+.rqcard:hover{transform:translateY(-2px)}
+.rqcard .h{font-family:var(--mono);font-size:12px;color:var(--cyan)}
+.rqcard .hyp{margin-top:8px;font-size:13px;color:var(--amber)}
+.rqcard .alt{display:none;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;color:var(--green)}
+.rqcard.open .alt{display:block;animation:rise .3s both}
+.rqcard .tap{font-size:11px;color:var(--dim);margin-top:8px}
+.rqcard.open .tap{display:none}
+.contrib{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+.contrib .card b{font-family:var(--mono);color:var(--green);display:block;font-size:13px}
+.contrib .card{padding:12px 14px}
+.contrib .card.key{border-color:rgba(52,211,153,.55)}
+.arch{display:flex;flex-direction:column;align-items:stretch;gap:0;max-width:760px}
+.layer{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 16px;display:grid;grid-template-columns:120px 1fr;gap:12px;align-items:center;transition:border-color .25s,box-shadow .25s}
+.layer.lit{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(56,214,240,.15)}
+.layer .ln{font-family:var(--mono);font-size:12px;color:var(--cyan)}
+.layer.l3 .ln{color:var(--green)}
+.layer .pl{display:none;margin-top:6px;font-family:var(--mono);font-size:12px;color:var(--cyan);background:rgba(56,214,240,.07);border-radius:6px;padding:4px 8px}
+.layer.lit .pl,.layer.done .pl{display:block;animation:rise .3s both}
+.flow{text-align:center;color:var(--dim);font-size:12px;padding:5px 0}
+.flow span{font-family:var(--mono)}
+.bank{margin-top:6px;font-size:13px;color:var(--rose)}
+.bars{display:flex;height:26px;border-radius:6px;overflow:hidden;border:1px solid var(--line);margin-top:6px;font-family:var(--mono);font-size:12px}
+.bars div{display:flex;align-items:center;justify-content:center;white-space:nowrap;overflow:hidden;transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.tp{background:rgba(52,211,153,.8);color:#04120c}.fp{background:rgba(242,85,122,.75);color:#fff}
+.big{font-family:var(--mono);font-size:40px;font-weight:700;line-height:1.1;transition:color .3s}
+.sys{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 0}
+.sys span{font-size:12px;border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:5px 9px}
+.sys span b{font-family:var(--mono);color:var(--cyan);margin-right:4px}
+.close{font-size:clamp(20px,2.4vw,28px);font-weight:600;color:var(--cyan);margin:18px 0 0}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:15;background:rgba(5,10,24,.95);border-top:1px solid var(--line);padding:10px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.nav .dots{display:flex;gap:6px;margin:0 auto}
+.dot{width:30px;height:28px;border-radius:7px;border:1px solid var(--line);background:var(--panel);font-family:var(--mono);font-size:12px;color:var(--dim)}
+.dot.on{background:var(--cyan);color:#041018;border-color:var(--cyan);font-weight:700}
+.hint{font-size:11px;color:var(--dim)}
+.prompter{position:fixed;left:0;right:0;bottom:52px;z-index:14;max-height:42vh;overflow:auto;background:#060d1f;border-top:1px solid rgba(56,214,240,.5);padding:14px 24px 18px;display:none}
+.prompter.on{display:block}
+.prompter .ph{display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;color:var(--cyan);margin-bottom:8px}
+.prompter p{margin:0 0 10px;font-size:clamp(16px,1.7vw,20px);line-height:1.75;max-width:1000px}
+.lab{display:grid;grid-template-columns:340px 1fr;gap:18px}
+.ctl{margin-bottom:16px}
+.ctl .row{display:flex;justify-content:space-between;font-size:13px}
+.ctl .row b{font-family:var(--mono);color:var(--cyan)}
+input[type=range]{width:100%;accent-color:var(--cyan)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.stat{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px;text-align:center}
+.stat .k{font-size:11px;color:var(--dim)}
+.stat .v{font-family:var(--mono);font-size:20px;font-weight:600}
+svg text{font-family:var(--mono);font-size:11px;fill:var(--dim)}
+.demo{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.chip{border:1px solid var(--line);background:var(--panel2);border-radius:999px;padding:5px 12px;font-size:13px}
+.chip:hover{border-color:var(--cyan)}
+.chip.on{border-color:var(--cyan);color:var(--cyan)}
+.chip .k{font-size:11px;color:var(--dim);margin-left:6px}
+textarea{width:100%;min-height:96px;resize:vertical;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;font-size:15px}
+textarea:focus{outline:none;border-color:var(--cyan)}
+.tools2{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;align-items:center}
+.switch{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);cursor:pointer;margin-top:4px}
+.switch input{accent-color:var(--cyan);width:16px;height:16px}
+.render{font-size:17px;line-height:1.9;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;min-height:96px;word-break:break-word}
+.render mark{background:none;color:inherit;border-radius:4px;padding:1px 2px}
+.m-auth{box-shadow:inset 0 -2px 0 var(--amber);background:rgba(245,184,61,.16)!important}
+.m-urg{box-shadow:inset 0 -2px 0 var(--rose);background:rgba(242,85,122,.16)!important}
+.m-req{box-shadow:inset 0 -2px 0 var(--violet);background:rgba(167,139,250,.18)!important}
+.cats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.cat{border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:12px;color:var(--dim);transition:all .25s}
+.cat b{display:block;font-size:13px;color:var(--muted)}
+.cat.hit{color:var(--text)}
+.cat.hit.auth{border-color:var(--amber);background:rgba(245,184,61,.08)}
+.cat.hit.urg{border-color:var(--rose);background:rgba(242,85,122,.08)}
+.cat.hit.req{border-color:var(--violet);background:rgba(167,139,250,.1)}
+.verdict{display:flex;align-items:center;gap:12px;border-radius:12px;padding:12px 14px;border:1px solid var(--line);transition:all .25s}
+.verdict .lv{font-weight:600;font-size:16px}
+.verdict.v0{border-color:rgba(52,211,153,.4)}.verdict.v0 .lv{color:var(--green)}
+.verdict.v1 .lv{color:var(--muted)}
+.verdict.v2{border-color:rgba(245,184,61,.6);background:rgba(245,184,61,.06)}.verdict.v2 .lv{color:var(--amber)}
+.verdict.v3{border-color:rgba(242,85,122,.6);background:rgba(242,85,122,.07)}.verdict.v3 .lv{color:var(--rose)}
+.meter{display:flex;gap:4px}
+.meter i{width:22px;height:10px;border-radius:3px;background:var(--line);transition:background .25s}
+.why{margin-top:10px;font-size:14px;color:var(--muted)}
+.conv{display:grid;grid-template-columns:300px 1fr;gap:18px;align-items:start}
+.cphone{min-height:430px}
+.tl{display:flex;align-items:center;margin:16px 0 6px}
+.tl .d{flex:1;position:relative;text-align:center;font-family:var(--mono);font-size:12px;color:var(--dim)}
+.tl .d span{display:inline-flex;width:30px;height:30px;border-radius:50%;align-items:center;justify-content:center;border:1px solid var(--line);background:var(--panel);transition:all .25s;position:relative;z-index:1}
+.tl .d::before{content:'';position:absolute;top:15px;left:-50%;right:50%;height:2px;background:var(--line)}
+.tl .d:first-child::before{display:none}
+.tl .d.seen span{border-color:var(--cyan);color:var(--text)}
+.tl .d.w2 span{background:var(--amber);color:#1a1200;border-color:var(--amber)}
+.tl .d.w3 span{background:var(--rose);color:#fff;border-color:var(--rose)}
+.tl .d.tx span{outline:2px dashed var(--rose);outline-offset:3px}
+.tl .d small{display:block;margin-top:4px;font-size:10px;min-height:14px}
+.result{border-radius:12px;padding:12px 14px;border:1px solid var(--line);margin-top:10px;font-size:15px}
+.result.good{border-color:rgba(52,211,153,.5);background:rgba(52,211,153,.07)}
+.result.bad{border-color:rgba(242,85,122,.55);background:rgba(242,85,122,.07)}
+.result b{font-size:17px}
+details{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin-bottom:10px}
+summary{padding:12px 16px;cursor:pointer;font-weight:500;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:'+';display:inline-block;width:18px;color:var(--cyan);font-family:var(--mono)}
+details[open] summary::before{content:'−'}
+details p,details .body{margin:0;padding:0 16px 14px 34px;color:var(--muted)}
+.refs{font-size:14px;color:var(--muted);padding-left:20px}
+.refs li{margin-bottom:6px}
+.sec{margin-top:34px;padding-top:24px;border-top:1px solid var(--line)}
+@media (max-width:900px){
+.hero,.grid2,.lab,.demo,.conv{grid-template-columns:1fr}
+.conv>div:first-child{order:2}
+.cphone{min-height:0}
+.grid3,.contrib{grid-template-columns:1fr 1fr}
+.chain{grid-template-columns:1fr 1fr}
+.step:not(:last-child)::after{display:none}
+.stats{grid-template-columns:1fr 1fr}
+.layer{grid-template-columns:1fr;gap:4px}
+}
+@media (max-width:560px){
+.wrap{padding:18px 16px 140px}
+.top{padding:8px 16px;position:static}
+.grid3,.contrib,.chain,.cats{grid-template-columns:1fr}
+.hint,.brand small,.lbl,.hint2{display:none}
+.dot{width:26px}
+.nav{padding:8px 12px;gap:8px}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+@media print{.top,.nav,.prompter,.ctrl,.poll{display:none}.slide{display:block!important;page-break-after:always}.wrap{padding-bottom:24px}}
+</style>
 </head>
-<body class="bg-grid">
+<body>
 
-  <!-- Nav -->
-  <nav class="fixed top-0 w-full z-50 glass-panel border-b-0 rounded-none border-t-0 border-l-0 border-r-0 border-b border-gray-800 px-6 py-4 flex justify-between items-center">
-    <div class="font-bold text-xl tracking-wider">AEGIS <span class="text-blue-400">V10</span></div>
-    <div class="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-400">
-      <a href="#problem" class="hover:text-white transition">The Problem</a>
-      <a href="#algorithm" class="hover:text-white transition">The Algorithm</a>
-      <a href="#safety-gate" class="hover:text-white transition">Safety Gate</a>
-      <a href="#architecture" class="hover:text-white transition">Architecture</a>
-      <a href="app-demo.html" class="px-5 py-2 bg-blue-500/10 text-blue-400 border border-blue-500/30 rounded-full hover:bg-blue-500/20 transition shadow-[0_0_10px_rgba(59,130,246,0.2)]">Launch Demo</a>
-    </div>
-  </nav>
+<header class='top'>
+<div class='brand'>Aegis V10: Safety-Gated Continual Adaptation<small>MIT Ph.D. Scientific Formulation · Sequential Scam Intervention</small></div>
+<div class='tabs' role='tablist'>
+<button role='tab' aria-selected='true' data-view='slides'>สไลด์</button>
+<button role='tab' aria-selected='false' data-view='demo'>เดโม</button>
+<button role='tab' aria-selected='false' data-view='lab'>Lab</button>
+<button role='tab' aria-selected='false' data-view='qa'>Q&amp;A</button>
+</div>
+<div class='tools'>
+<span class='clock' id='clock' title='เวลาซ้อม'>00:00</span>
+<span class='pace' id='pace'>พร้อม</span>
+<button class='btn' id='timerBtn' title='เริ่ม/หยุดจับเวลา'>▶ ซ้อม</button>
+<button class='btn' id='resetBtn' title='รีเซ็ตเวลา'>↺</button>
+<button class='btn' id='promptBtn' title='บทพูด (T)'>บทพูด</button>
+<button class='btn' id='fsBtn' title='เต็มจอ (F)'>⛶</button>
+</div>
+<div class='prog' id='prog'></div>
+</header>
 
-  <!-- Hero Section -->
-  <section class="min-h-screen flex flex-col justify-center items-center text-center px-4 relative pt-20">
-    <div class="absolute inset-0 bg-blue-900/20 blur-[150px] rounded-full w-[600px] h-[600px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10"></div>
-    <p class="mono text-blue-400 mb-6 tracking-widest text-sm uppercase gs-reveal">MIT Ph.D. Scientific Formulation</p>
-    <h1 class="text-6xl md:text-8xl font-black mb-6 tracking-tight gs-reveal">
-      Scammers Adapt.<br>
-      <span class="text-gradient">We Evolve.</span>
-    </h1>
-    <p class="text-xl md:text-2xl text-gray-400 max-w-3xl mb-12 gs-reveal">
-      Safety-Gated Continual Adaptation for Sequential Scam Intervention under Adversarial Concept Drift.
-    </p>
-    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 gs-reveal">
-      <a href="#problem" class="px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-semibold transition shadow-lg shadow-blue-500/30">Read the Story</a>
-      <a href="app-demo.html" class="px-8 py-4 bg-transparent border border-gray-600 hover:border-gray-400 text-white rounded-full font-semibold transition flex items-center justify-center">
-        Launch Interactive Demo <span class="ml-2">→</span>
-      </a>
-    </div>
-  </section>
+<main>
+<div class='view on' id='view-slides'>
 
-  <!-- The Problem -->
-  <section id="problem" class="py-32 px-6 relative">
-    <div class="max-w-6xl mx-auto">
-      <h2 class="text-4xl md:text-5xl font-bold mb-16 text-center gs-reveal">The <span class="text-gradient-danger">Catastrophic</span> Flaw in AI</h2>
-      
-      <div class="grid md:grid-cols-3 gap-8">
-        <div class="glass-panel p-8 gs-reveal">
-          <div class="text-4xl mb-4">🧊</div>
-          <h3 class="text-xl font-bold mb-3">1. Static Models Freeze</h3>
-          <p class="text-gray-400">A model trained today is obsolete tomorrow. Scammers use LLMs to constantly rewrite their scripts (Concept Drift), slipping right past static defenses.</p>
-        </div>
-        
-        <div class="glass-panel p-8 border-orange-500/30 gs-reveal">
-          <div class="text-4xl mb-4">🧠</div>
-          <h3 class="text-xl font-bold mb-3">2. Naive AI Forgets</h3>
-          <p class="text-gray-400">If you let an AI constantly learn new tricks, it suffers from <strong class="text-orange-400">Catastrophic Forgetting</strong>. It learns the new scam, but completely forgets how to stop the old ones.</p>
-        </div>
-        
-        <div class="glass-panel p-8 border-green-500/30 gs-reveal">
-          <div class="text-4xl mb-4">🛡️</div>
-          <h3 class="text-xl font-bold mb-3">3. Aegis Adapts Safely</h3>
-          <p class="text-gray-400">Aegis introduces the <strong class="text-green-400">Certified Safe Update (CSU)</strong>. It continuously learns new adversarial tactics, but mathematically guarantees it never forgets the past.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+<section class='slide on' id='s1'><div class='wrap'>
+<div class='kicker'>01 / 08 · 0:00–0:45</div>
+<div class='hero'>
+<div>
+<h2>Scammers Adapt. <br><em>We Evolve.</em></h2>
+<p class='lead'>A static model trained today is obsolete tomorrow. Aegis continuously learns new adversarial tactics without forgetting the past.</p>
+<div class='rq'>Can a compact language model continually adapt to adversarial concept drift<br><span class='muted'>while preserving prior knowledge and improving intervention timing?</span></div>
+</div>
+<div>
+<div class='phone' aria-label='ภาพจำลองหน้าจอโทรศัพท์'>
+<div class='bar'><span>14:38</span><span>SMS</span></div>
+<div id='s1Feed'></div>
+</div>
+<div class='sim'>สถานการณ์สมมติ</div>
+<div class='ctrl'><button class='btn pri' id='s1Play'>▶ เล่นสถานการณ์</button><button class='btn' id='s1Reset' title='เริ่มใหม่'>↺</button></div>
+<div class='poll hid' id='s1Poll'>
+<div class='q'>ถ้าเป็นคุณ จะกดยืนยันการโอนไหม?</div>
+<button class='btn' data-a='yes'>โอน</button> <button class='btn' data-a='no'>ไม่โอน</button>
+<div class='ans hid' id='s1Ans'>คุณเห็นทุกข้อความพร้อมกันและไม่มีใครกดดัน — ผู้ใช้จริงเห็นทีละข้อความ ภายใต้ความกลัวและเวลาที่จำกัด นี่คือช่วงเวลาที่งานวิจัยนี้ต้องการช่วย</div>
+</div>
+</div>
+</div>
+</div></section>
 
-  <!-- The Algorithm (SEW-BFAR) -->
-  <section id="algorithm" class="py-32 px-6 relative bg-gray-900/50">
-    <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
-      <div class="gs-reveal-left">
-        <h2 class="text-4xl md:text-5xl font-bold mb-6">Watching the <br><span class="text-gradient">Whole Story.</span></h2>
-        <p class="text-xl text-gray-400 mb-6">
-          Scams don't happen in a single text message. They unfold over a conversation. 
-        </p>
-        <p class="text-gray-400 mb-6">
-          Instead of classifying messages one by one, Aegis uses a <strong>Sequential Probability Ratio Test (SPRT)</strong>. It calculates the cumulative risk of the entire conversation.
-        </p>
-        <ul class="space-y-4 mono text-sm text-gray-300">
-          <li class="flex items-center"><span class="text-blue-400 mr-3">✓</span> Calculates exactly WHEN to intervene</li>
-          <li class="flex items-center"><span class="text-blue-400 mr-3">✓</span> Mathematically bounds false alarms (FPR &lt; 0.1%)</li>
-          <li class="flex items-center"><span class="text-blue-400 mr-3">✓</span> Triggers a Bayesian warning UI just before the transfer</li>
-        </ul>
-      </div>
-      
-      <div class="glass-panel p-8 relative gs-reveal-right">
-        <!-- Mock Chat Interface -->
-        <div class="space-y-4">
-          <div class="flex justify-start opacity-50"><div class="bg-gray-800 p-3 rounded-2xl rounded-tl-none max-w-[80%] text-sm">Hello, is this the account owner?</div></div>
-          <div class="flex justify-start opacity-70"><div class="bg-gray-800 p-3 rounded-2xl rounded-tl-none max-w-[80%] text-sm">We detected unusual activity on your card.</div></div>
-          <div class="flex justify-start"><div class="bg-gray-800 border border-orange-500/50 p-3 rounded-2xl rounded-tl-none max-w-[80%] text-sm">Please transfer your balance to this secure vault immediately.</div></div>
-          
-          <!-- Aegis Intervention -->
-          <div class="mt-8 border border-red-500/50 bg-red-500/10 p-4 rounded-xl text-center">
-            <div class="text-red-400 font-bold mb-1">AEGIS INTERVENTION TRIGGERED</div>
-            <div class="mono text-xs text-gray-400">Sequential Risk Threshold Exceeded</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+<section class='slide' id='s2'><div class='wrap'>
+<div class='kicker'>02 / 08 · 0:45–1:45</div>
+<h2>The Catastrophic Flaw: <em>Catastrophic Forgetting</em> vs <span style='color:var(--amber)'>Concept Drift</span></h2>
+<div><div class='seg' id='s2Seg'><button class='on' data-m='sys'>สิ่งที่ระบบเห็น</button><button data-m='bel'>สิ่งที่ผู้ใช้เชื่อ</button></div><span class='hint2'>สลับมุมมอง</span></div>
+<div class='chain'>
+<div class='step'><div class='n'>01</div><div class='h'>ติดต่อ</div><div class='sees' data-sys='ผู้ให้บริการข้อความเห็น: ข้อความจากผู้ส่งใหม่' data-bel='“ธนาคารติดต่อมาจริง ๆ”'></div></div>
+<div class='step'><div class='n'>02</div><div class='h'>สร้างความน่าเชื่อถือ</div><div class='sees' data-sys='เว็บไซต์ / สายโทรเห็น: การติดต่อตามปกติ' data-bel='“เจ้าหน้าที่คนนี้รู้ข้อมูลของเรา น่าเชื่อถือ”'></div></div>
+<div class='step'><div class='n'>03</div><div class='h'>กดดันให้ตัดสินใจ</div><div class='sees' data-sys='ไม่มีระบบใดเห็นบทสนทนาทั้งหมด' data-bel='“ถ้าไม่ทำตอนนี้ เงินจะถูกอายัด”'></div></div>
+<div class='step tb'><span class='tbl'>ขอบเขตความไว้วางใจ</span><div class='n'>04</div><div class='h'>โอนเงิน</div><div class='sees' data-sys='ธนาคารเห็น: ธุรกรรมที่ยืนยันตัวตนถูกต้อง' data-bel='“ฉันกำลังปกป้องเงินของตัวเอง”'></div></div>
+</div>
+<div class='grid2' style='margin-top:18px'>
+<div class='card'><h3>The Drift Problem</h3><p>Scammers constantly adapt using LLMs (Concept Drift). Static rule-based systems freeze and fail immediately against Zero-Day attacks.</p></div>
+<div class='card'><h3>The Forgetting Problem</h3><p>If you naively retrain an AI on new scams, it suffers from Catastrophic Forgetting—it learns the new tricks but forgets how to stop old ones.</p></div>
+</div>
+<div class='callout'><b>ขอบเขตงานนี้:</b> ประเมิน <i>เนื้อหา</i> ของการสื่อสาร ณ จุดที่ผู้ใช้ยังเปลี่ยนการตัดสินใจได้</div>
+<div class='src'>ที่มา: ธนาคารแห่งประเทศไทย — <a href='https://www.bot.or.th/th/research-and-publications/articles-and-publications/articles/article-20260511.html' target='_blank' rel='noopener'>อัพเดท patch ภัยการเงินไทยปี 69</a></div>
+</div></section>
 
-  <!-- The Core Loop & Safety Gate -->
-  <section id="safety-gate" class="py-32 px-6 relative">
-    <div class="max-w-6xl mx-auto">
-      <div class="text-center mb-16 gs-reveal">
-        <h2 class="text-4xl md:text-5xl font-bold mb-6">The 8-Step <span class="text-gradient-success">Core Loop</span></h2>
-        <p class="text-xl text-gray-400 max-w-2xl mx-auto">How Aegis continuously evolves without human intervention, protected by the Monotonic Safety Theorem.</p>
-      </div>
+<section class='slide' id='s3'><div class='wrap'>
+<div class='kicker'>03 / 08 · 1:45–3:00</div>
+<h2>งานที่เกี่ยวข้อง และ<em>ช่องว่างวิจัย</em></h2>
+<div class='tablebox'><table class='t'>
+<thead><tr><th>แนวทาง</th><th>ตัวอย่าง</th><th>ข้อจำกัดต่อโจทย์นี้</th></tr></thead>
+<tbody>
+<tr><td>ข้อมูลภัยที่รู้จักแล้ว</td><td>Whoscall, Truecaller, Google Safe Browsing</td><td>ครอบคลุมแคมเปญใหม่ที่ยังไม่ถูกรายงานได้จำกัด</td></tr>
+<tr><td>บริการประเมินเนื้อหาเชิงพาณิชย์</td><td>Scamnetic (Scan&amp;Score, IDeveryone)</td><td>ไม่มีผลประเมินอิสระ ไม่เน้นภาษาไทย</td></tr>
+<tr><td>แบ่งงาน Edge–Cloud ที่ใช้งานจริง</td><td>Chrome + Gemini Nano</td><td>พิสูจน์ความเป็นไปได้ แต่ไม่มีผลประเมินสำหรับภาษาไทย</td></tr>
+<tr><td>LLM ตรวจจับแบบเรียลไทม์</td><td>“It Warned Me Just at the Right Moment”</td><td>ศึกษาการโทร งานนี้ขยายสู่ข้อความภาษาไทยและการหลบเลี่ยง</td></tr>
+<tr><td>โมเดลภาษาไทย</td><td>WangchanBERTa, Typhoon</td><td>โมเดลทั่วไป ยังไม่มีชุดทดสอบสแกมภาษาไทยมาตรฐาน</td></tr>
+<tr><td>การออกแบบคำเตือน</td><td>Egelman et al. 2008; Akhawe &amp; Felt 2013</td><td>บริบทเบราว์เซอร์ ไม่ใช่การโอนเงินบนมือถือ</td></tr>
+</tbody></table></div>
+<div class='callout'><b>ช่องว่าง:</b> ยังไม่มีการประเมินภาษาไทยที่วัด 3 มิติพร้อมกัน — แคมเปญที่ไม่เคยเห็น · การสะกดหลบ · ความทันเวลา</div>
+</div></section>
 
-      <!-- Flow Diagram -->
-      <div class="flex flex-wrap justify-center gap-4 mb-16 gs-reveal">
-        <div class="px-4 py-2 glass-panel border-gray-700">1. Interaction</div>
-        <div class="text-gray-500 flex items-center">→</div>
-        <div class="px-4 py-2 glass-panel border-gray-700">2. Risk_t</div>
-        <div class="text-gray-500 flex items-center">→</div>
-        <div class="px-4 py-2 glass-panel border-blue-500/50">3. Intervention</div>
-        <div class="text-gray-500 flex items-center">→</div>
-        <div class="px-4 py-2 glass-panel border-gray-700">4. Outcome</div>
-        <div class="text-gray-500 flex items-center">→</div>
-        <div class="px-4 py-2 glass-panel border-orange-500/50">5. Drift</div>
-        <div class="text-gray-500 flex items-center">→</div>
-        <div class="px-4 py-2 glass-panel border-purple-500/50">6. Learn</div>
-        <div class="text-gray-500 flex items-center">→</div>
-        <div class="px-4 py-2 glass-panel border-green-500 shadow-[0_0_15px_rgba(34,197,94,0.3)] font-bold text-green-400">7. SAFETY GATE</div>
-        <div class="text-gray-500 flex items-center">→</div>
-        <div class="px-4 py-2 glass-panel border-gray-700">8. Updated Aegis</div>
-      </div>
+<section class='slide' id='s4'><div class='wrap'>
+<div class='kicker'>04 / 08 · 3:00–4:15</div>
+<h2>The Scientific Baseline & <em>Evaluation</em></h2>
+<div class='grid3'>
+<div class='card rqcard' tabindex='0'><div class='h'>Baseline 1 · Static Model</div><p>A frozen baseline model. It remembers all legacy scams perfectly, but fails completely against new, adaptive evasion attacks.</p><div class='hyp'>Failure Mode: High Retention, Low Adaptation</div><div class='tap'>คลิก: ดูผลการทดลอง</div><div class='alt'>Concept Drift bypasses this model completely.</div></div>
+<div class='card rqcard' tabindex='0'><div class='h'>Baseline 2 · Naive Continual Learning</div><p>A model that immediately retrains on new scams. It catches the new attacks, but completely forgets old scam strategies.</p><div class='hyp'>Failure Mode: Catastrophic Forgetting</div><div class='tap'>คลิก: ดูผลการทดลอง</div><div class='alt'>Creates massive false positives and misses legacy attacks.</div></div>
+<div class='card rqcard' tabindex='0'><div class='h'>Baseline 3 · Aegis V10 (CSU)</div><p>Uses the Certified Safe Update protocol to guarantee adaptation to new scams while mathematically bounding forgetting.</p><div class='hyp'>Result: Monotonic Safety Theorem</div><div class='tap'>คลิก: ดูผลการทดลอง</div><div class='alt'>High Adaptation AND High Retention. Safe for production.</div></div>
+</div>
+<div class='contrib'>
+<div class='card key'><b>C1: SEW-BFAR</b><p>Sequential Probability Ratio Test (SPRT) to calculate cumulative risk.</p></div>
+<div class='card'><b>C2: Aegis CSU</b><p>Safety-Gated Continual Learning to prevent catastrophic forgetting.</p></div>
+<div class='card'><b>C3: OpenVINO</b><p>On-device edge inference running under 300ms latency.</p></div>
+<div class='card'><b>C4: Metaflow</b><p>DAG orchestration enforcing the 6-gate bootstrap statistical test.</p></div>
+</div>
+</div></section>
 
-      <!-- The 6 Gates -->
-      <div class="grid md:grid-cols-2 gap-12 items-center">
-        <div class="gs-reveal-left">
-          <h3 class="text-3xl font-bold mb-6">The Safety Gate (CSU Protocol)</h3>
-          <p class="text-gray-400 mb-4">When Aegis learns a new scam, it generates a <em>Candidate Model</em>. Before this model is deployed to users, it must pass <strong>6 rigorous statistical gates</strong> orchestrated by Metaflow.</p>
-          <p class="text-gray-400">If the candidate fails even one test—if it forgets an old scam, or gets slightly slower—it is instantly rejected. Aegis only gets smarter. Never dumber.</p>
-        </div>
-        <div class="glass-panel p-6 space-y-3 mono text-sm gs-reveal-right">
-          <div class="flex justify-between items-center p-3 bg-gray-800/50 rounded"><span class="text-gray-300">G1: Constrained Recall</span> <span class="text-green-400">PASS</span></div>
-          <div class="flex justify-between items-center p-3 bg-gray-800/50 rounded"><span class="text-gray-300">G2: Hard Ham Preservation</span> <span class="text-green-400">PASS</span></div>
-          <div class="flex justify-between items-center p-3 bg-gray-800/50 rounded"><span class="text-gray-300">G3: Adversarial Robustness</span> <span class="text-green-400">PASS</span></div>
-          <div class="flex justify-between items-center p-3 bg-gray-800/50 rounded"><span class="text-gray-300">G4: Legacy Scam Coverage</span> <span class="text-green-400">PASS</span></div>
-          <div class="flex justify-between items-center p-3 bg-gray-800/50 rounded"><span class="text-gray-300">G5: Sequential Lead Time</span> <span class="text-green-400">PASS</span></div>
-          <div class="flex justify-between items-center p-3 bg-gray-800/50 rounded"><span class="text-gray-300">G6: Latency Budget (< 300ms)</span> <span class="text-green-400">PASS</span></div>
-        </div>
-      </div>
-    </div>
-  </section>
+<section class='slide' id='s5'><div class='wrap'>
+<div class='kicker'>05 / 08 · 4:15–5:15</div>
+<h2>The 8-Step <em>Core Loop</em></h2>
+<div><span class='label'>Aegis Lifecycle & Metaflow Orchestration</span> <button class='btn pri' id='flowBtn' style='margin-left:8px'>▶ ดูการไหลของข้อมูล</button></div>
+<div class='arch'>
+<div class='layer'><div class='dim'>ข้อมูลเข้า</div><div>เฉพาะช่องทางที่ได้รับอนุญาต เช่น ข้อความที่ผู้ใช้ส่งมาตรวจ<div class='pl'>“ธนาคารแจ้ง: บัญชีมีความเสี่ยง กรุณาโอนเงินไปบัญชีปลอดภัยทันที”</div></div></div>
+<div class='flow'>↓</div>
+<div class='layer'><div class='ln'>ชั้น 1 · บนอุปกรณ์</div><div>กฎ + ข้อมูลภัย + โมเดลภาษาไทย<div class='dim' style='font-size:13px'>ประเมินรูปแบบภาษา: การแอบอ้างอำนาจ · การเร่งรัด · การขอข้อมูลลับ</div><div class='pl'>สัญญาณ: แอบอ้างอำนาจ ✓ · เร่งรัด ✓ · ขอโอนเงิน ✓</div></div></div>
+<div class='flow'>↓ <span>ส่งเฉพาะสัญญาณ ไม่ส่งเนื้อหาดิบ</span></div>
+<div class='layer'><div class='ln'>ชั้น 2 · ส่วนกลาง</div><div>ชื่อเสียงโดเมน · สัญญาณแคมเปญ<div class='dim' style='font-size:13px'>ข้อมูลที่เครื่องเดียวไม่มี</div><div class='pl'>รับเฉพาะสัญญาณ → ตรวจกับข้อมูลแคมเปญที่รู้จัก</div></div></div>
+<div class='flow'>↓</div>
+<div class='layer l3'><div class='ln'>ชั้น 3 · นโยบาย</div><div>เตือน / ให้ตรวจสอบผ่านช่องทางทางการ / เพิ่มขั้นยืนยัน<div class='bank'>การระงับธุรกรรม = ระบบควบคุมความเสี่ยงของธนาคารเท่านั้น</div><div class='pl'>ผลลัพธ์: แสดงคำเตือนพร้อมเหตุผลก่อนหน้าจอโอนเงิน</div></div></div>
+</div>
+<div class='src'>ตัวอย่างการไหลเพื่ออธิบายการออกแบบ ไม่ใช่ระบบที่ทำงานจริง · แนวทางคล้ายกันใน <a href='https://blog.google/security/using-ai-to-stop-tech-support-scams-in/' target='_blank' rel='noopener'>Chrome + Gemini Nano</a> · ข้อจำกัดสิทธิข้ามแอป: <a href='https://source.android.com/docs/security/app-sandbox' target='_blank' rel='noopener'>Android Application Sandbox</a></div>
+</div></section>
 
-  <!-- Execution Architecture -->
-  <section id="architecture" class="py-32 px-6 bg-gray-900/50 relative">
-    <div class="max-w-6xl mx-auto text-center">
-      <h2 class="text-4xl md:text-5xl font-bold mb-6 gs-reveal">Built for the <span class="text-gradient">Real World.</span></h2>
-      <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-16 gs-reveal">Aegis V10 isn't just theory. It's an MLOps masterclass.</p>
+<section class='slide' id='s6'><div class='wrap'>
+<div class='kicker'>06 / 08 · 5:15–6:30</div>
+<h2>แผนข้อมูล: <em>ส่วนที่ยากที่สุดของงานนี้</em></h2>
+<div class='tablebox'><table class='t'>
+<thead><tr><th>ส่วน</th><th>แหล่งและวิธีการ</th></tr></thead>
+<tbody>
+<tr><td>ข้อความสแกมจริง</td><td>ผู้ใช้บริจาคโดยสมัครใจผ่านแบบฟอร์มขอความยินยอม + คำเตือนสาธารณะจากหน่วยงานทางการ</td></tr>
+<tr><td>ข้อความปกติที่ “ยาก”</td><td>แจ้งเตือนจริงที่ดูเร่งด่วน เช่น OTP พัสดุ แจ้งเตือนธนาคาร</td></tr>
+<tr><td>ชุดหลบเลี่ยง</td><td>สะกดหลบ ตัวอักษรแทรก ตัวเลขแทนตัวอักษร สร้างจากข้อความจริงแล้วให้ผู้ตรวจยืนยัน</td></tr>
+<tr><td>บทสนทนายกระดับ</td><td>เริ่มปกติแล้วเปลี่ยนเป็นหลอกลวง กำกับตำแหน่งข้อความที่เริ่มเสี่ยง</td></tr>
+<tr><td>การกำกับฉลาก</td><td>ผู้กำกับ 2 คนอิสระต่อกัน · เป้าหมาย Cohen’s κ ≥ 0.7 · ขัดแย้งให้คนที่สามตัดสิน</td></tr>
+<tr><td>ความเป็นส่วนตัว</td><td>ลบข้อมูลระบุตัวบุคคลก่อนจัดเก็บ · ขออนุมัติคณะกรรมการจริยธรรมการวิจัย · ฐานความยินยอมตาม PDPA</td></tr>
+</tbody></table></div>
+<div class='callout amber'><b>กติกา:</b> ข้อมูลสังเคราะห์ใช้ฝึกได้ แต่ไม่ใช้ในชุดทดสอบหลัก</div>
+</div></section>
 
-      <div class="grid md:grid-cols-3 gap-8">
-        <div class="glass-panel p-8 gs-reveal">
-          <div class="text-4xl mb-6">⚡</div>
-          <h3 class="text-lg font-bold text-blue-400 mb-2">OpenVINO Edge Inference</h3>
-          <p class="text-sm text-gray-400">Runs the quantized Thai language model directly on the phone in under 300ms. Total privacy. Zero cloud latency.</p>
-        </div>
-        <div class="glass-panel p-8 gs-reveal">
-          <div class="text-4xl mb-6">🔄</div>
-          <h3 class="text-lg font-bold text-orange-400 mb-2">Metaflow Orchestration</h3>
-          <p class="text-sm text-gray-400">Handles the 8-step Core Loop deterministically. Executes the CSU Safety Gates across distributed clusters.</p>
-        </div>
-        <div class="glass-panel p-8 gs-reveal">
-          <div class="text-4xl mb-6">🤖</div>
-          <h3 class="text-lg font-bold text-purple-400 mb-2">HexStrike Red Teaming</h3>
-          <p class="text-sm text-gray-400">An autonomous GPT-4 agent that constantly writes new Thai evasion patterns to attack Aegis, forcing it to evolve.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+<section class='slide' id='s7'><div class='wrap'>
+<div class='kicker'>07 / 08 · 6:30–8:45</div>
+<h2>การประเมินผล และ<em>เกณฑ์ความสำเร็จ</em></h2>
+<div class='grid2'>
+<div class='card'>
+<div class='label'>ตัวอย่างสมมติ — ไม่ใช่ผลทดลอง</div>
+<p style='margin:0 0 10px'>100,000 ข้อความ · สแกม 1% · Recall 90% · อัตราเตือนผิด:</p>
+<div class='seg' id='fprSeg'><button class='on' data-f='1'>1%</button><button data-f='0.1'>0.1%</button></div>
+<div style='display:flex;gap:22px;align-items:flex-end;flex-wrap:wrap'>
+<div><div class='dim' style='font-size:12px'>คำเตือนที่เป็นสแกมจริง</div><div class='big' id='s7P'>47.6%</div></div>
+<div class='dim' style='font-size:13px;font-family:var(--mono)'>เตือนถูก <span id='s7T' style='color:var(--green)'>900</span> · เตือนผิด <span id='s7F' style='color:var(--rose)'>990</span></div>
+</div>
+<div class='bars' id='s7Bar'><div class='tp' style='width:47.6%'>ถูก</div><div class='fp' style='width:52.4%'>ผิด</div></div>
+<div class='sys'><span><b>S0</b> Static Model</span><span><b>S1</b> Naive Continual Learning</span><span><b>S2</b> Aegis V10 (CSU)</span></div>
+</div>
+<div>
+<div class='tablebox'><table class='t'>
+<thead><tr><th>มิติ</th><th>ตัวชี้วัด</th><th>เป้าหมายที่ตั้งไว้ล่วงหน้า</th></tr></thead>
+<tbody>
+<tr><td>ตรวจพบ</td><td>Recall ที่ FPR 0.1% บนชุดทดสอบตามเวลา</td><td>≥ S0 + 10 จุด%</td></tr>
+<tr><td>ความทนทาน</td><td>Recall ที่ลดลงบนชุดหลบเลี่ยง</td><td>ลดไม่เกิน 10 จุด%</td></tr>
+<tr><td>ความทันเวลา</td><td>lead time ก่อนคำขอโอนเงิน (มัธยฐาน)</td><td>≥ 1 ข้อความ</td></tr>
+<tr><td>ต้นทุน</td><td>p95 latency บน Android ระดับกลาง</td><td>≤ 300 ms</td></tr>
+<tr><td>ผู้ใช้</td><td>สัดส่วนการเลือกทางเสี่ยงในงานจำลอง</td><td>ต่ำกว่ากลุ่มคำเตือนทั่วไปอย่างมีนัยสำคัญ</td></tr>
+</tbody></table></div>
+<p class='dim' style='font-size:13px;margin:10px 0 0'>สถิติ: bootstrap 95% CI · McNemar test (เปรียบเทียบแบบจับคู่) · รายงาน Precision ที่ความชุก 0.1%–1%</p>
+</div>
+</div>
+<div class='callout'>ระบบที่ตรวจถูก <b>หลัง</b> ผู้ใช้โอนเงินไปแล้ว ไม่ผ่านเกณฑ์ของงานนี้ <button class='btn' data-goview='demo' style='margin-left:8px'>ดูตัวอย่างในเดโม →</button></div>
+</div></section>
 
-  <!-- Live Demo CTA -->
-  <section class="py-32 px-6 relative border-t border-gray-800">
-    <div class="max-w-4xl mx-auto text-center gs-reveal">
-      <h2 class="text-4xl md:text-5xl font-bold mb-6">Experience <span class="text-gradient">Aegis.</span></h2>
-      <p class="text-xl text-gray-400 mb-10">
-        Try the fully interactive Sentinel-Edge simulator. Attack the system with adversarial text, test the Bayesian UI, and see the algorithms in real-time.
-      </p>
-      <a href="app-demo.html" class="inline-block px-10 py-5 bg-white text-black hover:bg-gray-200 rounded-full font-bold text-lg transition shadow-[0_0_30px_rgba(255,255,255,0.2)]">
-        Launch Interactive Demo
-      </a>
-    </div>
-  </section>
+<section class='slide' id='s8'><div class='wrap'>
+<div class='kicker'>08 / 08 · 8:45–10:00</div>
+<div class='hero'>
+<div>
+<h2>แผนดำเนินงาน ความเสี่ยง <em>และข้อสรุป</em></h2>
+<div class='tablebox'><table class='t'>
+<thead><tr><th>ระยะ</th><th>งาน</th><th>ผลลัพธ์</th></tr></thead>
+<tbody>
+<tr><td>ปีที่ 1</td><td>เก็บข้อมูล กำกับฉลาก สร้างชุดทดสอบ</td><td>C1</td></tr>
+<tr><td>ปีที่ 2</td><td>ฝึกและเปรียบเทียบ S0–S3 บนอุปกรณ์จริง</td><td>C2, C3 · RQ1–2</td></tr>
+<tr><td>ปีที่ 3</td><td>ศึกษาผู้ใช้ ทดลองในช่องทางจำกัด</td><td>C4 · RQ3</td></tr>
+</tbody></table></div>
+<div class='grid3' style='margin-top:12px'>
+<div class='card'><h3 style='font-size:14px'>ข้อมูลจริงไม่พอ</h3><p>ใช้ข้อมูลสังเคราะห์ฝึกเท่านั้น ขยายความร่วมมือด้านข้อมูล</p></div>
+<div class='card'><h3 style='font-size:14px'>ผู้โจมตีปรับตัว</h3><p>ชุดหลบเลี่ยง + ทดสอบซ้ำตามเวลา</p></div>
+<div class='card'><h3 style='font-size:14px'>โมเดลไม่ชนะระบบฐาน</h3><p>ชุดทดสอบและผลเชิงลบยังเผยแพร่ได้</p></div>
+</div>
+<div class='close'>“เตือนอย่างมีเหตุผล ในเวลาที่ผู้ใช้ยังเลือกได้”</div>
+</div>
+<div>
+<div class='phone' aria-label='ภาพจำลองหน้าจอพร้อมคำเตือน'>
+<div class='bar'><span>14:39</span><span>ธนาคาร</span></div>
+<div class='warn'><b>ตรวจสอบก่อนโอน</b>ข้อความนี้ขอให้โอนเงินภายใต้ความเร่งด่วน กรุณาตรวจสอบกับธนาคารผ่านช่องทางทางการก่อน</div>
+<div class='pay'>โอนไปยัง ‘บัญชีปลอดภัย’<div class='amt'>50,000.00 ฿</div><span class='go' style='background:#334155'>ยืนยันการโอน</span></div>
+</div>
+<div class='sim'>ภาพจำลองคำเตือน — ไม่ใช่ระบบที่พัฒนาแล้ว</div>
+<div class='ctrl'><button class='btn pri' data-goview='demo'>▶ เปิดเดโม</button></div>
+</div>
+</div>
+</div></section>
+</div>
 
-  <footer class="py-12 text-center text-gray-500 text-sm mono border-t border-gray-800">
-    <p>AEGIS V10 • SAFETY-GATED CONTINUAL ADAPTATION</p>
-    <p class="mt-2">MIT Ph.D. Scientific Formulation</p>
-  </footer>
+<div class='view' id='view-demo'><div class='wrap'>
+<div class='kicker'>DEMO · ระบบฐาน S0</div>
+<h2>ลองดูว่า <em>ระบบฐานแบบกฎ</em> ทำได้แค่ไหน</h2>
+<div class='callout amber' style='margin:0 0 18px'><b>เดโมนี้คืออะไร:</b> ตัวตรวจแบบคำสำคัญ (S0) ที่ทำงานในเบราว์เซอร์ ไม่ใช่โมเดลที่เสนอ และไม่ส่งข้อมูลออกไปไหน ใช้แสดง <i>ปัญหา</i> ที่งานวิจัยนี้ต้องแก้ ได้แก่ การเตือนผิด การถูกหลบเลี่ยง และการเตือนช้า</div>
+<div class='demo'>
+<div class='card'>
+<h3>1 · ตรวจข้อความ</h3>
+<div class='chips' id='presets'></div>
+<textarea id='dText' aria-label='ข้อความที่ต้องการตรวจ'></textarea>
+<div class='tools2'>
+<button class='btn' id='evZ' title='แทรกอักขระความกว้างศูนย์ระหว่างตัวอักษร'>ผู้โจมตี: แทรกอักขระล่องหน</button>
+<button class='btn' id='evS'>ผู้โจมตี: เว้นวรรคในคำ</button>
+</div>
+<label class='switch'><input type='checkbox' id='norm'> ป้องกัน: ทำข้อความให้เป็นรูปแบบมาตรฐานก่อนตรวจ</label>
+<p class='dim' style='font-size:12px;margin:10px 0 0'>พิมพ์ข้อความของคุณเองได้ · ตัวอย่างทั้งหมดเป็นข้อความสมมติ</p>
+</div>
+<div class='card'>
+<h3>สิ่งที่ S0 เห็น</h3>
+<div class='render' id='dRender' aria-live='polite'></div>
+<div class='cats'>
+<div class='cat auth' id='cAuth'><b>แอบอ้างอำนาจ</b><span></span></div>
+<div class='cat urg' id='cUrg'><b>เร่งรัด / ข่มขู่</b><span></span></div>
+<div class='cat req' id='cReq'><b>ขอเงิน / ข้อมูลลับ</b><span></span></div>
+</div>
+<div class='verdict' id='dVerdict'><div class='meter'><i></i><i></i><i></i></div><div class='lv'></div></div>
+<div class='why' id='dWhy'></div>
+</div>
+</div>
+<details style='margin-top:14px'><summary>ดูกฎคำสำคัญทั้งหมดที่ S0 ใช้</summary><div class='body' id='ruleList'></div></details>
+<div class='sec'>
+<h3 style='font-size:20px'>2 · บทสนทนาที่ค่อย ๆ ยกระดับ: เตือน <span style='color:var(--cyan)'>ทัน</span> ไหม?</h3>
+<p class='muted' style='margin:0 0 14px'>ข้อความมาทีละข้อ S0 สะสมสัญญาณจากทั้งบทสนทนา สิ่งที่วัดคือ lead time: เตือนก่อนคำขอโอนเงินกี่ข้อความ (RQ3)</p>
+<div class='conv'>
+<div><div class='phone cphone'><div class='bar'><span>14:30</span><span>แชท · บทสนทนาสมมติ</span></div><div id='cFeed'></div></div></div>
+<div>
+<div class='seg' id='cSeg'><button class='on' data-v='plain'>ผู้โจมตีใช้คำตรง ๆ</button><button data-v='evade'>ผู้โจมตีเลี่ยงคำ</button></div>
+<div class='ctrl' style='justify-content:flex-start;margin-top:0'><button class='btn pri' id='cPlay'>▶ เล่น</button><button class='btn' id='cStep'>ข้อความถัดไป</button><button class='btn' id='cReset'>↺ เริ่มใหม่</button></div>
+<div class='tl' id='cTl'></div>
+<div class='verdict' id='cVerdict'><div class='meter'><i></i><i></i><i></i></div><div class='lv'>รอข้อความแรก</div></div>
+<div class='result hid' id='cResult'></div>
+<p class='dim' style='font-size:12px;margin-top:10px'>วงประสีแดง = ข้อความที่ขอให้โอนเงิน · สีเหลือง = ควรตรวจสอบ · สีแดง = เตือน</p>
+</div>
+</div>
+</div>
+</div></div>
 
-  <script>
-    gsap.registerPlugin(ScrollTrigger);
+<div class='view' id='view-lab'><div class='wrap'>
+<div class='kicker'>LAB · BASE-RATE CALCULATOR</div>
+<h2>คำเตือนที่ผู้ใช้เห็น <em>ถูกจริงกี่เปอร์เซ็นต์?</em></h2>
+<div class='label'>เครื่องคำนวณจากสมมติฐาน — ไม่ใช่ผลทดลองของโมเดล</div>
+<div class='lab'>
+<div class='card'>
+<div class='ctl'><div class='row'><span>จำนวนข้อความ</span><b id='lN'></b></div><input type='range' id='iN' min='10000' max='1000000' step='10000' value='100000'></div>
+<div class='ctl'><div class='row'><span>ความชุกของสแกม</span><b id='lP'></b></div><input type='range' id='iP' min='0.1' max='10' step='0.1' value='1'></div>
+<div class='ctl'><div class='row'><span>Recall (จับสแกมได้)</span><b id='lR'></b></div><input type='range' id='iR' min='50' max='99' step='1' value='90'></div>
+<div class='ctl'><div class='row'><span>อัตราเตือนผิด (FPR)</span><b id='lF'></b></div><input type='range' id='iF' min='0.05' max='5' step='0.05' value='1'></div>
+<p class='dim' style='font-size:13px;margin:0'>Precision = เตือนถูก ÷ (เตือนถูก + เตือนผิด)</p>
+</div>
+<div class='card'>
+<div class='stats'>
+<div class='stat'><div class='k'>สแกมจริง</div><div class='v' id='oS' style='color:var(--amber)'></div></div>
+<div class='stat'><div class='k'>เตือนถูก</div><div class='v' id='oT' style='color:var(--green)'></div></div>
+<div class='stat'><div class='k'>เตือนผิด</div><div class='v' id='oF' style='color:var(--rose)'></div></div>
+<div class='stat'><div class='k'>Precision</div><div class='v' id='oP' style='color:var(--cyan)'></div></div>
+</div>
+<div class='bars' id='oBar'><div class='tp'></div><div class='fp'></div></div>
+<p class='dim' style='font-size:12px;margin:14px 0 4px'>Precision เมื่อความชุกเปลี่ยนไป (Recall และ FPR คงที่ตามที่ตั้งไว้)</p>
+<svg id='chart' viewBox='0 0 600 260' width='100%' role='img' aria-label='กราฟ Precision ตามความชุกของสแกม'></svg>
+</div>
+</div>
+</div></div>
 
-    gsap.utils.toArray('.gs-reveal').forEach(function(elem) {
-      gsap.fromTo(elem, 
-        { y: 50, opacity: 0 }, 
-        {
-          scrollTrigger: { trigger: elem, start: "top 85%" },
-          y: 0, opacity: 1, duration: 1, ease: "power3.out"
-        }
-      );
-    });
+<div class='view' id='view-qa'><div class='wrap'>
+<div class='kicker'>Q&amp;A · เตรียมตอบคำถาม</div>
+<h2>คำถามที่คาดว่า<em>จะถูกถาม</em></h2>
+<details><summary>อะไรคือสิ่งใหม่ของงานนี้ ในเมื่อ Google ทำ Edge–Cloud แล้ว?</summary><p>สถาปัตยกรรมไม่ใช่ข้อค้นพบหลักครับ สิ่งใหม่คือชุดทดสอบภาษาไทยที่วัดแคมเปญใหม่ การหลบเลี่ยง และความทันเวลาพร้อมกัน และการเปรียบเทียบแบบควบคุมบนอุปกรณ์จริงว่าความซับซ้อนแต่ละระดับคุ้มหรือไม่</p></details>
+<details><summary>เดโมที่แสดงคือระบบที่เสนอหรือเปล่า?</summary><p>ไม่ใช่ครับ เดโมคือระบบฐาน S0 แบบคำสำคัญ ใช้แสดงปัญหาที่งานวิจัยต้องแก้ ได้แก่ การเตือนผิดกับข้อความปกติ การถูกหลบเลี่ยงด้วยอักขระล่องหนหรือการเปลี่ยนคำ และการเตือนช้าในบทสนทนา</p></details>
+<details><summary>ทำไมต้อง SLM?</summary><p>ยังไม่ได้สรุปว่าต้องใช้ครับ นั่นคือ RQ2 ถ้า encoder ขนาดเล็กให้ผลพอและใช้ทรัพยากรน้อยกว่า ผมจะเสนอให้ใช้ encoder</p></details>
+<details><summary>ทำไมตั้งเกณฑ์ 10 จุดเปอร์เซ็นต์ / 300 ms?</summary><p>เป็นเกณฑ์เริ่มต้นที่ตั้งก่อนทดลองเพื่อป้องกันการเลือกเกณฑ์ภายหลังครับ ปรับได้ครั้งเดียวหลังการศึกษานำร่อง และจะรายงานการปรับอย่างเปิดเผย</p></details>
+<details><summary>ความชุก 1% สมจริงไหม?</summary><p>น่าจะสูงกว่าความจริงครับ ซึ่งยิ่งทำให้การเตือนผิดสำคัญขึ้น ผมจึงรายงาน Precision ที่ความชุกหลายระดับ ไม่ใช่ค่าเดียว (ดูแท็บ Lab)</p></details>
+<details><summary>Scamnetic ใช้ SLM บน Edge จริงหรือ?</summary><p>เอกสารสาธารณะไม่ได้ยืนยันครับ Scamnetic อยู่ในงานที่เกี่ยวข้องในฐานะบริการเชิงพาณิชย์ ส่วนสถาปัตยกรรมเป็นข้อเสนอแยกของงานนี้</p></details>
+<details><summary>ตรวจพบแล้วบล็อกเลยได้ไหม?</summary><p>งานนี้แยกการตรวจจับออกจากนโยบายตอบสนองครับ การระงับธุรกรรมต้องอยู่ในระบบของธนาคาร ซึ่งมีหลักฐานอื่นและช่องทางทบทวน</p></details>
+<details><summary>โมเดลบนเครื่องปลอดภัยจาก prompt injection ไหม?</summary><p>ไม่รับประกันครับ ถ้าใช้โมเดลที่รับคำสั่ง จะทดสอบ prompt injection ตามกรอบ NIST AI 100-2 และโมเดลไม่มีอำนาจสั่งธุรกรรมโดยตรง</p></details>
+<details><summary>เก็บข้อมูลผิด PDPA ไหม?</summary><p>เก็บบนฐานความยินยอม ลบข้อมูลระบุตัวบุคคลก่อนจัดเก็บ และผ่านคณะกรรมการจริยธรรมก่อนเริ่มครับ PDPA ไม่ได้ห้ามการส่งข้อมูลแบบเหมารวม แต่มีเงื่อนไขที่ต้องปฏิบัติตาม</p></details>
+<h3 style='margin-top:26px'>แหล่งอ้างอิง</h3>
+<ul class='refs'>
+<li>ธนาคารแห่งประเทศไทย — <a href='https://www.bot.or.th/th/research-and-publications/articles-and-publications/articles/article-20260511.html' target='_blank' rel='noopener'>อัพเดท patch ภัยการเงินไทยปี 69</a></li>
+<li>Scamnetic — <a href='https://scamnetic.com/scanscore/' target='_blank' rel='noopener'>Scan&amp;Score</a>, <a href='https://scamnetic.com/ideveryone/' target='_blank' rel='noopener'>IDeveryone</a></li>
+<li>Google — <a href='https://blog.google/security/using-ai-to-stop-tech-support-scams-in/' target='_blank' rel='noopener'>Using AI to stop tech support scams in Chrome</a></li>
+<li><a href='https://arxiv.org/abs/2502.03964' target='_blank' rel='noopener'>“It Warned Me Just at the Right Moment”: Exploring LLM-based Real-time Detection of Phone Scams</a></li>
+<li>Lowphansirikul et al. — WangchanBERTa (2021) · SCB 10X — Typhoon</li>
+<li>Egelman, Cranor &amp; Hong — “You’ve Been Warned” (CHI 2008) · Akhawe &amp; Porter Felt — “Alice in Warningland” (USENIX Security 2013)</li>
+<li>NIST AI 100-2 — Adversarial Machine Learning · <a href='https://source.android.com/docs/security/app-sandbox' target='_blank' rel='noopener'>Android Application Sandbox</a></li>
+</ul>
+</div></div>
+</main>
 
-    gsap.utils.toArray('.gs-reveal-left').forEach(function(elem) {
-      gsap.fromTo(elem, 
-        { x: -50, opacity: 0 }, 
-        {
-          scrollTrigger: { trigger: elem, start: "top 85%" },
-          x: 0, opacity: 1, duration: 1, ease: "power3.out"
-        }
-      );
-    });
+<div class='prompter' id='prompter' aria-live='polite'>
+<div class='ph'><span id='pTitle'></span><span id='pTime'></span></div>
+<div id='pText'></div>
+</div>
 
-    gsap.utils.toArray('.gs-reveal-right').forEach(function(elem) {
-      gsap.fromTo(elem, 
-        { x: 50, opacity: 0 }, 
-        {
-          scrollTrigger: { trigger: elem, start: "top 85%" },
-          x: 0, opacity: 1, duration: 1, ease: "power3.out"
-        }
-      );
-    });
-  </script>
+<nav class='nav' id='nav'>
+<button class='btn' id='prev'>◀<span class='lbl'> ก่อนหน้า</span></button>
+<div class='dots' id='dots'></div>
+<button class='btn' id='next'><span class='lbl'>ถัดไป </span>▶</button>
+<span class='hint'>← → เลื่อนสไลด์ · T บทพูด · F เต็มจอ</span>
+</nav>
+
+<script>
+const S=[
+{t:0,e:45,title:'ก่อนเงินจะออกจากบัญชี เรามีโอกาสช่วยผู้ใช้ตรงไหน?',script:[
+'เรียนท่านอาจารย์และเพื่อน ๆ ทุกท่านครับ',
+'ลองนึกภาพผู้ใช้คนหนึ่งได้รับข้อความว่าบัญชีธนาคารมีความเสี่ยง เขาติดต่อกลับ คุยกับคนที่อ้างว่าเป็นเจ้าหน้าที่ และถูกชักชวนให้โอนเงินไปยัง ‘บัญชีปลอดภัย’',
+'ผู้ใช้เป็นคนกดโอนเอง ระบบยืนยันตัวตนผ่านทุกขั้นตอน แต่ไม่มีระบบใดรู้ว่าเขากำลังตัดสินใจภายใต้การหลอกลวง',
+'งานวิจัยนี้จึงไม่ได้ถามแค่ว่า ‘ตรวจจับสแกมได้ไหม’ แต่ถามว่า ‘ตรวจจับได้ทัน ก่อนเงินออกจากบัญชีหรือไม่ ด้วยอัตราการเตือนผิดที่ผู้ใช้ยอมรับได้’ ครับ']},
+{t:45,e:105,title:'ช่องว่างอยู่ระหว่าง “สิ่งที่ระบบเห็น” กับ “สิ่งที่ผู้ใช้กำลังเชื่อ”',script:[
+'ในกรอบ Threat Modeling ทรัพย์สินที่ต้องปกป้องคือเงินและข้อมูลของผู้ใช้ ผู้โจมตีควบคุมข้อความ เว็บไซต์ และเรื่องราวที่สร้างความน่าเชื่อถือ',
+'ขอบเขตความไว้วางใจถูกข้ามเมื่อผู้ใช้นำคำกล่าวอ้างจากภายนอก มาเป็นเหตุผลอนุมัติธุรกรรมจริง',
+'การป้องกันปัจจุบันมีช่องว่างสองข้อ ข้อแรก ฐานข้อมูลภัยที่รู้จักแล้วจับได้เฉพาะสิ่งที่เคยถูกรายงาน แคมเปญใหม่จึงหลุดได้ ข้อสอง บริบทกระจายอยู่หลายระบบ ซึ่งธนาคารแห่งประเทศไทยก็ชี้ถึงข้อจำกัดของการเชื่อมโยงข้อมูลระหว่างภาคการเงิน โทรคมนาคม และแพลตฟอร์มออนไลน์',
+'งานนี้จึงมุ่งที่การประเมินเนื้อหาของการสื่อสาร ณ จุดที่ผู้ใช้ยังเปลี่ยนการตัดสินใจได้ครับ']},
+{t:105,e:180,title:'งานที่เกี่ยวข้อง และช่องว่างวิจัย',script:[
+'งานที่มีอยู่แบ่งได้เป็นหกกลุ่มครับ',
+'ข้อมูลภัยที่รู้จักแล้วมีประโยชน์ แต่ครอบคลุมแคมเปญใหม่ได้จำกัด บริการเชิงพาณิชย์อย่าง Scamnetic ประเมินทั้งเนื้อหาและตัวตนของคู่สนทนา แต่ข้อมูลที่เปิดเผยเป็นของบริษัทเอง ยังไม่มีผลประเมินอิสระ',
+'Google แสดงให้เห็นว่าการแบ่งงานระหว่างโมเดลบนเครื่องกับระบบส่วนกลางใช้งานได้จริงใน Chrome และงานวิจัยด้านการโทรชี้ว่าการเตือนทันเวลาสำคัญพอ ๆ กับการเตือนถูก',
+'ด้านภาษาไทย เรามีโมเดลภาษาที่ดี แต่ยังไม่มีชุดทดสอบสแกมภาษาไทยที่ใช้เป็นมาตรฐานได้ และงานด้านคำเตือนส่วนใหญ่ศึกษาบนเบราว์เซอร์',
+'ช่องว่างที่งานนี้จะเติมคือ การประเมินภาษาไทยที่วัดสามมิติพร้อมกัน: แคมเปญที่ไม่เคยเห็น การสะกดหลบ และความทันเวลาครับ']},
+{t:180,e:255,title:'คำถามวิจัยและผลงานที่คาดหวัง',script:[
+'จากช่องว่างนี้ ผมตั้งคำถามวิจัยสามข้อครับ',
+'ข้อแรก โมเดลบนเครื่องช่วยจับแคมเปญใหม่ได้มากกว่าระบบฐานหรือไม่ ที่อัตราเตือนผิดคงที่ ผมตั้งเกณฑ์ไว้ล่วงหน้าว่าต้องเพิ่ม Recall อย่างน้อยสิบจุดเปอร์เซ็นต์ ถ้าไม่ถึง ก็ถือว่าสมมติฐานไม่ได้รับการสนับสนุน',
+'ข้อสอง เราจำเป็นต้องใช้ SLM จริงหรือ หรือโมเดลจำแนกที่เล็กกว่าก็พอ คำตอบว่า ‘ไม่จำเป็น’ ก็เป็นผลที่มีค่า เพราะประหยัดทรัพยากรได้มาก',
+'ข้อสาม ระบบเตือนได้ทันก่อนคำขอโอนเงินหรือไม่ และผู้ใช้ตอบสนองต่อคำเตือนแบบไหนดีกว่า',
+'ผลงานหลักคือชุดทดสอบภาษาไทย ซึ่งมีคุณค่าต่อชุมชนวิจัยไม่ว่าผลการเปรียบเทียบโมเดลจะออกมาอย่างไรครับ']},
+{t:255,e:315,title:'สถาปัตยกรรมที่ใช้ทดสอบ',script:[
+'สถาปัตยกรรมนี้เป็นเครื่องมือสำหรับตอบคำถามวิจัยครับ มีสามชั้น',
+'ชั้นแรกประเมินบนอุปกรณ์ เฉพาะข้อมูลจากช่องทางที่ได้รับอนุญาต เช่น ข้อความที่ผู้ใช้ส่งมาตรวจ โมเดลประเมินรูปแบบภาษา เช่น การแอบอ้างอำนาจ การเร่งรัด และการขอข้อมูลลับ ไม่ใช่การอ่านเจตนาในใจคน',
+'ชั้นที่สองคือบริการส่วนกลาง สำหรับข้อมูลที่เครื่องเดียวไม่มี โดยส่งเฉพาะสัญญาณที่จำเป็น ไม่ส่งเนื้อหาดิบ',
+'ชั้นที่สามแยกการตรวจจับออกจากการตัดสินใจ คะแนนของโมเดลใช้เลือกระดับการเตือนเท่านั้น การระงับธุรกรรมต้องอยู่ในระบบควบคุมความเสี่ยงของธนาคาร ซึ่งมีหลักฐานอื่นและช่องทางทบทวนครับ']},
+{t:315,e:390,title:'แผนข้อมูล: ส่วนที่ยากที่สุดของงานนี้',script:[
+'ความท้าทายที่ใหญ่ที่สุดของงานนี้ไม่ใช่โมเดล แต่เป็นข้อมูลครับ',
+'ข้อความสแกมจริงจะมาจากการบริจาคโดยสมัครใจพร้อมความยินยอม และจากคำเตือนสาธารณะของหน่วยงานทางการ ส่วนข้อความปกติ ผมตั้งใจเลือกข้อความที่ดูเร่งด่วนแต่ถูกต้อง เช่น OTP หรือแจ้งเตือนพัสดุ เพราะนี่คือสิ่งที่ทำให้ระบบเตือนผิดในโลกจริง',
+'ข้อความทุกชิ้นจะถูกกำกับโดยสองคนอย่างอิสระ และวัดความสอดคล้องด้วย Cohen’s kappa ข้อมูลระบุตัวบุคคลจะถูกลบก่อนจัดเก็บ และโครงการจะผ่านคณะกรรมการจริยธรรมก่อนเก็บข้อมูล',
+'กติกาสำคัญคือ ข้อมูลสังเคราะห์ใช้ฝึกโมเดลได้ แต่ชุดทดสอบหลักต้องเป็นข้อมูลจริงเท่านั้น เพื่อไม่ให้ผลดูดีเกินจริงครับ']},
+{t:390,e:525,title:'การประเมินผลและเกณฑ์ความสำเร็จ',script:[
+'ความแม่นยำค่าเดียวไม่ได้บอกว่าผู้ใช้ควรเชื่อคำเตือนหรือไม่ครับ',
+'สมมติมีหนึ่งแสนข้อความ เป็นสแกมหนึ่งเปอร์เซ็นต์ ระบบจับได้เก้าสิบเปอร์เซ็นต์ ถ้าเตือนผิดหนึ่งเปอร์เซ็นต์ คำเตือนที่เป็นสแกมจริงมีไม่ถึงครึ่ง แต่ถ้าลดการเตือนผิดเหลือศูนย์จุดหนึ่งเปอร์เซ็นต์ สัดส่วนนี้ขึ้นไปประมาณเก้าสิบเปอร์เซ็นต์',
+'ตัวเลขนี้คือเหตุผลที่ผมกำหนดจุดทำงานไว้ที่อัตราเตือนผิดศูนย์จุดหนึ่งเปอร์เซ็นต์ และในความเป็นจริงความชุกของสแกมอาจต่ำกว่านี้ ผมจึงจะรายงาน Precision ที่หลายระดับความชุก',
+'การทดลองเปรียบเทียบสี่ระบบ ตั้งแต่ระบบฐานไปจนถึง Edge–Cloud ครบชุด ทุกเกณฑ์ในตารางถูกกำหนดไว้ก่อนทดลอง ครอบคลุมการตรวจพบ ความทนทาน ความทันเวลา ต้นทุนบนอุปกรณ์จริง และผลต่อผู้ใช้',
+'การเปรียบเทียบใช้ McNemar test เพราะทุกระบบทดสอบบนข้อความชุดเดียวกัน และรายงานช่วงความเชื่อมั่นด้วย bootstrap',
+'ระบบที่ตรวจถูกหลังผู้ใช้โอนเงินไปแล้ว อาจได้คะแนนโมเดลดี แต่ไม่ผ่านเกณฑ์ของงานนี้ครับ']},
+{t:525,e:600,title:'แผนดำเนินงาน ความเสี่ยง และข้อสรุป',script:[
+'งานแบ่งเป็นสามระยะครับ ปีแรกสร้างชุดทดสอบ ปีที่สองเปรียบเทียบโมเดลบนอุปกรณ์จริง ปีที่สามศึกษาผู้ใช้และทดลองในช่องทางจำกัด เช่น การตรวจข้อความที่ผู้ใช้ส่งมาเอง',
+'ความเสี่ยงหลักคือข้อมูลไม่พอ และผู้โจมตีปรับตัว ซึ่งผมรับมือด้วยการแยกข้อมูลสังเคราะห์ออกจากชุดทดสอบ และทดสอบซ้ำตามเวลา',
+'และถ้าโมเดลไม่ชนะระบบฐาน งานนี้ก็ยังมีผลงาน เพราะชุดทดสอบภาษาไทยและผลเชิงลบที่วัดอย่างรัดกุม คือสิ่งที่ชุมชนวิจัยยังไม่มีครับ',
+'กลับไปที่ผู้ใช้คนเดิม ในระบบที่ผ่านเกณฑ์ เขาจะเห็นคำเตือนว่า ‘ข้อความนี้ขอให้โอนเงินภายใต้ความเร่งด่วน กรุณาตรวจสอบกับธนาคารผ่านช่องทางทางการก่อน’ และเห็นคำเตือนนั้นก่อนจะกดโอน',
+'คุณค่าของ AI ในงานนี้ จึงอยู่ที่การช่วยให้ผู้ใช้ตัดสินใจได้ปลอดภัยขึ้น ก่อนที่ความเชื่อจะกลายเป็นความเสียหายครับ']}
+];
+const $=id=>document.getElementById(id);
+const el=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e};
+const fmt=s=>String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0,view='slides',sec=0,run=null;
+
+S.forEach((_,i)=>{const b=el('button','dot',String(i+1));b.setAttribute('aria-label','สไลด์ '+(i+1));b.onclick=()=>go(i);$('dots').appendChild(b)});
+
+function go(i){
+  cur=Math.max(0,Math.min(S.length-1,i));
+  slides.forEach((s,k)=>s.classList.toggle('on',k===cur));
+  document.querySelectorAll('.dot').forEach((d,k)=>d.classList.toggle('on',k===cur));
+  $('prev').disabled=cur===0;$('next').disabled=cur===S.length-1;
+  const s=S[cur];
+  $('pTitle').textContent=(cur+1)+' / 8 · '+s.title;
+  $('pTime').textContent='เป้าหมาย '+fmt(s.t)+'–'+fmt(s.e);
+  $('pText').innerHTML='';
+  s.script.forEach(t=>$('pText').appendChild(el('p',null,t)));
+  $('prog').style.width=view==='slides'?((cur+1)/S.length*100)+'%':'0';
+  try{history.replaceState(null,'','#'+(cur+1))}catch(e){}
+  pace();window.scrollTo(0,0);
+}
+function setView(v){
+  view=v;
+  document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='view-'+v));
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.view===v));
+  $('nav').style.display=v==='slides'?'flex':'none';
+  $('prog').style.width=v==='slides'?((cur+1)/S.length*100)+'%':'0';
+  if(v!=='slides')$('prompter').classList.remove('on');
+  if(v==='lab')calc();
+  if(v==='demo')analyze();
+  window.scrollTo(0,0);
+}
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>setView(b.dataset.view));
+document.querySelectorAll('[data-goview]').forEach(b=>b.onclick=()=>setView(b.dataset.goview));
+$('prev').onclick=()=>go(cur-1);$('next').onclick=()=>go(cur+1);
+
+function pace(){
+  const p=$('pace'),s=S[cur];
+  if(!sec&&!run){p.className='pace';p.textContent='พร้อม';return}
+  if(sec>s.e){p.className='pace late';p.textContent='ช้ากว่าแผน '+fmt(sec-s.e)}
+  else if(sec<s.t){p.className='pace early';p.textContent='เร็วกว่าแผน'}
+  else{p.className='pace ok';p.textContent='ตามแผน'}
+}
+$('timerBtn').onclick=()=>{
+  if(run){clearInterval(run);run=null;$('timerBtn').textContent='▶ ต่อ'}
+  else{run=setInterval(()=>{sec++;$('clock').textContent=fmt(sec);$('clock').style.color=sec>600?'var(--rose)':'';pace()},1000);$('timerBtn').textContent='❚❚ หยุด'}
+  pace();
+};
+$('resetBtn').onclick=()=>{clearInterval(run);run=null;sec=0;$('clock').textContent='00:00';$('clock').style.color='';$('timerBtn').textContent='▶ ซ้อม';pace()};
+$('promptBtn').onclick=()=>{if(view!=='slides')setView('slides');$('prompter').classList.toggle('on')};
+function fs(){try{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}catch(e){}}
+$('fsBtn').onclick=fs;
+document.addEventListener('keydown',e=>{
+  const tg=e.target.tagName;if(tg==='INPUT'||tg==='TEXTAREA')return;
+  const k=e.key;
+  if(k==='t'||k==='T'){$('promptBtn').click();return}
+  if(k==='f'||k==='F'){fs();return}
+  if(view!=='slides')return;
+  if(k==='ArrowRight'||k===' '||k==='PageDown'){e.preventDefault();go(cur+1)}
+  else if(k==='ArrowLeft'||k==='PageUp'){e.preventDefault();go(cur-1)}
+  else if(k==='Home')go(0);else if(k==='End')go(S.length-1);
+  else if(/^[1-8]$/.test(k))go(+k-1);
+});
+let tx=null;
+document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
+document.addEventListener('touchend',e=>{if(tx===null||view!=='slides')return;const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>70)go(cur+(d<0?1:-1));tx=null},{passive:true});
+
+/* slide 1 */
+const S1=[
+{f:'ไม่ทราบผู้ส่ง',t:'“บัญชีของคุณมีความเสี่ยง กรุณาติดต่อเจ้าหน้าที่ทันที”'},
+{f:'“เจ้าหน้าที่ธนาคาร”',t:'“ตรวจพบรายการผิดปกติครับ ต้องย้ายเงินไปบัญชีปลอดภัยก่อน”'},
+{f:'“เจ้าหน้าที่ธนาคาร”',t:'“ต้องทำภายใน 10 นาที และห้ามบอกใครนะครับ”',c:'req'}
+];
+let s1T=[];
+const s1Bubble=m=>{const b=el('div','bubble'+(m.c?' '+m.c:''));b.append(el('div','from',m.f),document.createTextNode(m.t));return b};
+const s1Pay=()=>{const p=el('div','pay');p.append(document.createTextNode('โอนไปยัง ‘บัญชีปลอดภัย’'),el('div','amt','50,000.00 ฿'),el('span','go','ยืนยันการโอน'));return p};
+function s1Reset(){s1T.forEach(clearTimeout);s1T=[];$('s1Feed').innerHTML='';$('s1Poll').classList.add('hid');$('s1Ans').classList.add('hid');document.querySelectorAll('#s1Poll [data-a]').forEach(x=>x.classList.remove('on'));$('s1Play').disabled=false}
+function s1Play(){
+  s1Reset();$('s1Play').disabled=true;let t=0;
+  S1.forEach(m=>{
+    s1T.push(setTimeout(()=>{const ty=el('div','typing');ty.append(el('i'),el('i'),el('i'));ty.id='s1Ty';$('s1Feed').appendChild(ty)},t));
+    t+=700;
+    s1T.push(setTimeout(()=>{const ty=$('s1Ty');if(ty)ty.remove();$('s1Feed').appendChild(s1Bubble(m))},t));
+    t+=900;
+  });
+  s1T.push(setTimeout(()=>$('s1Feed').appendChild(s1Pay()),t));
+  s1T.push(setTimeout(()=>{$('s1Poll').classList.remove('hid');$('s1Play').disabled=false},t+500));
+}
+$('s1Play').onclick=s1Play;
+$('s1Reset').onclick=()=>{s1Reset();S1.forEach(m=>$('s1Feed').appendChild(s1Bubble(m)));$('s1Feed').appendChild(s1Pay())};
+document.querySelectorAll('#s1Poll [data-a]').forEach(b=>b.onclick=()=>{document.querySelectorAll('#s1Poll [data-a]').forEach(x=>x.classList.toggle('on',x===b));$('s1Ans').classList.remove('hid')});
+S1.forEach(m=>$('s1Feed').appendChild(s1Bubble(m)));$('s1Feed').appendChild(s1Pay());
+
+/* slide 2 */
+function s2Mode(m){document.querySelectorAll('#s2Seg button').forEach(b=>b.classList.toggle('on',b.dataset.m===m));document.querySelectorAll('#s2 .sees').forEach(x=>{x.textContent=x.dataset[m];x.classList.toggle('bel',m==='bel');x.style.animation='none';void x.offsetWidth;x.style.animation='rise .3s both'})}
+document.querySelectorAll('#s2Seg button').forEach(b=>b.onclick=()=>s2Mode(b.dataset.m));
+s2Mode('sys');
+
+/* slide 4 */
+document.querySelectorAll('.rqcard').forEach(c=>{const f=()=>c.classList.toggle('open');c.onclick=f;c.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();f()}}});
+
+/* slide 5 */
+let flowT=[];
+$('flowBtn').onclick=()=>{
+  flowT.forEach(clearTimeout);flowT=[];
+  const L=[...document.querySelectorAll('#s5 .layer')];L.forEach(l=>l.classList.remove('lit','done'));
+  L.forEach((l,i)=>flowT.push(setTimeout(()=>{L.forEach(x=>x.classList.remove('lit'));l.classList.add('lit','done')},i*1100)));
+  flowT.push(setTimeout(()=>L.forEach(x=>x.classList.remove('lit')),L.length*1100+600));
+};
+
+/* slide 7 */
+function s7(f){
+  const tp=900,fp=Math.round(99000*f/100),pr=tp/(tp+fp)*100;
+  document.querySelectorAll('#fprSeg button').forEach(b=>b.classList.toggle('on',+b.dataset.f===f));
+  $('s7P').textContent=pr.toFixed(1)+'%';$('s7P').style.color=pr<50?'var(--rose)':'var(--green)';
+  $('s7T').textContent=tp.toLocaleString('en-US');$('s7F').textContent=fp.toLocaleString('en-US');
+  const b=$('s7Bar').children;b[0].style.width=pr+'%';b[1].style.width=(100-pr)+'%';b[1].textContent=100-pr>12?'ผิด':'';
+}
+document.querySelectorAll('#fprSeg button').forEach(b=>b.onclick=()=>s7(+b.dataset.f));
+s7(1);
+
+/* demo: keyword baseline S0 */
+const RULES=[
+{id:'auth',el:'cAuth',name:'แอบอ้างอำนาจ',words:['ธนาคาร','ตำรวจ','ดีเอสไอ','DSI','เจ้าหน้าที่','สรรพากร','การไฟฟ้า','ศาล','ปปง']},
+{id:'urg',el:'cUrg',name:'เร่งรัด / ข่มขู่',words:['ด่วน','ทันที','ภายใน','อายัด','ระงับ','ดำเนินคดี','หมายจับ','ฟอกเงิน','ผิดปกติ','มีความเสี่ยง']},
+{id:'req',el:'cReq',name:'ขอเงิน / ข้อมูลลับ',words:['โอน','บัญชีปลอดภัย','OTP','แจ้งรหัส','ติดตั้งแอป','กดลิงก์','ห้ามบอก','เป็นความลับ']}
+];
+const PRESETS=[
+{n:'ธนาคารแจ้งอายัด',k:'สแกม',t:'ธนาคารแจ้ง: บัญชีของคุณมีความเสี่ยง จะถูกอายัดภายใน 1 ชม. กรุณาโอนเงินไปบัญชีปลอดภัยทันที และห้ามบอกผู้อื่น'},
+{n:'พัสดุตีกลับ',k:'ข้อความปกติ',t:'แจ้งเตือนจากบริษัทขนส่ง: พัสดุของคุณจะถูกส่งคืนภายใน 24 ชม. หากไม่ยืนยันที่อยู่ กรุณากดลิงก์ในแอปของบริษัท'},
+{n:'รหัส OTP',k:'ข้อความปกติ',t:'รหัส OTP ของท่านคือ 482913 สำหรับเข้าสู่ระบบ ห้ามเปิดเผยรหัสนี้แก่ผู้อื่น'},
+{n:'ขอย้ายยอด',k:'สแกม · เปลี่ยนคำ',t:'พี่ครับ ช่วยย้ายยอดไปพักไว้ที่เลขที่ผมส่งให้ก่อนนะ เรื่องนี้รอไม่ได้ และอย่าเพิ่งเล่าให้ใครฟัง'}
+];
+const ZW=String.fromCharCode(8203);
+const isMark=c=>{const k=c.charCodeAt(0);return k===0x0E31||(k>=0x0E34&&k<=0x0E3A)||(k>=0x0E47&&k<=0x0E4E)};
+const isGap=c=>c.charCodeAt(0)<=32||c===ZW;
+let ev=null;
+PRESETS.forEach(p=>{const b=el('button','chip');b.append(document.createTextNode(p.n),el('span','k',p.k));b.onclick=()=>{ev=null;$('dText').value=p.t;document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('on',c===b));analyze()};$('presets').appendChild(b)});
+function scan(text,normalize){
+  const src=[...text];let norm=[],map=[];
+  src.forEach((c,i)=>{if(normalize&&isGap(c))return;norm.push(c.toLowerCase());map.push(i)});
+  const low=norm.join('');
+  const tag=new Array(src.length).fill(null),hits={auth:[],urg:[],req:[]};
+  RULES.forEach(r=>r.words.forEach(w=>{
+    let kc=[...w.toLowerCase()];if(normalize)kc=kc.filter(c=>!isGap(c));
+    const kw=kc.join('');
+    let from=0;
+    while(true){
+      const idx=low.indexOf(kw,from);if(idx<0)break;
+      const ci=[...low.slice(0,idx)].length;
+      if(!hits[r.id].includes(w))hits[r.id].push(w);
+      const a=map[ci],b=map[ci+kc.length-1];
+      for(let j=a;j<=b;j++)if(!tag[j])tag[j]=r.id;
+      from=idx+kw.length;
+    }
+  }));
+  return {src,tag,hits,n:['auth','urg','req'].filter(k=>hits[k].length).length};
+}
+const LV=['ไม่พบสัญญาณ','พบสัญญาณเดียว — ยังไม่เตือน','ควรตรวจสอบ','เตือน: ลักษณะคล้ายสแกม'];
+function setVerdict(box,n,label){
+  box.className='verdict v'+n;
+  const cols=['var(--green)','var(--muted)','var(--amber)','var(--rose)'];
+  [...box.querySelectorAll('.meter i')].forEach((m,i)=>m.style.background=i<n?cols[n]:'');
+  box.querySelector('.lv').textContent=label||LV[n];
+}
+function analyze(){
+  const text=$('dText').value,normalize=$('norm').checked,r=scan(text,normalize);
+  const out=$('dRender');out.innerHTML='';
+  if(!text.trim())out.appendChild(el('span','dim','พิมพ์หรือเลือกข้อความตัวอย่าง'));
+  let i=0;
+  while(i<r.src.length){
+    const t=r.tag[i];let j=i;while(j<r.src.length&&r.tag[j]===t)j++;
+    const chunk=r.src.slice(i,j).join('');
+    out.appendChild(t?el('mark','m-'+t,chunk):document.createTextNode(chunk));
+    i=j;
+  }
+  RULES.forEach(x=>{const c=$(x.el);c.classList.toggle('hit',r.hits[x.id].length>0);c.querySelector('span').textContent=r.hits[x.id].length?r.hits[x.id].join(', '):'—'});
+  setVerdict($('dVerdict'),r.n);
+  const inv=r.src.filter(c=>c===ZW).length,p=PRESETS.findIndex(q=>q.t===text);
+  let why='';
+  if(ev==='zw'&&!normalize)why='ข้อความดูเหมือนเดิมทุกตัวอักษร แต่มีอักขระล่องหน '+inv+' ตัวคั่นอยู่ S0 จึงจับคำไม่ได้ ลองเปิด “ป้องกัน” ด้านซ้าย';
+  else if(ev==='sp'&&!normalize)why='ผู้โจมตีเว้นวรรคในคำสำคัญ คนยังอ่านออก แต่ S0 จับคำไม่ได้ ลองเปิด “ป้องกัน” ด้านซ้าย';
+  else if(ev&&normalize)why='การทำข้อความให้เป็นรูปแบบมาตรฐานลบช่องว่างและอักขระล่องหนก่อนตรวจ จึงจับได้อีกครั้ง แต่ผู้โจมตีเปลี่ยนวิธีได้เสมอ ลองตัวอย่าง “ขอย้ายยอด”';
+  else if(p===0)why='พบครบทั้งสามกลุ่ม S0 เตือนได้ เพราะผู้โจมตีใช้คำตรง ๆ ลองกดปุ่ม “ผู้โจมตี” ด้านซ้ายดูว่าจะเกิดอะไรขึ้น';
+  else if(p===1)why='นี่เป็นข้อความปกติ แต่ S0 ขึ้น “ควรตรวจสอบ” เพราะมีคำเร่งรัดและคำขอให้กดลิงก์ — ตัวอย่างของการเตือนผิดที่ทำให้ Precision ต่ำ (สไลด์ 7)';
+  else if(p===2)why='ข้อความ OTP ปกติมีคำเสี่ยงหนึ่งกลุ่ม S0 จึงยังไม่เตือน แต่ถ้าตั้งเกณฑ์เข้มขึ้น ข้อความลักษณะนี้จะกลายเป็นการเตือนผิดทันที';
+  else if(p===3)why='ความหมายคือการหลอกให้โอนเงินชัดเจน แต่ไม่มีคำสำคัญเลย S0 จึงไม่เห็นอะไร — เหตุผลที่ต้องทดสอบโมเดลภาษา (RQ1–RQ2)';
+  else if(text.trim())why='S0 ให้เหตุผลจากคำที่พบเท่านั้น ไม่เข้าใจความหมายของทั้งประโยค';
+  $('dWhy').textContent=why;
+}
+$('dText').addEventListener('input',()=>{ev=null;document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));analyze()});
+$('norm').addEventListener('change',analyze);
+$('evZ').onclick=()=>{
+  const s=[...$('dText').value.split(ZW).join('')];let o='';
+  s.forEach((c,i)=>{o+=c;const n=s[i+1];if(n&&!isGap(c)&&!isGap(n)&&!isMark(n))o+=ZW});
+  ev='zw';$('dText').value=o;document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));analyze();
+};
+$('evS').onclick=()=>{
+  let t=$('dText').value.split(ZW).join('');
+  const ws=[];RULES.forEach(r=>r.words.forEach(w=>ws.push(w)));ws.sort((a,b)=>b.length-a.length);
+  ws.forEach(w=>{if(t.includes(w)){const cl=[];[...w].forEach(c=>{if(cl.length&&isMark(c))cl[cl.length-1]+=c;else cl.push(c)});t=t.split(w).join(cl.join(' '))}});
+  ev='sp';$('dText').value=t;document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));analyze();
+};
+(function(){const rl=$('ruleList');RULES.forEach(r=>{const p=el('p');p.style.padding='0 0 8px';p.append(el('b',null,r.name+': '),document.createTextNode(r.words.join(' · ')));rl.appendChild(p)});rl.appendChild(el('p',null,'ระดับ: พบ 0–1 กลุ่ม = ไม่เตือน · 2 กลุ่ม = ควรตรวจสอบ · 3 กลุ่ม = เตือน (ส่วนที่ 2 สะสมตลอดบทสนทนา)'))})();
+$('dText').value=PRESETS[0].t;document.querySelector('.chip').classList.add('on');
+
+/* demo: conversation lead time */
+const CONV={
+plain:['สวัสดีครับ ผมโทรจากฝ่ายดูแลลูกค้านะครับ','ระบบตรวจพบรายการผิดปกติในบัญชีของคุณ','เจ้าหน้าที่ตำรวจจะติดต่อไปเรื่องคดีฟอกเงิน','เรื่องนี้เป็นความลับ ห้ามบอกคนในครอบครัว','กรุณาโอนเงินไปบัญชีปลอดภัยภายใน 30 นาที'],
+evade:['สวัสดีครับ ผมโทรจากฝ่ายดูแลลูกค้านะครับ','ระบบตรวจพบรายการผิดปกติในบัญชีของคุณ','มีหน่วยงานรัฐจะติดต่อไปเรื่องคดีร้ายแรงนะครับ','เรื่องนี้คุยกับใครไม่ได้นะครับ รอสายผมอยู่','กรุณาโอนเงินไปบัญชีปลอดภัยภายใน 30 นาที']
+};
+const TX=4;
+let cv='plain',cIdx=-1,cTimer=null,cWarn=-1;
+function cBuildTl(){const tl=$('cTl');tl.innerHTML='';CONV[cv].forEach((_,i)=>{const d=el('div','d'+(i===TX?' tx':''));d.append(el('span',null,String(i+1)),el('small',null,i===TX?'ขอโอน':''));tl.appendChild(d)})}
+function cReset(){clearInterval(cTimer);cTimer=null;cIdx=-1;cWarn=-1;$('cFeed').innerHTML='';$('cResult').classList.add('hid');cBuildTl();setVerdict($('cVerdict'),0,'รอข้อความแรก');$('cPlay').textContent='▶ เล่น';$('cStep').disabled=false}
+function cNext(){
+  if(cIdx>=CONV[cv].length-1){clearInterval(cTimer);cTimer=null;return}
+  cIdx++;
+  const b=el('div','bubble'+(cIdx===TX?' req':''));b.append(el('div','from','ข้อความที่ '+(cIdx+1)),document.createTextNode(CONV[cv][cIdx]));$('cFeed').appendChild(b);
+  const r=scan(CONV[cv].slice(0,cIdx+1).join(' '),true);
+  const d=$('cTl').children[cIdx];d.classList.add('seen');
+  if(r.n>=2)d.classList.add(r.n>=3?'w3':'w2');
+  if(r.n>=2&&cWarn<0)cWarn=cIdx;
+  setVerdict($('cVerdict'),r.n,r.n>=2?LV[r.n]+' · สะสมถึงข้อความที่ '+(cIdx+1):LV[r.n]);
+  if(cIdx===CONV[cv].length-1){
+    clearInterval(cTimer);cTimer=null;$('cPlay').textContent='▶ เล่นอีกครั้ง';$('cStep').disabled=true;
+    const res=$('cResult');res.innerHTML='';
+    if(cWarn>=0&&cWarn<TX){res.className='result good';res.append(el('b',null,'lead time = '+(TX-cWarn)+' ข้อความ'),document.createTextNode(' — เริ่มเตือนที่ข้อความที่ '+(cWarn+1)+' ก่อนคำขอโอนเงิน ผู้ใช้ยังมีเวลาหยุดคิด'))}
+    else if(cWarn===TX){res.className='result bad';res.append(el('b',null,'lead time = 0'),document.createTextNode(' — เตือนพร้อมคำขอโอนเงินพอดี เมื่อผู้โจมตีเลี่ยงคำ S0 เห็นสัญญาณช้าเกินไป นี่คือสิ่งที่ RQ3 ต้องวัด'))}
+    else{res.className='result bad';res.append(el('b',null,'ไม่เตือนเลย'),document.createTextNode(' — S0 ไม่พบสัญญาณพอ'))}
+  }
+}
+$('cStep').onclick=()=>cNext();
+$('cPlay').onclick=()=>{if(cTimer){clearInterval(cTimer);cTimer=null;$('cPlay').textContent='▶ เล่นต่อ';return}if(cIdx>=CONV[cv].length-1)cReset();cNext();cTimer=setInterval(cNext,1500);$('cPlay').textContent='❚❚ หยุด'};
+$('cReset').onclick=cReset;
+document.querySelectorAll('#cSeg button').forEach(b=>b.onclick=()=>{cv=b.dataset.v;document.querySelectorAll('#cSeg button').forEach(x=>x.classList.toggle('on',x===b));cReset()});
+cReset();
+
+/* lab */
+const nf=n=>Math.round(n).toLocaleString('en-US');
+function prec(p,r,f){const tp=r*p,fp=f*(1-p);return tp+fp>0?tp/(tp+fp):0}
+function calc(){
+  const N=+$('iN').value,P=+$('iP').value/100,R=+$('iR').value/100,F=+$('iF').value/100;
+  $('lN').textContent=nf(N);$('lP').textContent=(P*100).toFixed(1)+'%';$('lR').textContent=Math.round(R*100)+'%';$('lF').textContent=(F*100).toFixed(2)+'%';
+  const sc=Math.round(N*P),tp=Math.round(sc*R),fp=Math.round((N-sc)*F),pr=tp+fp?tp/(tp+fp)*100:0;
+  $('oS').textContent=nf(sc);$('oT').textContent=nf(tp);$('oF').textContent=nf(fp);$('oP').textContent=pr.toFixed(1)+'%';
+  const b=$('oBar').children;b[0].style.width=pr+'%';b[0].textContent=pr>12?'ถูก '+pr.toFixed(1)+'%':'';b[1].style.width=(100-pr)+'%';b[1].textContent=100-pr>12?'ผิด '+(100-pr).toFixed(1)+'%':'';
+  chart(P,R,F);
+}
+function chart(P,R,F){
+  const W=600,H=260,l=46,r=16,t=14,bm=36,x0=Math.log10(0.1),x1=Math.log10(10);
+  const X=p=>l+(Math.log10(p)-x0)/(x1-x0)*(W-l-r),Y=v=>t+(1-v)*(H-t-bm);
+  let g='';
+  [0,.25,.5,.75,1].forEach(v=>{g+=`<line x1='${l}' x2='${W-r}' y1='${Y(v)}' y2='${Y(v)}' stroke='#1f2d4d' ${v===.5?`stroke-dasharray='4 4' stroke='#3a4a6b'`:''}/><text x='${l-8}' y='${Y(v)+4}' text-anchor='end'>${v*100}%</text>`});
+  [0.1,0.3,1,3,10].forEach(p=>{g+=`<text x='${X(p)}' y='${H-14}' text-anchor='middle'>${p}%</text>`});
+  g+=`<text x='${(l+W-r)/2}' y='${H-1}' text-anchor='middle'>ความชุกของสแกม (สเกล log)</text>`;
+  let d='';for(let i=0;i<=80;i++){const lp=x0+(x1-x0)*i/80,p=Math.pow(10,lp);d+=(i?'L':'M')+X(p).toFixed(1)+','+Y(prec(p/100,R,F)).toFixed(1)}
+  g+=`<path d='${d}' fill='none' stroke='#38d6f0' stroke-width='2.5'/>`;
+  const pc=Math.min(10,Math.max(.1,P*100)),v=prec(P,R,F);
+  g+=`<circle cx='${X(pc)}' cy='${Y(v)}' r='6' fill='#f5b83d' stroke='#050a18' stroke-width='2'/><text x='${X(pc)+(X(pc)>W-140?-10:10)}' y='${Y(v)-14}' text-anchor='${X(pc)>W-140?'end':'start'}' style='fill:#f5b83d;paint-order:stroke;stroke:#0b1328;stroke-width:5px'>${(v*100).toFixed(1)}% ที่ความชุก ${pc.toFixed(1)}%</text>`;
+  $('chart').innerHTML=g;
+}
+['iN','iP','iR','iF'].forEach(id=>$(id).addEventListener('input',calc));
+
+const h=parseInt(location.hash.slice(1),10);
+go(h>=1&&h<=8?h-1:0);
+</script>
 </body>
 </html>
+
+
