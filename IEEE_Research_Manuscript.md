@@ -220,13 +220,13 @@ We contribute the first Thai-language adversarial robustness benchmark for cyber
 | `zero_width` | Invisible \u200C insertion | Pre-processing integrity |
 | `repeat_chars` | "ด่วนนนนน" | Sequence length manipulation |
 
-### B. Longitudinal Collection Plan (6–12 months)
-To measure concept drift, we establish two ongoing collection channels:
+### B. Longitudinal Collection Plan and Concept Drift (6–12 months)
+To measure and adapt to real-world adversarial environments, static datasets are insufficient. As established by Gama et al. [34], security systems must account for *concept drift* — where the underlying distribution of attacks changes over time. We establish two ongoing collection channels:
 
 1. **University Campaign:** A "Report a Scam" system deployed via TU LINE groups, collecting anonymized screenshots of suspected scam messages. Target: 500+ real messages over 6 months.
 2. **Public Sources:** Systematic scraping of scam reports from Thai Police Cyber Crime Division press releases, Foundation for Consumers complaint database, and Pantip.com user reports.
 
-We measure **tactic drift** by computing the Jensen-Shannon divergence between the feature distributions of months $i$ and $j$: $D_{JS}(P_i \| P_j)$. Significant drift ($D_{JS} > \theta_{\text{drift}}$) triggers model retraining.
+We measure **tactic drift** by computing the Jensen-Shannon divergence [35] between the feature distributions of months $i$ and $j$: $D_{JS}(P_i \| P_j)$. Significant drift ($D_{JS} > \theta_{\text{drift}}$) triggers the Aegis CSU *Learn* phase, ensuring the system continually adapts to adversarial concept drift.
 
 ## IX. Aegis Certified Safe Update (CSU) Protocol
 
@@ -412,3 +412,5 @@ By collapsing information asymmetry through a privacy-preserving Edge-Cloud arch
 [31] J. Chen and X. Ran, "Deep learning with edge computing: A review," *Proc. IEEE*, vol. 107, no. 8, pp. 1655–1674, 2019.
 [32] D. Sculley et al., "Hidden technical debt in machine learning systems," in *NeurIPS*, 2015, pp. 2503–2511.
 [33] E. Perez et al., "Red teaming language models with language models," in *EMNLP*, 2022, pp. 3419–3448.
+[34] J. Gama, I. Žliobaitė, A. Bifet, M. Pechenizkiy, and A. Bouchachia, "A survey on concept drift adaptation," *ACM Comput. Surv.*, vol. 46, no. 4, pp. 1–37, 2014.
+[35] J. Lin, "Divergence measures based on the Shannon entropy," *IEEE Trans. Inf. Theory*, vol. 37, no. 1, pp. 145–151, 1991.
