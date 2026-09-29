@@ -1,23 +1,23 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="th" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aegis V10: Comprehensive Ph.D. Defense</title>
+  <title>Aegis V10: การสอบป้องกันวิทยานิพนธ์ (Ph.D. Defense)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   
   <style>
-    body { background-color: #020617; color: #f8fafc; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+    body { background-color: #020617; color: #f8fafc; font-family: 'Anuphan', sans-serif; overflow-x: hidden; }
     .mono { font-family: 'JetBrains Mono', monospace; }
     
     .glass { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(51, 65, 85, 0.5); }
-    .glass-card { background: linear-gradient(180deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%); border: 1px solid rgba(71, 85, 105, 0.5); border-radius: 12px; }
+    .glass-card { background: linear-gradient(180deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%); border: 1px solid rgba(71, 85, 105, 0.5); border-radius: 12px; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .glass-card.interactive:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(6, 182, 212, 0.2); border-color: rgba(6, 182, 212, 0.6); cursor: pointer; }
     
     .glow-text-cyan { text-shadow: 0 0 20px rgba(6, 182, 212, 0.5); }
-    .glow-text-red { text-shadow: 0 0 20px rgba(225, 29, 72, 0.5); }
     .glow-text-emerald { text-shadow: 0 0 20px rgba(16, 185, 129, 0.5); }
     
     .grid-bg { background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px); background-size: 30px 30px; }
@@ -27,8 +27,6 @@
     ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
     
     .node-line { width: 2px; background: linear-gradient(180deg, #06b6d4 0%, transparent 100%); height: 60px; margin: 0 auto; }
-    .node-line-h { height: 2px; background: linear-gradient(90deg, #06b6d4 0%, transparent 100%); width: 60px; margin: auto 0; }
-    
     .progress-bar-fill { transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
     .math-font { font-family: 'Times New Roman', Times, serif; font-style: italic; }
   </style>
@@ -40,14 +38,14 @@
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-cyan-900/10 rounded-full blur-[150px] -z-10 pointer-events-none"></div>
     <div class="gs-reveal max-w-4xl">
       <p class="mono text-cyan-400 text-sm tracking-widest uppercase mb-6 border border-cyan-500/30 px-4 py-2 rounded-full inline-block bg-cyan-950/30">Ph.D. Defense • Scientific Formulation</p>
-      <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-6 leading-tight">
-        Stop the scam <br><span class="text-cyan-400 glow-text-cyan">before the money moves.</span>
+      <h1 class="text-4xl md:text-6xl font-bold tracking-tight mb-6 leading-tight">
+        หยุดอาชญากรรมไซเบอร์ <br><span class="text-cyan-400 glow-text-cyan">ก่อนที่เงินจะถูกโอนออกจากบัญชี</span>
       </h1>
       <p class="text-slate-300 text-lg md:text-xl mx-auto mb-6 leading-relaxed">
-        <strong>Aegis V10:</strong> Safety-Gated Continual Adaptation for Sequential Scam Intervention under Adversarial Concept Drift.
+        <strong>Aegis V10:</strong> สถาปัตยกรรมการเรียนรู้ต่อเนื่องภายใต้ประตูล็อกความปลอดภัย สำหรับการแทรกแซงสแกมเมอร์ในระดับพฤติกรรม (Safety-Gated Continual Adaptation)
       </p>
       <p class="text-slate-500 text-sm max-w-3xl mx-auto mb-12 leading-relaxed">
-        Addressing the paradox of modern AI security: Static models fail against <span class="text-slate-300">Concept Drift</span> (Zero-Day Evasions), while Naive Continual Learning suffers from <span class="text-slate-300">Catastrophic Forgetting</span> (high false positives). Aegis V10 introduces a mathematically provable framework to achieve Monotonic Safety.
+        การแก้ปัญหาเชิงทฤษฎี: โมเดลแบบคงที่ (Static Models) จะล้มเหลวทันทีเมื่อเจอกลยุทธ์ใหม่ <span class="text-slate-300">(Concept Drift)</span> ในขณะที่โมเดลที่เรียนรู้ตลอดเวลาโดยขาดการควบคุม จะลืมข้อมูลเก่า <span class="text-slate-300">(Catastrophic Forgetting)</span> Aegis V10 นำเสนอสถาปัตยกรรมทางคณิตศาสตร์ที่พิสูจน์ได้ว่าสามารถวิวัฒนาการได้อย่างปลอดภัยโดยสมบูรณ์ (Monotonic Safety)
       </p>
       <div class="glass-card p-6 inline-flex flex-col items-center max-w-md w-full border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.15)] relative overflow-hidden">
         <div class="absolute inset-0 bg-cyan-500/5 animate-pulse"></div>
@@ -62,14 +60,14 @@
   <!-- 2. PROBLEM -->
   <section class="py-24 px-6 border-t border-slate-800/50 relative">
     <div class="max-w-6xl mx-auto gs-reveal">
-      <h2 class="text-3xl font-bold mb-4 text-center">The Contextual Blind Spot</h2>
-      <p class="text-slate-400 text-center max-w-2xl mx-auto mb-16">Why current financial infrastructure is mathematically too late to prevent social engineering.</p>
+      <h2 class="text-3xl font-bold mb-4 text-center">ช่องโหว่เชิงบริบท <span class="text-slate-400 text-2xl">(The Contextual Blind Spot)</span></h2>
+      <p class="text-slate-400 text-center max-w-2xl mx-auto mb-16">เหตุผลเชิงโครงสร้างที่ระบบตรวจจับของธนาคารในปัจจุบัน "ช้าเกินไป" ทางคณิตศาสตร์</p>
       
       <div class="flex flex-col md:flex-row items-stretch justify-between glass-card p-8 relative">
-        <div class="text-center w-full md:w-1/3 mb-6 md:mb-0 px-4">
+        <div class="text-center w-full md:w-1/3 mb-6 md:mb-0 px-4 glass-card interactive py-6">
           <div class="text-3xl mb-4">💬</div>
-          <div class="font-bold text-lg text-slate-200">Semantic Space <span class="math-font text-slate-400 text-sm">S(t)</span></div>
-          <div class="text-sm text-slate-400 mt-3 text-left">The attacker applies psychological manipulation, urgency, and authority over multiple turns. Financial institutions have <b>zero visibility</b> into this space due to E2E encryption and privacy laws.</div>
+          <div class="font-bold text-lg text-slate-200">พื้นที่เชิงความหมาย <span class="math-font text-slate-400 text-sm">S(t)</span></div>
+          <div class="text-sm text-slate-400 mt-3 text-left">มิจฉาชีพใช้หลักจิตวิทยา, สร้างความกดดัน, และแอบอ้างอำนาจ (Authority) อย่างต่อเนื่อง ธนาคาร<b>ตาบอดสนิท</b>ในพื้นที่นี้เนื่องจากนโยบายความเป็นส่วนตัวและ E2E Encryption</div>
         </div>
         
         <div class="flex items-center justify-center w-full md:w-1/4 relative py-8 md:py-0">
@@ -77,14 +75,14 @@
           <div class="text-center relative z-10 px-4">
             <div class="text-2xl mb-2">⚠️</div>
             <div class="font-bold text-rose-400 text-lg uppercase tracking-wider">The Void</div>
-            <div class="text-xs text-rose-300 mt-2">Data silos prevent cross-context inference. By the time intent is formed, the manipulation is complete.</div>
+            <div class="text-xs text-rose-300 mt-2">Data Silos ขัดขวางการส่งผ่านบริบท กว่าเหยื่อจะรู้ตัว การแทรกแซงทางจิตวิทยาก็สมบูรณ์แล้ว</div>
           </div>
         </div>
         
-        <div class="text-center w-full md:w-1/3 px-4">
+        <div class="text-center w-full md:w-1/3 px-4 glass-card interactive py-6">
           <div class="text-3xl mb-4">🏦</div>
-          <div class="font-bold text-lg text-slate-200">Transaction Space <span class="math-font text-slate-400 text-sm">T(x)</span></div>
-          <div class="text-sm text-slate-400 mt-3 text-left">Bank Fraud Detection (Rule-based / ML) evaluates the transaction amount, IP, and velocity. <b>Result:</b> The transaction looks perfectly legitimate because the authenticated user executes it willingly.</div>
+          <div class="font-bold text-lg text-slate-200">พื้นที่ธุรกรรม <span class="math-font text-slate-400 text-sm">T(x)</span></div>
+          <div class="text-sm text-slate-400 mt-3 text-left">Bank Fraud Detection ประเมินเพียงจำนวนเงิน, IP, และความเร็ว (Velocity) <b>ผลลัพธ์:</b> ธุรกรรมดูเหมือนถูกต้อง 100% เพราะผู้ใช้ที่ยืนยันตัวตนแล้วเป็นผู้กดโอนเงินด้วยตนเอง</div>
         </div>
       </div>
     </div>
@@ -95,38 +93,34 @@
     <div class="max-w-6xl mx-auto gs-reveal">
       <div class="grid md:grid-cols-2 gap-12 items-center">
         <div>
-          <h2 class="text-3xl font-bold mb-4">How Aegis Thinks: <br><span class="text-cyan-400">SEW-BFAR</span></h2>
-          <p class="text-slate-400 mb-6">Aegis abandons single-message classification. Instead, it utilizes the <strong>Sequential Probability Ratio Test (SPRT)</strong> to accumulate evidence across the entire conversational timeline.</p>
+          <h2 class="text-3xl font-bold mb-4">กระบวนการตัดสินใจด้วยคณิตศาสตร์: <br><span class="text-cyan-400">SEW-BFAR Engine</span></h2>
+          <p class="text-slate-400 mb-6">Aegis ทำลายข้อจำกัดของการจำแนกข้อความแบบแยกส่วน (Single-message classification) โดยประยุกต์ใช้ <strong>Sequential Probability Ratio Test (SPRT)</strong> เพื่อคำนวณความเสี่ยงสะสมจากภาพรวมของบทสนทนา</p>
           
-          <div class="glass-card p-6 mb-6 bg-slate-950/80">
-            <div class="text-xs mono text-cyan-500 mb-2">MATHEMATICAL FORMULATION</div>
+          <div class="glass-card p-6 mb-6 bg-slate-950/80 interactive">
+            <div class="text-xs mono text-cyan-500 mb-2">MATHEMATICAL FORMULATION (SPRT)</div>
             <div class="text-lg text-slate-300 text-center py-4">
               <span class="math-font">Z<sub>n</sub> = Z<sub>n-1</sub> + log [ P(x<sub>n</sub> | &theta;<sub>scam</sub>) / P(x<sub>n</sub> | &theta;<sub>safe</sub>) ]</span>
             </div>
-            <p class="text-xs text-slate-400">Where <span class="math-font">Z<sub>n</sub></span> is the cumulative log-likelihood ratio. If <span class="math-font">Z<sub>n</sub> &ge; Threshold</span>, Aegis intervenes. This guarantees a mathematically bounded False Positive Rate.</p>
+            <p class="text-xs text-slate-400"><span class="math-font">Z<sub>n</sub></span> คือค่า Cumulative Log-Likelihood Ratio หาก <span class="math-font">Z<sub>n</sub> &ge; Threshold</span>, ระบบจะเริ่มการแทรกแซงทันที วิธีการนี้ช่วยการันตีขอบเขตของ False Positive Rate (FPR) ในระดับทฤษฎี</p>
           </div>
         </div>
         
         <div class="space-y-4">
-          <!-- Turn 1 -->
           <div class="flex items-center space-x-4">
             <div class="w-16 text-right mono text-xs text-slate-500">t=1</div>
-            <div class="flex-1 glass-card p-3 text-sm">"Hello, is this the account owner?"</div>
+            <div class="flex-1 glass-card p-3 text-sm">"สวัสดีครับ ติดต่อจากศูนย์บัตรเครดิต"</div>
             <div class="w-24 text-right mono text-xs text-cyan-400">Z = 1.2</div>
           </div>
-          <!-- Turn 2 -->
           <div class="flex items-center space-x-4">
             <div class="w-16 text-right mono text-xs text-slate-500">t=2</div>
-            <div class="flex-1 glass-card p-3 text-sm border-amber-500/30">"We detected unauthorized logins from foreign IPs."</div>
+            <div class="flex-1 glass-card p-3 text-sm border-amber-500/30">"พบยอดรูดบัตรผิดปกติ 45,000 บาทที่ต่างประเทศ"</div>
             <div class="w-24 text-right mono text-xs text-amber-400">Z = 4.8</div>
           </div>
-          <!-- Turn 3 -->
           <div class="flex items-center space-x-4">
             <div class="w-16 text-right mono text-xs text-slate-500">t=3</div>
-            <div class="flex-1 glass-card p-3 text-sm border-rose-500/50">"Transfer funds to this secure vault immediately."</div>
+            <div class="flex-1 glass-card p-3 text-sm border-rose-500/50">"ให้โอนเงินทั้งหมดมาพักที่บัญชี ปปง. เพื่อความปลอดภัย"</div>
             <div class="w-24 text-right mono text-xs text-rose-400 font-bold">Z = 9.5</div>
           </div>
-          <!-- Intervention -->
           <div class="flex justify-center mt-6">
             <div class="bg-rose-500/10 border border-rose-500 text-rose-400 px-6 py-2 rounded font-bold text-sm shadow-[0_0_20px_rgba(225,29,72,0.2)]">
               &sum; Z<sub>n</sub> > Threshold &rarr; TRIGGER INTERVENTION
@@ -137,42 +131,50 @@
     </div>
   </section>
 
-  <!-- 4. ARCHITECTURE -->
+  <!-- 4. INTERACTIVE ARCHITECTURE -->
   <section class="py-24 px-6 border-t border-slate-800/50">
     <div class="max-w-6xl mx-auto gs-reveal">
-      <h2 class="text-3xl font-bold mb-4 text-center">Edge-Cloud Hybrid Architecture</h2>
-      <p class="text-slate-400 text-center max-w-3xl mx-auto mb-16">Balancing 100% On-Device Privacy (OpenVINO) with Global Threat Intelligence (HexStrike).</p>
+      <h2 class="text-3xl font-bold mb-4 text-center">สถาปัตยกรรม Edge-Cloud Hybrid <br><span class="text-xl text-slate-400">(Interactive Architecture)</span></h2>
+      <p class="text-slate-400 text-center max-w-3xl mx-auto mb-12">คลิกที่โมดูลด้านล่างเพื่อดูเจาะลึกกลไกทางเทคนิคเบื้องหลัง Aegis V10</p>
       
       <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-sm">
-        <div class="glass-card p-6 border-cyan-500/30 relative">
+        <div class="glass-card interactive p-6 border-cyan-500/30 relative" onclick="showArch('edge')">
           <div class="text-2xl mb-3">📱</div>
-          <h3 class="font-bold text-cyan-400 mb-2">Edge SLM (OpenVINO)</h3>
-          <p class="text-xs text-slate-400">Small Language Model running natively via NPU/CPU. Encodes raw Thai text into high-dimensional semantic vectors. <b>Zero data leaves the device.</b></p>
+          <h3 class="font-bold text-cyan-400 mb-2">Edge SLM</h3>
+          <p class="text-xs text-slate-400">โมเดลภาษาขนาดเล็ก (Small Language Model) ทำงานแบบ On-device</p>
+          <div class="mt-2 text-cyan-500 text-xs text-right">คลิกเพื่อดูข้อมูลเชิงลึก &rarr;</div>
         </div>
-        <div class="hidden md:flex items-center justify-center text-cyan-500/50 text-2xl">&rarr;</div>
         
-        <div class="glass-card p-6 border-amber-500/30 relative">
+        <div class="glass-card interactive p-6 border-amber-500/30 relative" onclick="showArch('cloud')">
           <div class="text-2xl mb-3">🕸️</div>
           <h3 class="font-bold text-amber-400 mb-2">Cloud Threat Graph</h3>
-          <p class="text-xs text-slate-400">Maintains the topology of known scams. Employs <b>HexStrike</b> (LLM Red-Teaming) to proactively generate synthetic zero-day evasions for pre-training.</p>
+          <p class="text-xs text-slate-400">ระบบรวบรวมภูมิคุ้มกันส่วนกลาง และ LLM Red-Teaming</p>
+          <div class="mt-2 text-amber-500 text-xs text-right">คลิกเพื่อดูข้อมูลเชิงลึก &rarr;</div>
         </div>
-        <div class="hidden md:flex items-center justify-center text-amber-500/50 text-2xl">&rarr;</div>
         
-        <div class="glass-card p-6 border-rose-500/50 shadow-[0_0_15px_rgba(225,29,72,0.1)] relative">
+        <div class="glass-card interactive p-6 border-rose-500/50 shadow-[0_0_15px_rgba(225,29,72,0.1)] relative" onclick="showArch('sew')">
           <div class="text-2xl mb-3">⚖️</div>
           <h3 class="font-bold text-rose-400 mb-2">SEW-BFAR Engine</h3>
-          <p class="text-xs text-slate-400">Executes the SPRT math on the incoming vectors. Determines the exact moment to inject <b>Cognitive Friction</b> before financial loss.</p>
+          <p class="text-xs text-slate-400">อัลกอริทึมวิเคราะห์อนุกรมเวลาเพื่อประเมินความเสี่ยงสะสม</p>
+          <div class="mt-2 text-rose-500 text-xs text-right">คลิกเพื่อดูข้อมูลเชิงลึก &rarr;</div>
+        </div>
+
+        <div class="glass-card interactive p-6 border-emerald-500/50 bg-emerald-950/20 relative" onclick="showArch('csu')">
+          <div class="text-2xl mb-3">🧬</div>
+          <h3 class="font-bold text-emerald-400 mb-2">CSU (LoRA)</h3>
+          <p class="text-xs text-slate-400">กระบวนการเรียนรู้และอัปเดตโมเดลอย่างปลอดภัย (Safety-Gated)</p>
+          <div class="mt-2 text-emerald-500 text-xs text-right">คลิกเพื่อดูข้อมูลเชิงลึก &rarr;</div>
         </div>
       </div>
       
-      <div class="node-line my-6"></div>
-      
-      <div class="flex justify-center">
-        <div class="glass-card p-6 max-w-lg w-full text-center border-emerald-500/50 bg-emerald-950/20">
-          <div class="text-2xl mb-3">🧬</div>
-          <h3 class="font-bold text-emerald-400 mb-2">CSU Learning Loop (LoRA)</h3>
-          <p class="text-xs text-slate-400">When Drift is detected (Jensen-Shannon Divergence), the Cloud retrains using Parameter-Efficient Fine-Tuning. The Delta Weights are pushed to the Edge seamlessly.</p>
-        </div>
+      <!-- Interactive Detail Pane -->
+      <div id="arch-detail" class="mt-8 p-8 glass-card border-cyan-500/50 hidden animate-[fadeIn_0.3s_ease-out]">
+         <div class="flex justify-between items-start mb-4">
+           <h4 id="ad-title" class="text-2xl font-bold text-cyan-400"></h4>
+           <button onclick="document.getElementById('arch-detail').classList.add('hidden')" class="text-slate-500 hover:text-white">✕</button>
+         </div>
+         <p id="ad-desc" class="text-slate-300 leading-relaxed text-sm"></p>
+         <ul id="ad-list" class="mt-4 space-y-2 text-sm text-slate-400 list-disc list-inside marker:text-cyan-500"></ul>
       </div>
     </div>
   </section>
@@ -180,36 +182,36 @@
   <!-- 5. HOW AEGIS LEARNS (CSU) -->
   <section class="py-24 px-6 bg-slate-900/40 border-t border-slate-800/50">
     <div class="max-w-6xl mx-auto gs-reveal">
-      <h2 class="text-3xl font-bold mb-4">The Safety Gate: <span class="text-emerald-400">Certified Safe Update (CSU)</span></h2>
-      <p class="text-slate-400 mb-12 max-w-3xl">To solve Catastrophic Forgetting and prevent model poisoning, Aegis enforces the <strong>Monotonic Safety Theorem</strong>. A newly trained model candidate (<span class="math-font">M<sub>new</sub></span>) MUST mathematically outperform <span class="math-font">M<sub>old</sub></span> across 6 dimensions. If it fails even one, the update is destroyed.</p>
+      <h2 class="text-3xl font-bold mb-4">ประตูล็อกความปลอดภัย 6 มิติ <br><span class="text-emerald-400 text-2xl">(Certified Safe Update Protocol)</span></h2>
+      <p class="text-slate-400 mb-12 max-w-3xl">เพื่อแก้ปัญหา Catastrophic Forgetting แบบถอนรากถอนโคน Aegis ใช้กฎ <strong>Monotonic Safety Theorem</strong>: โมเดลเวอร์ชันใหม่ (<span class="math-font">M<sub>new</sub></span>) จะต้องเหนือกว่าหรือเทียบเท่าโมเดลเดิม (<span class="math-font">M<sub>old</sub></span>) ใน 6 มิติทางสถิติ หากสอบตกแม้แต่มิติเดียว (เช่น Latency ช้าลง 50ms) การอัปเดตจะถูกทำลายทิ้งทันที</p>
       
       <div class="grid grid-cols-2 md:grid-cols-6 gap-4 text-center">
-        <div class="glass-card p-4 border-emerald-500/50">
+        <div class="glass-card interactive p-4 border-emerald-500/50 hover:bg-emerald-900/30">
           <div class="text-emerald-400 text-xl mb-2">✓</div>
           <div class="font-bold text-xs uppercase text-slate-200">Recall</div>
           <div class="text-[10px] text-slate-500 mt-1">&ge; Baseline</div>
         </div>
-        <div class="glass-card p-4 border-emerald-500/50">
+        <div class="glass-card interactive p-4 border-emerald-500/50 hover:bg-emerald-900/30">
           <div class="text-emerald-400 text-xl mb-2">✓</div>
           <div class="font-bold text-xs uppercase text-slate-200">Hard Ham</div>
           <div class="text-[10px] text-slate-500 mt-1">FPR &le; 0.1%</div>
         </div>
-        <div class="glass-card p-4 border-emerald-500/50">
+        <div class="glass-card interactive p-4 border-emerald-500/50 hover:bg-emerald-900/30">
           <div class="text-emerald-400 text-xl mb-2">✓</div>
           <div class="font-bold text-xs uppercase text-slate-200">Latency</div>
           <div class="text-[10px] text-slate-500 mt-1">&lt; 300ms</div>
         </div>
-        <div class="glass-card p-4 border-emerald-500/50">
+        <div class="glass-card interactive p-4 border-emerald-500/50 hover:bg-emerald-900/30">
           <div class="text-emerald-400 text-xl mb-2">✓</div>
           <div class="font-bold text-xs uppercase text-slate-200">Lead Time</div>
           <div class="text-[10px] text-slate-500 mt-1">&ge; 1 Turn</div>
         </div>
-        <div class="glass-card p-4 border-emerald-500/50">
+        <div class="glass-card interactive p-4 border-emerald-500/50 hover:bg-emerald-900/30">
           <div class="text-emerald-400 text-xl mb-2">✓</div>
           <div class="font-bold text-xs uppercase text-slate-200">Robustness</div>
           <div class="text-[10px] text-slate-500 mt-1">ASR &lt; 1%</div>
         </div>
-        <div class="glass-card p-4 border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+        <div class="glass-card interactive p-4 border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.2)] hover:bg-emerald-900/30">
           <div class="text-emerald-400 text-xl mb-2">✓</div>
           <div class="font-bold text-xs uppercase text-slate-200">Retention</div>
           <div class="text-[10px] text-emerald-400 mt-1 font-bold">BWT &ge; 0</div>
@@ -221,46 +223,46 @@
   <!-- 6 & 7. PROOF & EXPECTED PERFORMANCE -->
   <section class="py-24 px-6 border-t border-slate-800/50">
     <div class="max-w-6xl mx-auto gs-reveal">
-      <div class="flex justify-between items-end mb-8">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
         <div>
-          <h2 class="text-3xl font-bold mb-2">Scientific Evaluation Rubric</h2>
-          <p class="text-slate-400">Strict metrics for Ph.D. validation across adaptation and retention.</p>
+          <h2 class="text-3xl font-bold mb-2">ผลการประเมินทางวิทยาศาสตร์</h2>
+          <p class="text-slate-400">เกณฑ์ชี้วัดความสำเร็จทางคณิตศาสตร์ (Evaluation Rubric) ของสถาปัตยกรรม Aegis</p>
         </div>
-        <div class="bg-rose-500/10 border border-rose-500/50 px-4 py-2 rounded text-rose-400 font-bold text-xs uppercase tracking-wider">
+        <div class="bg-rose-500/10 border border-rose-500/50 px-4 py-2 rounded text-rose-400 font-bold text-xs uppercase tracking-wider whitespace-nowrap">
           * Pre-Clinical Simulated Targets
         </div>
       </div>
       
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="glass-card p-6">
+        <div class="glass-card interactive p-6">
           <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">Constrained Recall</div>
           <div class="text-4xl font-bold text-cyan-400 mb-3">94.0<span class="text-2xl text-cyan-500/50">%</span></div>
-          <p class="text-xs text-slate-400">Ability to detect Zero-Day Evasions and Drifted Scams, holding FPR strictly constant.</p>
+          <p class="text-xs text-slate-400">ความสามารถในการสกัดกั้น Zero-Day Evasions โดยต้องควบคุม False Positive ให้คงที่</p>
         </div>
-        <div class="glass-card p-6 border-emerald-500/30">
-          <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">False Positive Rate</div>
+        <div class="glass-card interactive p-6 border-emerald-500/30">
+          <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">False Positive Rate (FPR)</div>
           <div class="text-4xl font-bold text-emerald-400 mb-3">&le; 0.1<span class="text-2xl text-emerald-500/50">%</span></div>
-          <p class="text-xs text-slate-400">Critical UX constraint: Less than 1 false alarm per 1,000 legitimate conversations.</p>
+          <p class="text-xs text-slate-400">ข้อจำกัดสำคัญด้าน UX: ต้องเตือนผิดพลาดไม่เกิน 1 ครั้งจากการใช้งานปกติ 1,000 ครั้ง</p>
         </div>
-        <div class="glass-card p-6">
+        <div class="glass-card interactive p-6">
           <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">Intervention Lead Time</div>
           <div class="text-4xl font-bold text-cyan-400 mb-3">&ge; 1 <span class="text-2xl text-cyan-500/50">Turn</span></div>
-          <p class="text-xs text-slate-400">Warning triggers <i>before</i> the user confirms the financial transfer in their banking app.</p>
+          <p class="text-xs text-slate-400">ระบบต้องสามารถออกคำเตือนได้ <i>ก่อน</i> ที่ผู้ใช้จะกดยืนยันการโอนเงินในแอปธนาคารเสมอ</p>
         </div>
-        <div class="glass-card p-6">
+        <div class="glass-card interactive p-6">
           <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">Adversarial ASR</div>
           <div class="text-4xl font-bold text-cyan-400 mb-3">&lt; 1.0<span class="text-2xl text-cyan-500/50">%</span></div>
-          <p class="text-xs text-slate-400">Attack Success Rate: System immunity against spacing, ZWJ, and typo-evasions from HexStrike.</p>
+          <p class="text-xs text-slate-400">Attack Success Rate: ความต้านทานต่อการโจมตีด้วยอักขระล่องหน (ZWJ) หรือการแทรกช่องว่าง</p>
         </div>
-        <div class="glass-card p-6 border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.1)]">
+        <div class="glass-card interactive p-6 border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.1)]">
           <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">Catastrophic Forgetting</div>
           <div class="text-4xl font-bold text-emerald-400 mb-3">BWT &ge; 0</div>
-          <p class="text-xs text-slate-400"><b>Backward Transfer:</b> The model retains 100% of its knowledge regarding legacy scams after updating.</p>
+          <p class="text-xs text-slate-400"><b>Backward Transfer:</b> โมเดลต้องคงทักษะการตรวจจับสแกมรูปแบบเก่าไว้ได้ 100% หลังการ Retrain</p>
         </div>
-        <div class="glass-card p-6">
+        <div class="glass-card interactive p-6">
           <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">Edge Latency</div>
           <div class="text-4xl font-bold text-cyan-400 mb-3">&lt; 300<span class="text-2xl text-cyan-500/50">ms</span></div>
-          <p class="text-xs text-slate-400">On-device NPU execution time via OpenVINO, guaranteeing imperceptible real-time UX.</p>
+          <p class="text-xs text-slate-400">ความเร็วในการประมวลผลบนชิปมือถือ (NPU) การันตีประสบการณ์ผู้ใช้ (UX) แบบเรียลไทม์</p>
         </div>
       </div>
     </div>
@@ -269,26 +271,26 @@
   <!-- 10. LIVE DEMO (THE CLIMAX) -->
   <section class="py-32 px-6 border-t border-slate-800/50 min-h-screen flex flex-col justify-center bg-slate-950">
     <div class="max-w-5xl mx-auto w-full">
-      <h2 class="text-4xl font-bold mb-4 text-center gs-reveal glow-text-cyan text-cyan-400">Live Clinical Simulation</h2>
-      <p class="text-slate-400 text-center mb-12 max-w-3xl mx-auto gs-reveal">Experience the SEW-BFAR Engine injecting Cognitive Friction, followed by the Aegis V10 Concept Drift Learning Loop.</p>
+      <h2 class="text-4xl font-bold mb-4 text-center gs-reveal glow-text-cyan text-cyan-400">สถานการณ์จำลองทางคลินิก (Live Clinical Simulation)</h2>
+      <p class="text-slate-400 text-center mb-12 max-w-3xl mx-auto gs-reveal">ทดสอบการทำงานของเครื่องยนต์ SEW-BFAR ในการสร้างการหน่วงเวลา (Cognitive Friction) และวัฏจักรการเรียนรู้อัตโนมัติ (CSU Loop)</p>
       
       <div class="glass-card border-cyan-500/30 overflow-hidden flex flex-col md:flex-row shadow-[0_0_40px_rgba(6,182,212,0.15)] gs-reveal">
         <!-- Chat UI -->
         <div class="w-full md:w-3/5 p-6 bg-[#020617] flex flex-col min-h-[450px]">
           <div class="text-xs mono text-slate-500 mb-6 border-b border-slate-800 pb-2 flex justify-between">
             <span>TARGET: USER_DEVICE_01</span>
-            <span class="text-cyan-500">LIVE</span>
+            <span class="text-cyan-500">LIVE CONNECTION</span>
           </div>
           <div id="chat-box" class="flex-1 space-y-4 mb-6 overflow-y-auto">
             <!-- Messages -->
           </div>
           
-          <div class="grid grid-cols-2 gap-3">
+          <div class="grid grid-cols-2 gap-3 mt-auto">
             <button id="btn-next" class="w-full py-3 bg-cyan-600/20 border border-cyan-500/50 hover:bg-cyan-600/40 text-cyan-400 rounded font-bold transition text-sm">
-              [+] Inject Scammer Message
+              [+] จำลองข้อความจากมิจฉาชีพ
             </button>
             <button id="btn-drift" class="w-full py-3 bg-slate-800 text-slate-500 rounded font-bold transition text-sm cursor-not-allowed opacity-50" disabled>
-              Trigger Concept Drift (Retrain)
+              กระตุ้น Concept Drift (อัปเดตโมเดล)
             </button>
           </div>
         </div>
@@ -302,7 +304,7 @@
             <div class="h-2 bg-slate-800 rounded-full overflow-hidden">
               <div id="risk-bar" class="h-full bg-cyan-400 w-0 progress-bar-fill shadow-[0_0_10px_rgba(6,182,212,0.8)]"></div>
             </div>
-            <div class="text-[10px] text-slate-500 text-right mt-1">Threshold: 9.0 (Critical)</div>
+            <div class="text-[10px] text-slate-500 text-right mt-1">Threshold: 9.0 (Critical Limit)</div>
           </div>
           
           <div class="space-y-4 flex-1">
@@ -321,8 +323,8 @@
           <!-- Friction Overlay -->
           <div id="friction-box" class="hidden mt-6 p-4 border border-rose-500 bg-rose-500/10 rounded-lg text-center shadow-[0_0_20px_rgba(225,29,72,0.2)]">
             <div class="text-rose-500 text-3xl mb-2 animate-bounce">⚠️</div>
-            <div class="text-rose-400 font-bold text-sm mb-1 uppercase">Cognitive Friction Triggered</div>
-            <div class="text-xs text-rose-300 mb-3">Psychological interruption initiated. Financial apps locked.</div>
+            <div class="text-rose-400 font-bold text-sm mb-1 uppercase">ระบบแทรกแซงอัตโนมัติทำงาน</div>
+            <div class="text-xs text-rose-300 mb-3">ล็อกแอปพลิเคชันธนาคารเพื่อดึงสติ (Cognitive Friction)</div>
             <div class="text-2xl font-bold text-white mono" id="countdown">5.00s</div>
           </div>
           
@@ -330,8 +332,8 @@
           <div id="retrain-box" class="hidden mt-6 p-4 border border-emerald-500 bg-emerald-500/10 rounded-lg text-center shadow-[0_0_20px_rgba(16,185,129,0.2)]">
             <div class="text-emerald-500 text-2xl mb-2 animate-spin">⚙️</div>
             <div class="text-emerald-400 font-bold text-sm mb-1 uppercase">CSU Learning Loop Active</div>
-            <div class="text-[10px] text-emerald-300 mb-1">Replay Buffer ... OK (BWT &ge; 0)</div>
-            <div class="text-[10px] text-emerald-300 mb-1">LoRA Weights ... Updated</div>
+            <div class="text-[10px] text-emerald-300 mb-1">Replay Buffer Check ... OK (BWT &ge; 0)</div>
+            <div class="text-[10px] text-emerald-300 mb-1">LoRA Delta Weights ... Deployed</div>
             <div class="text-xs font-bold text-white mt-2">Monotonic Safety Guaranteed</div>
           </div>
         </div>
@@ -350,6 +352,44 @@
         }
       );
     });
+
+    // Architecture Interactive Data
+    const archData = {
+      edge: {
+        title: "Edge SLM (On-Device Inference)",
+        desc: "Aegis V10 ประมวลผลข้อความทั้งหมดบนอุปกรณ์ของผู้ใช้ผ่านโมเดลภาษาขนาดเล็ก (Small Language Model) ที่ถูกบีบอัดด้วยเทคนิค 4-bit Quantization บนเฟรมเวิร์ก OpenVINO",
+        bullets: ["รักษาความลับ 100% (Zero Data Leakage)", "เข้ารหัสข้อความดิบให้เป็นเวกเตอร์มิติสูง (High-dimensional Semantic Vectors)", "ตอบสนองในเวลาไม่ถึง 300 มิลลิวินาที (Low Latency)"]
+      },
+      cloud: {
+        title: "Cloud Threat Graph & Red-Teaming",
+        desc: "ระบบจัดเก็บภูมิคุ้มกันส่วนกลาง ที่รวบรวมลักษณะรูปแบบของสแกมเมอร์ในระดับองค์รวม ทำงานร่วมกับ LLM Red-Teaming (HexStrike) เพื่อสร้างการโจมตีสังเคราะห์ (Synthetic Evasions)",
+        bullets: ["ใช้ Vector Database จัดการ Topological representation", "ตรวจจับ Concept Drift ด้วยการคำนวณ Jensen-Shannon Divergence", "สร้าง Zero-day scams เพื่อ Pre-train โมเดลก่อนเกิดความเสียหายจริง"]
+      },
+      sew: {
+        title: "SEW-BFAR Decision Engine",
+        desc: "เครื่องยนต์ประเมินความเสี่ยงเชิงพฤติกรรม (Sequential Evidence Window) ที่รับ Semantic Vectors มาคำนวณด้วยสมการ SPRT (Sequential Probability Ratio Test)",
+        bullets: ["ประเมินค่า Cumulative Log-Likelihood Ratio ของการสนทนาทั้งหมด", "แก้ปัญหา Single-message context loss", "กระตุ้น Cognitive Friction อย่างแม่นยำก่อนเกิดการสูญเสียทางการเงิน"]
+      },
+      csu: {
+        title: "Certified Safe Update (CSU via LoRA)",
+        desc: "ระบบวิวัฒนาการอัตโนมัติที่อัปเดตโมเดลโดยใช้ Parameter-Efficient Fine-Tuning (PEFT/LoRA) ควบคู่กับประตูล็อกความปลอดภัย 6 มิติ",
+        bullets: ["รับประกัน Monotonic Safety (โมเดลใหม่ต้องไม่ด้อยกว่าเดิม)", "ใช้ Replay Buffer ขจัดปัญหา Catastrophic Forgetting", "อัปเดตเฉพาะ Delta Weights ทำให้ไฟล์มีขนาดเล็ก (หลัก KB)"]
+      }
+    };
+
+    function showArch(node) {
+      const data = archData[node];
+      document.getElementById('ad-title').textContent = data.title;
+      document.getElementById('ad-desc').textContent = data.desc;
+      const ul = document.getElementById('ad-list');
+      ul.innerHTML = '';
+      data.bullets.forEach(b => {
+        const li = document.createElement('li');
+        li.textContent = b;
+        ul.appendChild(li);
+      });
+      document.getElementById('arch-detail').classList.remove('hidden');
+    }
 
     const script = [
       { msg: "สวัสดีครับ ติดต่อจากศูนย์บัตรเครดิต", risk: 2.1, pct: 20, ind: "auth" },
@@ -417,7 +457,7 @@
     btnDrift.addEventListener('click', () => {
       btnDrift.disabled = true;
       btnDrift.className = 'w-full py-3 bg-slate-900 border border-slate-800 text-slate-600 rounded font-bold cursor-not-allowed text-sm';
-      btnDrift.textContent = 'Updating...';
+      btnDrift.textContent = 'Updating Neural Weights...';
       
       // Scammer mutates
       const msgEl = document.createElement('div');
@@ -430,9 +470,9 @@
         setTimeout(() => {
            btn.disabled = false;
            btn.className = 'w-full py-3 bg-cyan-600 hover:bg-cyan-500 text-white rounded font-bold transition text-sm';
-           btn.textContent = 'Reset Environment';
+           btn.textContent = 'Reset Simulation Environment';
            btn.onclick = () => location.reload();
-        }, 3000);
+        }, 4000);
       }, 1000);
     });
   </script>
