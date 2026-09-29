@@ -220,7 +220,55 @@
     </div>
   </section>
 
-  <!-- 6 & 7. PROOF & EXPECTED PERFORMANCE -->
+  <!-- 6. RESEARCH LAB ENVIRONMENT (NEW) -->
+  <section class="py-24 px-6 bg-[#020617] border-t border-slate-800/50">
+    <div class="max-w-6xl mx-auto gs-reveal">
+      <h2 class="text-3xl font-bold mb-4 text-center">ห้องปฏิบัติการวิจัย <span class="text-slate-400 text-2xl">(Research Lab Environment)</span></h2>
+      <p class="text-slate-400 text-center max-w-3xl mx-auto mb-12">สถาปัตยกรรมจำลองสำหรับการทดสอบอัลกอริทึมและประเมินผลในสภาพแวดล้อมควบคุม (Controlled Sandbox)</p>
+      
+      <div class="glass-card flex flex-col md:flex-row overflow-hidden border-slate-700/50 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+        <!-- Left: Lab Components -->
+        <div class="w-full md:w-1/3 bg-slate-900/80 p-6 border-r border-slate-700/50">
+          <h3 class="text-cyan-400 font-bold mb-4 text-sm uppercase tracking-widest">Experimental Setup</h3>
+          <div class="space-y-4">
+            <div class="p-4 glass rounded border-l-2 border-cyan-500 hover:bg-slate-800 transition">
+              <div class="text-xs text-slate-400 mb-1">Dataset Synthesis</div>
+              <div class="font-bold text-sm text-slate-200">HexStrike Red-Teaming</div>
+              <div class="text-[10px] text-slate-500 mt-1">สร้าง 100k+ Thai Synthetic Scam Transcripts</div>
+            </div>
+            <div class="p-4 glass rounded border-l-2 border-emerald-500 hover:bg-slate-800 transition">
+              <div class="text-xs text-slate-400 mb-1">Edge Hardware Simulation</div>
+              <div class="font-bold text-sm text-slate-200">OpenVINO / NPU Simulation</div>
+              <div class="text-[10px] text-slate-500 mt-1">ทดสอบ INT4 Quantization Memory Constraints</div>
+            </div>
+            <div class="p-4 glass rounded border-l-2 border-rose-500 hover:bg-slate-800 transition">
+              <div class="text-xs text-slate-400 mb-1">Adversarial Environment</div>
+              <div class="font-bold text-sm text-slate-200">Zero-Day Perturbation</div>
+              <div class="text-[10px] text-slate-500 mt-1">แทรก ZWJ, ช่องว่าง, พิมพ์ผิด (Stress-Test ASR)</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Right: Terminal Simulator -->
+        <div class="w-full md:w-2/3 p-0 flex flex-col bg-[#0a0a0a] relative">
+          <div class="bg-slate-800 px-4 py-2 flex items-center space-x-2 text-xs text-slate-400 border-b border-slate-700">
+            <div class="w-3 h-3 rounded-full bg-rose-500"></div>
+            <div class="w-3 h-3 rounded-full bg-amber-500"></div>
+            <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+            <span class="ml-4 mono text-[10px]">aegis_lab@csu-cluster:~</span>
+          </div>
+          <div class="p-6 font-mono text-sm text-slate-300 h-[300px] overflow-y-auto" id="lab-terminal">
+            <div class="text-cyan-400 mb-2">$ python run_eval.py --model aegis-v10 --dataset hexstrike-thai --drift true</div>
+            <div id="term-content"></div>
+            <div id="term-cursor" class="w-2 h-4 bg-slate-400 inline-block animate-pulse mt-1"></div>
+          </div>
+          <button id="btn-run-lab" onclick="runLabSimulation()" class="absolute bottom-4 right-4 px-4 py-2 bg-cyan-900/30 hover:bg-cyan-800/50 text-cyan-400 text-xs font-bold rounded border border-cyan-700 transition">Run Benchmark Simulation</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. PROOF & EXPECTED PERFORMANCE -->
   <section class="py-24 px-6 border-t border-slate-800/50">
     <div class="max-w-6xl mx-auto gs-reveal">
       <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
@@ -396,6 +444,58 @@
         ul.appendChild(li);
       });
       document.getElementById('arch-detail').classList.remove('hidden');
+    }
+
+    // Terminal Lab Simulator
+    const terminalLines = [
+      "[INFO] Initializing Experimental Lab Environment...",
+      "[INFO] Loading Baseline Model (M_old)... <span class='text-emerald-400'>OK</span>",
+      "[INFO] Generating 1,500 Zero-Day Evasions via HexStrike...",
+      "[WARN] Concept Drift Detected (Jensen-Shannon Div = 0.84)",
+      "----------------------------------------",
+      "> Testing Baseline (M_old) against Zero-Day Dataset...",
+      "> M_old Recall: <span class='text-rose-400'>45.2% (FAILED)</span>",
+      "> Triggering CSU Loop...",
+      "----------------------------------------",
+      "[SYSTEM] PEFT LoRA Retraining (Epoch 1/5) - Loss: 2.451",
+      "[SYSTEM] PEFT LoRA Retraining (Epoch 3/5) - Loss: 0.932",
+      "[SYSTEM] PEFT LoRA Retraining (Epoch 5/5) - Loss: 0.104",
+      "----------------------------------------",
+      "> Testing Candidate (M_new)...",
+      "> [CSU GATE 1] Recall: <span class='text-emerald-400'>94.0% (PASS)</span>",
+      "> [CSU GATE 2] Hard Ham FPR: <span class='text-emerald-400'>0.08% (PASS)</span>",
+      "> [CSU GATE 6] Backward Transfer (BWT): <span class='text-emerald-400'>0.98 &ge; 0 (PASS)</span>",
+      "<span class='text-cyan-400 font-bold'>[SUCCESS] Update Certified Safe. Deploying to Edge...</span>"
+    ];
+
+    function runLabSimulation() {
+      const btn = document.getElementById('btn-run-lab');
+      btn.disabled = true;
+      btn.textContent = "Running...";
+      btn.classList.add("opacity-50", "cursor-not-allowed");
+      
+      const tc = document.getElementById('term-content');
+      tc.innerHTML = '';
+      
+      let delay = 0;
+      terminalLines.forEach((line, index) => {
+        setTimeout(() => {
+          const p = document.createElement('div');
+          p.className = "mb-1 text-slate-400";
+          p.innerHTML = line;
+          tc.appendChild(p);
+          document.getElementById('lab-terminal').scrollTop = document.getElementById('lab-terminal').scrollHeight;
+          
+          if(index === terminalLines.length - 1) {
+            btn.textContent = "Simulation Complete";
+          }
+        }, delay);
+        
+        // Add variable delay to simulate real processing
+        delay += (Math.random() * 400) + 200;
+        if(line.includes("Retraining")) delay += 600;
+        if(line.includes("Testing")) delay += 800;
+      });
     }
 
     // Comprehensive Scam Scenarios
