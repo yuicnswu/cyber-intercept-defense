@@ -451,9 +451,9 @@ details p,details .body{margin:0;padding:0 16px 14px 34px;color:var(--muted)}
 </div>
 
 <div class='view' id='view-demo'><div class='wrap'>
-<div class='kicker'>DEMO · ระบบฐาน S0</div>
-<h2>ลองดูว่า <em>ระบบฐานแบบกฎ</em> ทำได้แค่ไหน</h2>
-<div class='callout amber' style='margin:0 0 18px'><b>เดโมนี้คืออะไร:</b> ตัวตรวจแบบคำสำคัญ (S0) ที่ทำงานในเบราว์เซอร์ ไม่ใช่โมเดลที่เสนอ และไม่ส่งข้อมูลออกไปไหน ใช้แสดง <i>ปัญหา</i> ที่งานวิจัยนี้ต้องแก้ ได้แก่ การเตือนผิด การถูกหลบเลี่ยง และการเตือนช้า</div>
+<div class='kicker'>DEMO · BASELINE 1 FAILURE (STATIC MODEL)</div>
+<h2>แบบจำลองความล้มเหลว: <em>Concept Drift</em></h2>
+<div class='callout amber' style='margin:0 0 18px'><b>เดโมนี้คืออะไร:</b> นี่คือแบบจำลองความล้มเหลวของ <b>Baseline 1 (Static Model)</b> ลองสวมบทบาทเป็นมิจฉาชีพ (HexStrike) โดยกดปุ่ม "ผู้โจมตี" ด้านล่าง เพื่อดูว่าโมเดลแบบเก่าถูกหลบเลี่ยงได้ง่ายแค่ไหน ซึ่งเป็นเหตุผลว่าทำไมเราถึงต้องใช้การเรียนรู้ต่อเนื่องใน <b>Aegis V10</b></div>
 <div class='demo'>
 <div class='card'>
 <h3>1 · ตรวจข้อความ</h3>
@@ -497,9 +497,9 @@ details p,details .body{margin:0;padding:0 16px 14px 34px;color:var(--muted)}
 </div></div>
 
 <div class='view' id='view-lab'><div class='wrap'>
-<div class='kicker'>LAB · BASE-RATE CALCULATOR</div>
-<h2>คำเตือนที่ผู้ใช้เห็น <em>ถูกจริงกี่เปอร์เซ็นต์?</em></h2>
-<div class='label'>เครื่องคำนวณจากสมมติฐาน — ไม่ใช่ผลทดลองของโมเดล</div>
+<div class='kicker'>LAB · BASELINE 2 FAILURE (CATASTROPHIC FORGETTING)</div>
+<h2>ทำไม <em>Naive Continual Learning</em> ถึงพัง?</h2>
+<div class='callout amber' style='margin:0 0 18px'><b>Lab นี้คืออะไร:</b> เมื่อเราปล่อยให้โมเดลเรียนรู้แบบอิสระ โมเดลจะลืมข้อมูลเก่าและมี <b>อัตราเตือนผิด (FPR)</b> พุ่งสูงขึ้น ลองเลื่อนแถบ FPR ด้านล่างขึ้นไปที่ 1-5% แล้วดูว่าความแม่นยำพังทลายแค่ไหน นี่คือเหตุผลที่ <b>Aegis V10 ต้องมี CSU Safety Gate</b> เพื่อล็อกไม่ให้ FPR เกิน 0.1%</div>
 <div class='lab'>
 <div class='card'>
 <div class='ctl'><div class='row'><span>จำนวนข้อความ</span><b id='lN'></b></div><input type='range' id='iN' min='10000' max='1000000' step='10000' value='100000'></div>
