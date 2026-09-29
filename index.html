@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aegis V10: Elevator Pitch</title>
+  <title>Aegis V10: Comprehensive Ph.D. Defense</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
@@ -13,40 +13,45 @@
     body { background-color: #020617; color: #f8fafc; font-family: 'Inter', sans-serif; overflow-x: hidden; }
     .mono { font-family: 'JetBrains Mono', monospace; }
     
-    /* Academically restrained motion & cyber aesthetics */
     .glass { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(51, 65, 85, 0.5); }
-    .glass-card { background: linear-gradient(180deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.4) 100%); border: 1px solid rgba(71, 85, 105, 0.4); border-radius: 12px; }
+    .glass-card { background: linear-gradient(180deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%); border: 1px solid rgba(71, 85, 105, 0.5); border-radius: 12px; }
     
     .glow-text-cyan { text-shadow: 0 0 20px rgba(6, 182, 212, 0.5); }
     .glow-text-red { text-shadow: 0 0 20px rgba(225, 29, 72, 0.5); }
+    .glow-text-emerald { text-shadow: 0 0 20px rgba(16, 185, 129, 0.5); }
     
     .grid-bg { background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px); background-size: 30px 30px; }
     
-    /* Custom Scrollbar */
     ::-webkit-scrollbar { width: 8px; }
     ::-webkit-scrollbar-track { background: #020617; }
     ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
     
-    .node-line { width: 2px; background: linear-gradient(180deg, #06b6d4 0%, transparent 100%); height: 40px; margin: 0 auto; }
+    .node-line { width: 2px; background: linear-gradient(180deg, #06b6d4 0%, transparent 100%); height: 60px; margin: 0 auto; }
+    .node-line-h { height: 2px; background: linear-gradient(90deg, #06b6d4 0%, transparent 100%); width: 60px; margin: auto 0; }
+    
     .progress-bar-fill { transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+    .math-font { font-family: 'Times New Roman', Times, serif; font-style: italic; }
   </style>
 </head>
 <body class="grid-bg">
 
   <!-- 1. HERO -->
   <section class="min-h-screen flex flex-col justify-center items-center text-center px-4 relative pt-10">
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-900/20 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
-    <div class="gs-reveal">
-      <p class="mono text-cyan-400 text-sm tracking-widest uppercase mb-4">Aegis V10 • Ph.D. Scientific Formulation</p>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-cyan-900/10 rounded-full blur-[150px] -z-10 pointer-events-none"></div>
+    <div class="gs-reveal max-w-4xl">
+      <p class="mono text-cyan-400 text-sm tracking-widest uppercase mb-6 border border-cyan-500/30 px-4 py-2 rounded-full inline-block bg-cyan-950/30">Ph.D. Defense • Scientific Formulation</p>
       <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-6 leading-tight">
         Stop the scam <br><span class="text-cyan-400 glow-text-cyan">before the money moves.</span>
       </h1>
-      <p class="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto mb-12">
-        Safety-Gated Continual Adaptation for Sequential Scam Intervention.
+      <p class="text-slate-300 text-lg md:text-xl mx-auto mb-6 leading-relaxed">
+        <strong>Aegis V10:</strong> Safety-Gated Continual Adaptation for Sequential Scam Intervention under Adversarial Concept Drift.
+      </p>
+      <p class="text-slate-500 text-sm max-w-3xl mx-auto mb-12 leading-relaxed">
+        Addressing the paradox of modern AI security: Static models fail against <span class="text-slate-300">Concept Drift</span> (Zero-Day Evasions), while Naive Continual Learning suffers from <span class="text-slate-300">Catastrophic Forgetting</span> (high false positives). Aegis V10 introduces a mathematically provable framework to achieve Monotonic Safety.
       </p>
       <div class="glass-card p-6 inline-flex flex-col items-center max-w-md w-full border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.15)] relative overflow-hidden">
         <div class="absolute inset-0 bg-cyan-500/5 animate-pulse"></div>
-        <div class="w-full flex justify-between text-xs mono text-slate-400 mb-2"><span>Semantic Risk</span> <span class="text-cyan-400">Escalating...</span></div>
+        <div class="w-full flex justify-between text-xs mono text-slate-400 mb-2"><span>Semantic Risk Vector <span class="math-font">R(t)</span></span> <span class="text-cyan-400">Escalating...</span></div>
         <div class="w-full h-1 bg-slate-800 rounded-full overflow-hidden">
           <div class="h-full bg-cyan-400 w-2/3 animate-[pulse_2s_ease-in-out_infinite]"></div>
         </div>
@@ -55,79 +60,77 @@
   </section>
 
   <!-- 2. PROBLEM -->
-  <section class="py-24 px-6 border-t border-slate-800/50">
-    <div class="max-w-5xl mx-auto gs-reveal">
-      <h2 class="text-3xl font-bold mb-12 text-center">The Blind Spot: <span class="text-slate-400">Why current systems are too late</span></h2>
-      <div class="flex flex-col md:flex-row items-center justify-between glass-card p-8">
-        <div class="text-center w-full md:w-1/4 mb-6 md:mb-0">
-          <div class="text-2xl mb-2">💬</div>
-          <div class="font-semibold text-sm">Communication</div>
-          <div class="text-xs text-slate-500 mt-1">Victim is manipulated</div>
+  <section class="py-24 px-6 border-t border-slate-800/50 relative">
+    <div class="max-w-6xl mx-auto gs-reveal">
+      <h2 class="text-3xl font-bold mb-4 text-center">The Contextual Blind Spot</h2>
+      <p class="text-slate-400 text-center max-w-2xl mx-auto mb-16">Why current financial infrastructure is mathematically too late to prevent social engineering.</p>
+      
+      <div class="flex flex-col md:flex-row items-stretch justify-between glass-card p-8 relative">
+        <div class="text-center w-full md:w-1/3 mb-6 md:mb-0 px-4">
+          <div class="text-3xl mb-4">💬</div>
+          <div class="font-bold text-lg text-slate-200">Semantic Space <span class="math-font text-slate-400 text-sm">S(t)</span></div>
+          <div class="text-sm text-slate-400 mt-3 text-left">The attacker applies psychological manipulation, urgency, and authority over multiple turns. Financial institutions have <b>zero visibility</b> into this space due to E2E encryption and privacy laws.</div>
         </div>
-        <div class="h-8 w-1 md:w-16 md:h-1 bg-slate-700"></div>
-        <div class="text-center w-full md:w-1/4 mb-6 md:mb-0 relative">
-          <div class="absolute -inset-4 border-2 border-rose-500/50 rounded-xl bg-rose-500/10 animate-pulse"></div>
-          <div class="text-2xl mb-2 relative z-10">⚠️</div>
-          <div class="font-bold text-rose-400 text-sm relative z-10">THE BLIND SPOT</div>
-          <div class="text-xs text-rose-300 mt-1 relative z-10">No context shared</div>
+        
+        <div class="flex items-center justify-center w-full md:w-1/4 relative py-8 md:py-0">
+          <div class="absolute inset-0 border-2 border-rose-500/30 rounded-xl bg-rose-500/5 animate-pulse"></div>
+          <div class="text-center relative z-10 px-4">
+            <div class="text-2xl mb-2">⚠️</div>
+            <div class="font-bold text-rose-400 text-lg uppercase tracking-wider">The Void</div>
+            <div class="text-xs text-rose-300 mt-2">Data silos prevent cross-context inference. By the time intent is formed, the manipulation is complete.</div>
+          </div>
         </div>
-        <div class="h-8 w-1 md:w-16 md:h-1 bg-slate-700"></div>
-        <div class="text-center w-full md:w-1/4 mb-6 md:mb-0">
-          <div class="text-2xl mb-2">💸</div>
-          <div class="font-semibold text-sm">Transaction</div>
-          <div class="text-xs text-slate-500 mt-1">Money is moved</div>
-        </div>
-        <div class="h-8 w-1 md:w-16 md:h-1 bg-slate-700"></div>
-        <div class="text-center w-full md:w-1/4">
-          <div class="text-2xl mb-2">🏦</div>
-          <div class="font-semibold text-sm">Bank Fraud Detection</div>
-          <div class="text-xs text-rose-500 mt-1 font-bold">Too late.</div>
+        
+        <div class="text-center w-full md:w-1/3 px-4">
+          <div class="text-3xl mb-4">🏦</div>
+          <div class="font-bold text-lg text-slate-200">Transaction Space <span class="math-font text-slate-400 text-sm">T(x)</span></div>
+          <div class="text-sm text-slate-400 mt-3 text-left">Bank Fraud Detection (Rule-based / ML) evaluates the transaction amount, IP, and velocity. <b>Result:</b> The transaction looks perfectly legitimate because the authenticated user executes it willingly.</div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- 3. HOW AEGIS THINKS -->
-  <section class="py-24 px-6 bg-slate-900/30">
-    <div class="max-w-5xl mx-auto gs-reveal">
-      <h2 class="text-3xl font-bold mb-4">How Aegis Thinks</h2>
-      <p class="text-slate-400 mb-12">Semantic intent + sequential evidence (SEW-BFAR) instead of single-message classification.</p>
-      
-      <div class="space-y-4">
-        <!-- Turn 1 -->
-        <div class="flex items-center space-x-6">
-          <div class="w-16 text-right mono text-xs text-slate-500">Turn 1</div>
-          <div class="flex-1 glass-card p-4 text-sm">"Hello, is this the account owner?"</div>
-          <div class="w-32 flex items-center space-x-3">
-            <div class="flex-1 h-1 bg-slate-800 rounded"><div class="h-full bg-cyan-500 w-[12%]"></div></div>
-            <div class="mono text-xs text-cyan-400">12%</div>
+  <section class="py-24 px-6 bg-slate-900/40 border-t border-slate-800/50">
+    <div class="max-w-6xl mx-auto gs-reveal">
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="text-3xl font-bold mb-4">How Aegis Thinks: <br><span class="text-cyan-400">SEW-BFAR</span></h2>
+          <p class="text-slate-400 mb-6">Aegis abandons single-message classification. Instead, it utilizes the <strong>Sequential Probability Ratio Test (SPRT)</strong> to accumulate evidence across the entire conversational timeline.</p>
+          
+          <div class="glass-card p-6 mb-6 bg-slate-950/80">
+            <div class="text-xs mono text-cyan-500 mb-2">MATHEMATICAL FORMULATION</div>
+            <div class="text-lg text-slate-300 text-center py-4">
+              <span class="math-font">Z<sub>n</sub> = Z<sub>n-1</sub> + log [ P(x<sub>n</sub> | &theta;<sub>scam</sub>) / P(x<sub>n</sub> | &theta;<sub>safe</sub>) ]</span>
+            </div>
+            <p class="text-xs text-slate-400">Where <span class="math-font">Z<sub>n</sub></span> is the cumulative log-likelihood ratio. If <span class="math-font">Z<sub>n</sub> &ge; Threshold</span>, Aegis intervenes. This guarantees a mathematically bounded False Positive Rate.</p>
           </div>
         </div>
-        <!-- Turn 2 -->
-        <div class="flex items-center space-x-6">
-          <div class="w-16 text-right mono text-xs text-slate-500">Turn 2</div>
-          <div class="flex-1 glass-card p-4 text-sm border-amber-500/30">"We detected unauthorized logins from foreign IPs."</div>
-          <div class="w-32 flex items-center space-x-3">
-            <div class="flex-1 h-1 bg-slate-800 rounded"><div class="h-full bg-amber-500 w-[48%]"></div></div>
-            <div class="mono text-xs text-amber-400">48%</div>
+        
+        <div class="space-y-4">
+          <!-- Turn 1 -->
+          <div class="flex items-center space-x-4">
+            <div class="w-16 text-right mono text-xs text-slate-500">t=1</div>
+            <div class="flex-1 glass-card p-3 text-sm">"Hello, is this the account owner?"</div>
+            <div class="w-24 text-right mono text-xs text-cyan-400">Z = 1.2</div>
           </div>
-        </div>
-        <!-- Turn 3 -->
-        <div class="flex items-center space-x-6">
-          <div class="w-16 text-right mono text-xs text-slate-500">Turn 3</div>
-          <div class="flex-1 glass-card p-4 text-sm border-rose-500/50 relative">
-            <div class="absolute -left-2 top-1/2 -translate-y-1/2 w-1 h-8 bg-rose-500 rounded-full shadow-[0_0_10px_rgba(225,29,72,0.8)]"></div>
-            "Transfer your funds to this secure vault immediately to avoid asset freezing."
+          <!-- Turn 2 -->
+          <div class="flex items-center space-x-4">
+            <div class="w-16 text-right mono text-xs text-slate-500">t=2</div>
+            <div class="flex-1 glass-card p-3 text-sm border-amber-500/30">"We detected unauthorized logins from foreign IPs."</div>
+            <div class="w-24 text-right mono text-xs text-amber-400">Z = 4.8</div>
           </div>
-          <div class="w-32 flex items-center space-x-3">
-            <div class="flex-1 h-1 bg-slate-800 rounded"><div class="h-full bg-rose-500 w-[85%]"></div></div>
-            <div class="mono text-xs text-rose-400 font-bold">85%</div>
+          <!-- Turn 3 -->
+          <div class="flex items-center space-x-4">
+            <div class="w-16 text-right mono text-xs text-slate-500">t=3</div>
+            <div class="flex-1 glass-card p-3 text-sm border-rose-500/50">"Transfer funds to this secure vault immediately."</div>
+            <div class="w-24 text-right mono text-xs text-rose-400 font-bold">Z = 9.5</div>
           </div>
-        </div>
-        <!-- Intervention -->
-        <div class="flex justify-center mt-8">
-          <div class="bg-rose-500/20 border border-rose-500 text-rose-400 px-6 py-2 rounded-full font-bold text-sm uppercase tracking-widest shadow-[0_0_20px_rgba(225,29,72,0.3)] animate-pulse">
-            System Intervention Triggered
+          <!-- Intervention -->
+          <div class="flex justify-center mt-6">
+            <div class="bg-rose-500/10 border border-rose-500 text-rose-400 px-6 py-2 rounded font-bold text-sm shadow-[0_0_20px_rgba(225,29,72,0.2)]">
+              &sum; Z<sub>n</sub> > Threshold &rarr; TRIGGER INTERVENTION
+            </div>
           </div>
         </div>
       </div>
@@ -137,160 +140,199 @@
   <!-- 4. ARCHITECTURE -->
   <section class="py-24 px-6 border-t border-slate-800/50">
     <div class="max-w-6xl mx-auto gs-reveal">
-      <h2 class="text-3xl font-bold mb-16 text-center">Data Flow & Architecture</h2>
-      <div class="flex flex-col md:flex-row justify-center items-center gap-4 text-center text-sm">
-        <div class="glass-card p-4 w-40 border-cyan-500/30">📱 Phone<br><span class="text-xs text-slate-400">Interaction</span></div>
-        <div class="text-cyan-500">→</div>
-        <div class="glass-card p-4 w-40 border-cyan-500/30">🧠 Edge Model<br><span class="text-xs text-slate-400">Semantic Vector</span></div>
-        <div class="text-cyan-500">→</div>
-        <div class="glass-card p-4 w-40 border-amber-500/30">🕸️ Threat Graph<br><span class="text-xs text-slate-400">Cloud Context</span></div>
-        <div class="text-amber-500">→</div>
-        <div class="glass-card p-4 w-40 border-rose-500/50 shadow-[0_0_15px_rgba(225,29,72,0.2)]">📊 SEW-BFAR<br><span class="text-xs text-slate-400">Decision Engine</span></div>
+      <h2 class="text-3xl font-bold mb-4 text-center">Edge-Cloud Hybrid Architecture</h2>
+      <p class="text-slate-400 text-center max-w-3xl mx-auto mb-16">Balancing 100% On-Device Privacy (OpenVINO) with Global Threat Intelligence (HexStrike).</p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-sm">
+        <div class="glass-card p-6 border-cyan-500/30 relative">
+          <div class="text-2xl mb-3">📱</div>
+          <h3 class="font-bold text-cyan-400 mb-2">Edge SLM (OpenVINO)</h3>
+          <p class="text-xs text-slate-400">Small Language Model running natively via NPU/CPU. Encodes raw Thai text into high-dimensional semantic vectors. <b>Zero data leaves the device.</b></p>
+        </div>
+        <div class="hidden md:flex items-center justify-center text-cyan-500/50 text-2xl">&rarr;</div>
+        
+        <div class="glass-card p-6 border-amber-500/30 relative">
+          <div class="text-2xl mb-3">🕸️</div>
+          <h3 class="font-bold text-amber-400 mb-2">Cloud Threat Graph</h3>
+          <p class="text-xs text-slate-400">Maintains the topology of known scams. Employs <b>HexStrike</b> (LLM Red-Teaming) to proactively generate synthetic zero-day evasions for pre-training.</p>
+        </div>
+        <div class="hidden md:flex items-center justify-center text-amber-500/50 text-2xl">&rarr;</div>
+        
+        <div class="glass-card p-6 border-rose-500/50 shadow-[0_0_15px_rgba(225,29,72,0.1)] relative">
+          <div class="text-2xl mb-3">⚖️</div>
+          <h3 class="font-bold text-rose-400 mb-2">SEW-BFAR Engine</h3>
+          <p class="text-xs text-slate-400">Executes the SPRT math on the incoming vectors. Determines the exact moment to inject <b>Cognitive Friction</b> before financial loss.</p>
+        </div>
       </div>
-      <div class="node-line my-4"></div>
+      
+      <div class="node-line my-6"></div>
+      
       <div class="flex justify-center">
-        <div class="glass-card p-4 w-64 text-center border-emerald-500/50">
-          <div class="font-bold text-emerald-400">CSU Learning Loop</div>
-          <div class="text-xs text-slate-400 mt-1">Feedback & Safe Updates</div>
+        <div class="glass-card p-6 max-w-lg w-full text-center border-emerald-500/50 bg-emerald-950/20">
+          <div class="text-2xl mb-3">🧬</div>
+          <h3 class="font-bold text-emerald-400 mb-2">CSU Learning Loop (LoRA)</h3>
+          <p class="text-xs text-slate-400">When Drift is detected (Jensen-Shannon Divergence), the Cloud retrains using Parameter-Efficient Fine-Tuning. The Delta Weights are pushed to the Edge seamlessly.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 5. HOW AEGIS LEARNS -->
-  <section class="py-24 px-6 bg-slate-900/30">
-    <div class="max-w-5xl mx-auto gs-reveal">
-      <h2 class="text-3xl font-bold mb-4">Self-Learning, but Controlled</h2>
-      <p class="text-slate-400 mb-12">The Certified Safe Update (CSU) protocol guarantees Monotonic Safety.</p>
+  <!-- 5. HOW AEGIS LEARNS (CSU) -->
+  <section class="py-24 px-6 bg-slate-900/40 border-t border-slate-800/50">
+    <div class="max-w-6xl mx-auto gs-reveal">
+      <h2 class="text-3xl font-bold mb-4">The Safety Gate: <span class="text-emerald-400">Certified Safe Update (CSU)</span></h2>
+      <p class="text-slate-400 mb-12 max-w-3xl">To solve Catastrophic Forgetting and prevent model poisoning, Aegis enforces the <strong>Monotonic Safety Theorem</strong>. A newly trained model candidate (<span class="math-font">M<sub>new</sub></span>) MUST mathematically outperform <span class="math-font">M<sub>old</sub></span> across 6 dimensions. If it fails even one, the update is destroyed.</p>
       
-      <div class="flex flex-wrap justify-between items-center bg-slate-950 p-8 rounded-xl border border-slate-800">
-        <div class="text-center w-full md:w-auto mb-6 md:mb-0"><div class="text-amber-400 font-bold">1. Drift Detected</div><div class="text-xs text-slate-500">New Scam</div></div>
-        <div class="hidden md:block text-slate-600">→</div>
-        <div class="text-center w-full md:w-auto mb-6 md:mb-0"><div class="text-cyan-400 font-bold">2. Retrain</div><div class="text-xs text-slate-500">Replay Buffer</div></div>
-        <div class="hidden md:block text-slate-600">→</div>
-        <div class="text-center w-full md:w-auto mb-6 md:mb-0">
-          <div class="text-emerald-400 font-bold">3. 6 Safety Gates</div>
-          <div class="grid grid-cols-2 gap-1 mt-2 text-[10px] text-slate-400 mono text-left">
-            <div>✓ Recall</div><div>✓ Hard Ham</div>
-            <div>✓ Latency</div><div>✓ Lead Time</div>
-            <div>✓ Robustness</div><div>✓ Forgetting</div>
-          </div>
+      <div class="grid grid-cols-2 md:grid-cols-6 gap-4 text-center">
+        <div class="glass-card p-4 border-emerald-500/50">
+          <div class="text-emerald-400 text-xl mb-2">✓</div>
+          <div class="font-bold text-xs uppercase text-slate-200">Recall</div>
+          <div class="text-[10px] text-slate-500 mt-1">&ge; Baseline</div>
         </div>
-        <div class="hidden md:block text-slate-600">→</div>
-        <div class="text-center w-full md:w-auto"><div class="bg-emerald-500/20 text-emerald-400 px-4 py-2 rounded font-bold border border-emerald-500/50">DEPLOY</div></div>
+        <div class="glass-card p-4 border-emerald-500/50">
+          <div class="text-emerald-400 text-xl mb-2">✓</div>
+          <div class="font-bold text-xs uppercase text-slate-200">Hard Ham</div>
+          <div class="text-[10px] text-slate-500 mt-1">FPR &le; 0.1%</div>
+        </div>
+        <div class="glass-card p-4 border-emerald-500/50">
+          <div class="text-emerald-400 text-xl mb-2">✓</div>
+          <div class="font-bold text-xs uppercase text-slate-200">Latency</div>
+          <div class="text-[10px] text-slate-500 mt-1">&lt; 300ms</div>
+        </div>
+        <div class="glass-card p-4 border-emerald-500/50">
+          <div class="text-emerald-400 text-xl mb-2">✓</div>
+          <div class="font-bold text-xs uppercase text-slate-200">Lead Time</div>
+          <div class="text-[10px] text-slate-500 mt-1">&ge; 1 Turn</div>
+        </div>
+        <div class="glass-card p-4 border-emerald-500/50">
+          <div class="text-emerald-400 text-xl mb-2">✓</div>
+          <div class="font-bold text-xs uppercase text-slate-200">Robustness</div>
+          <div class="text-[10px] text-slate-500 mt-1">ASR &lt; 1%</div>
+        </div>
+        <div class="glass-card p-4 border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+          <div class="text-emerald-400 text-xl mb-2">✓</div>
+          <div class="font-bold text-xs uppercase text-slate-200">Retention</div>
+          <div class="text-[10px] text-emerald-400 mt-1 font-bold">BWT &ge; 0</div>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- 6 & 7. PROOF & EXPECTED PERFORMANCE -->
   <section class="py-24 px-6 border-t border-slate-800/50">
-    <div class="max-w-5xl mx-auto gs-reveal">
-      <h2 class="text-3xl font-bold mb-2">Interactive Benchmark Dashboard</h2>
-      <p class="text-rose-400 font-bold text-sm uppercase tracking-wider mb-12">* Targets / Simulated Values (Pre-Clinical)</p>
-      
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
-        <div class="glass-card p-6 text-center">
-          <div class="text-3xl font-bold text-cyan-400 mb-1">94%</div>
-          <div class="text-xs text-slate-400 uppercase tracking-widest">Constrained Recall</div>
+    <div class="max-w-6xl mx-auto gs-reveal">
+      <div class="flex justify-between items-end mb-8">
+        <div>
+          <h2 class="text-3xl font-bold mb-2">Scientific Evaluation Rubric</h2>
+          <p class="text-slate-400">Strict metrics for Ph.D. validation across adaptation and retention.</p>
         </div>
-        <div class="glass-card p-6 text-center border-emerald-500/30">
-          <div class="text-3xl font-bold text-emerald-400 mb-1">< 0.1%</div>
-          <div class="text-xs text-slate-400 uppercase tracking-widest">False Positive Rate</div>
-        </div>
-        <div class="glass-card p-6 text-center">
-          <div class="text-3xl font-bold text-cyan-400 mb-1">> 1 Turn</div>
-          <div class="text-xs text-slate-400 uppercase tracking-widest">Intervention Lead Time</div>
-        </div>
-        <div class="glass-card p-6 text-center">
-          <div class="text-3xl font-bold text-cyan-400 mb-1">< 1%</div>
-          <div class="text-xs text-slate-400 uppercase tracking-widest">Adversarial ASR</div>
-        </div>
-        <div class="glass-card p-6 text-center border-emerald-500/30">
-          <div class="text-3xl font-bold text-emerald-400 mb-1">BWT &ge; 0</div>
-          <div class="text-xs text-slate-400 uppercase tracking-widest">Catastrophic Forgetting</div>
-        </div>
-        <div class="glass-card p-6 text-center">
-          <div class="text-3xl font-bold text-cyan-400 mb-1">< 250ms</div>
-          <div class="text-xs text-slate-400 uppercase tracking-widest">Edge Latency</div>
+        <div class="bg-rose-500/10 border border-rose-500/50 px-4 py-2 rounded text-rose-400 font-bold text-xs uppercase tracking-wider">
+          * Pre-Clinical Simulated Targets
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- 8 & 9. PREVENT & FEATURES -->
-  <section class="py-24 px-6 bg-slate-900/30">
-    <div class="max-w-6xl mx-auto gs-reveal">
-      <div class="grid md:grid-cols-2 gap-16">
-        <div>
-          <h2 class="text-3xl font-bold mb-8">What Aegis Prevents</h2>
-          <div class="space-y-6">
-            <div class="glass-card p-4 border-rose-500/30 opacity-50">
-              <div class="text-rose-400 font-bold text-sm mb-2">WITHOUT AEGIS</div>
-              <div class="text-xs text-slate-400 flex items-center space-x-2"><span>Manipulation</span> <span>→</span> <span class="text-rose-400">Transfer Executed</span></div>
-            </div>
-            <div class="glass-card p-4 border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.1)]">
-              <div class="text-emerald-400 font-bold text-sm mb-2">WITH AEGIS</div>
-              <div class="text-xs text-slate-300 flex items-center space-x-2"><span>Early Warning</span> <span>→</span> <span class="text-amber-400 font-bold">Cognitive Friction Delay</span> <span>→</span> <span class="text-emerald-400">Transfer Prevented</span></div>
-            </div>
-          </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="glass-card p-6">
+          <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">Constrained Recall</div>
+          <div class="text-4xl font-bold text-cyan-400 mb-3">94.0<span class="text-2xl text-cyan-500/50">%</span></div>
+          <p class="text-xs text-slate-400">Ability to detect Zero-Day Evasions and Drifted Scams, holding FPR strictly constant.</p>
         </div>
-        
-        <div>
-          <h2 class="text-3xl font-bold mb-8">Product Features</h2>
-          <div class="grid grid-cols-2 gap-3 text-xs font-medium">
-            <div class="glass-card p-3 border-cyan-500/20 flex items-center">🔒 Private On-Device</div>
-            <div class="glass-card p-3 border-cyan-500/20 flex items-center">⏱️ Sequential Warning</div>
-            <div class="glass-card p-3 border-cyan-500/20 flex items-center">🧬 Scam Adaptation</div>
-            <div class="glass-card p-3 border-cyan-500/20 flex items-center">🧠 Anti-Forgetting</div>
-            <div class="glass-card p-3 border-cyan-500/20 flex items-center">🛡️ Adversarial Robust</div>
-            <div class="glass-card p-3 border-cyan-500/20 flex items-center">✅ Safe Updates (CSU)</div>
-          </div>
+        <div class="glass-card p-6 border-emerald-500/30">
+          <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">False Positive Rate</div>
+          <div class="text-4xl font-bold text-emerald-400 mb-3">&le; 0.1<span class="text-2xl text-emerald-500/50">%</span></div>
+          <p class="text-xs text-slate-400">Critical UX constraint: Less than 1 false alarm per 1,000 legitimate conversations.</p>
+        </div>
+        <div class="glass-card p-6">
+          <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">Intervention Lead Time</div>
+          <div class="text-4xl font-bold text-cyan-400 mb-3">&ge; 1 <span class="text-2xl text-cyan-500/50">Turn</span></div>
+          <p class="text-xs text-slate-400">Warning triggers <i>before</i> the user confirms the financial transfer in their banking app.</p>
+        </div>
+        <div class="glass-card p-6">
+          <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">Adversarial ASR</div>
+          <div class="text-4xl font-bold text-cyan-400 mb-3">&lt; 1.0<span class="text-2xl text-cyan-500/50">%</span></div>
+          <p class="text-xs text-slate-400">Attack Success Rate: System immunity against spacing, ZWJ, and typo-evasions from HexStrike.</p>
+        </div>
+        <div class="glass-card p-6 border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.1)]">
+          <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">Catastrophic Forgetting</div>
+          <div class="text-4xl font-bold text-emerald-400 mb-3">BWT &ge; 0</div>
+          <p class="text-xs text-slate-400"><b>Backward Transfer:</b> The model retains 100% of its knowledge regarding legacy scams after updating.</p>
+        </div>
+        <div class="glass-card p-6">
+          <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">Edge Latency</div>
+          <div class="text-4xl font-bold text-cyan-400 mb-3">&lt; 300<span class="text-2xl text-cyan-500/50">ms</span></div>
+          <p class="text-xs text-slate-400">On-device NPU execution time via OpenVINO, guaranteeing imperceptible real-time UX.</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- 10. LIVE DEMO (THE CLIMAX) -->
-  <section class="py-32 px-6 border-t border-slate-800/50 min-h-screen flex flex-col justify-center">
-    <div class="max-w-4xl mx-auto w-full">
-      <h2 class="text-4xl font-bold mb-4 text-center gs-reveal">Live Simulation</h2>
-      <p class="text-slate-400 text-center mb-12 gs-reveal">Experience the SPRT Engine & Cognitive Friction in real-time.</p>
+  <section class="py-32 px-6 border-t border-slate-800/50 min-h-screen flex flex-col justify-center bg-slate-950">
+    <div class="max-w-5xl mx-auto w-full">
+      <h2 class="text-4xl font-bold mb-4 text-center gs-reveal glow-text-cyan text-cyan-400">Live Clinical Simulation</h2>
+      <p class="text-slate-400 text-center mb-12 max-w-3xl mx-auto gs-reveal">Experience the SEW-BFAR Engine injecting Cognitive Friction, followed by the Aegis V10 Concept Drift Learning Loop.</p>
       
-      <div class="glass-card border-cyan-500/30 overflow-hidden flex flex-col md:flex-row shadow-[0_0_40px_rgba(6,182,212,0.1)] gs-reveal">
+      <div class="glass-card border-cyan-500/30 overflow-hidden flex flex-col md:flex-row shadow-[0_0_40px_rgba(6,182,212,0.15)] gs-reveal">
         <!-- Chat UI -->
-        <div class="w-full md:w-3/5 p-6 bg-slate-950 flex flex-col min-h-[400px]">
-          <div class="text-xs mono text-slate-500 mb-6 border-b border-slate-800 pb-2">SIMULATED SCAM VECTOR (THAI)</div>
-          <div id="chat-box" class="flex-1 space-y-4 mb-6">
-            <!-- Messages will appear here -->
+        <div class="w-full md:w-3/5 p-6 bg-[#020617] flex flex-col min-h-[450px]">
+          <div class="text-xs mono text-slate-500 mb-6 border-b border-slate-800 pb-2 flex justify-between">
+            <span>TARGET: USER_DEVICE_01</span>
+            <span class="text-cyan-500">LIVE</span>
           </div>
-          <button id="btn-next" class="w-full py-3 bg-cyan-600 hover:bg-cyan-500 text-white rounded font-bold transition">
-            Receive Next Message
-          </button>
+          <div id="chat-box" class="flex-1 space-y-4 mb-6 overflow-y-auto">
+            <!-- Messages -->
+          </div>
+          
+          <div class="grid grid-cols-2 gap-3">
+            <button id="btn-next" class="w-full py-3 bg-cyan-600/20 border border-cyan-500/50 hover:bg-cyan-600/40 text-cyan-400 rounded font-bold transition text-sm">
+              [+] Inject Scammer Message
+            </button>
+            <button id="btn-drift" class="w-full py-3 bg-slate-800 text-slate-500 rounded font-bold transition text-sm cursor-not-allowed opacity-50" disabled>
+              Trigger Concept Drift (Retrain)
+            </button>
+          </div>
         </div>
         
         <!-- Aegis Engine UI -->
         <div class="w-full md:w-2/5 p-6 bg-slate-900 border-l border-slate-800 flex flex-col">
-          <div class="text-xs mono text-slate-500 mb-6 border-b border-slate-800 pb-2">AEGIS SEW-BFAR ENGINE</div>
+          <div class="text-xs mono text-slate-500 mb-6 border-b border-slate-800 pb-2">AEGIS DIAGNOSTICS & TELEMETRY</div>
           
-          <div class="mb-6">
-            <div class="flex justify-between text-xs mb-2"><span>Cumulative Risk</span> <span id="risk-val" class="mono text-cyan-400">0.0%</span></div>
+          <div class="mb-8">
+            <div class="flex justify-between text-xs mb-2"><span>Cumulative Risk <span class="math-font">&sum; Z<sub>n</sub></span></span> <span id="risk-val" class="mono text-cyan-400 font-bold text-lg">0.0</span></div>
             <div class="h-2 bg-slate-800 rounded-full overflow-hidden">
-              <div id="risk-bar" class="h-full bg-cyan-400 w-0 progress-bar-fill"></div>
+              <div id="risk-bar" class="h-full bg-cyan-400 w-0 progress-bar-fill shadow-[0_0_10px_rgba(6,182,212,0.8)]"></div>
+            </div>
+            <div class="text-[10px] text-slate-500 text-right mt-1">Threshold: 9.0 (Critical)</div>
+          </div>
+          
+          <div class="space-y-4 flex-1">
+            <div class="text-[10px] text-slate-500 uppercase tracking-widest">Active Semantic Vectors</div>
+            <div id="ind-auth" class="text-xs p-3 glass rounded opacity-30 transition-all duration-300 flex justify-between">
+              <span>Authority/Impersonation</span><span class="mono">v_1</span>
+            </div>
+            <div id="ind-urg" class="text-xs p-3 glass rounded opacity-30 transition-all duration-300 flex justify-between">
+              <span>Urgency/Coercion</span><span class="mono">v_2</span>
+            </div>
+            <div id="ind-fin" class="text-xs p-3 glass rounded opacity-30 transition-all duration-300 flex justify-between">
+              <span>Financial Action</span><span class="mono">v_3</span>
             </div>
           </div>
-          
-          <div class="space-y-3 flex-1">
-            <div class="text-[10px] text-slate-500 uppercase">Semantic Indicators</div>
-            <div id="ind-auth" class="text-xs p-2 glass rounded opacity-30 transition-opacity">Authority Impersonation</div>
-            <div id="ind-urg" class="text-xs p-2 glass rounded opacity-30 transition-opacity">Urgency / Panic</div>
-            <div id="ind-fin" class="text-xs p-2 glass rounded opacity-30 transition-opacity">Financial Action Request</div>
-          </div>
 
-          <!-- Friction Overlay (Hidden by default) -->
-          <div id="friction-box" class="hidden mt-4 p-4 border border-rose-500 bg-rose-500/10 rounded-lg text-center animate-pulse">
-            <div class="text-rose-500 text-2xl mb-2">⚠️</div>
-            <div class="text-rose-400 font-bold text-sm mb-1">COGNITIVE FRICTION ACTIVE</div>
-            <div class="text-xs text-rose-300">Action locked for <span id="countdown" class="font-bold text-white text-lg mx-1">5</span>s</div>
+          <!-- Friction Overlay -->
+          <div id="friction-box" class="hidden mt-6 p-4 border border-rose-500 bg-rose-500/10 rounded-lg text-center shadow-[0_0_20px_rgba(225,29,72,0.2)]">
+            <div class="text-rose-500 text-3xl mb-2 animate-bounce">⚠️</div>
+            <div class="text-rose-400 font-bold text-sm mb-1 uppercase">Cognitive Friction Triggered</div>
+            <div class="text-xs text-rose-300 mb-3">Psychological interruption initiated. Financial apps locked.</div>
+            <div class="text-2xl font-bold text-white mono" id="countdown">5.00s</div>
+          </div>
+          
+          <!-- Retrain Overlay -->
+          <div id="retrain-box" class="hidden mt-6 p-4 border border-emerald-500 bg-emerald-500/10 rounded-lg text-center shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+            <div class="text-emerald-500 text-2xl mb-2 animate-spin">⚙️</div>
+            <div class="text-emerald-400 font-bold text-sm mb-1 uppercase">CSU Learning Loop Active</div>
+            <div class="text-[10px] text-emerald-300 mb-1">Replay Buffer ... OK (BWT &ge; 0)</div>
+            <div class="text-[10px] text-emerald-300 mb-1">LoRA Weights ... Updated</div>
+            <div class="text-xs font-bold text-white mt-2">Monotonic Safety Guaranteed</div>
           </div>
         </div>
       </div>
@@ -298,7 +340,6 @@
   </section>
 
   <script>
-    // GSAP Scroll Animations
     gsap.registerPlugin(ScrollTrigger);
     gsap.utils.toArray('.gs-reveal').forEach(function(elem) {
       gsap.fromTo(elem, 
@@ -310,75 +351,89 @@
       );
     });
 
-    // Interactive Demo Logic
     const script = [
-      { msg: "สวัสดีครับ ติดต่อจากศูนย์บัตรเครดิต", risk: 15, ind: "auth" },
-      { msg: "พบยอดรูดบัตรผิดปกติ 45,000 บาทที่ต่างประเทศ", risk: 42, ind: "auth" },
-      { msg: "หากไม่ได้ทำรายการ กรุณารีบอายัดบัญชีด่วนภายใน 5 นาที", risk: 78, ind: "urg" },
-      { msg: "ให้โอนเงินทั้งหมดมาพักที่บัญชี ปปง. เพื่อความปลอดภัย", risk: 98, ind: "fin" }
+      { msg: "สวัสดีครับ ติดต่อจากศูนย์บัตรเครดิต", risk: 2.1, pct: 20, ind: "auth" },
+      { msg: "พบยอดรูดบัตรผิดปกติ 45,000 บาทที่ต่างประเทศ", risk: 4.8, pct: 45, ind: "auth" },
+      { msg: "หากไม่ได้ทำรายการ กรุณารีบอายัดบัญชีด่วนภายใน 5 นาที", risk: 7.2, pct: 75, ind: "urg" },
+      { msg: "ให้โอนเงินทั้งหมดมาพักที่บัญชี ปปง. เพื่อความปลอดภัย", risk: 9.8, pct: 100, ind: "fin" }
     ];
     
     let step = 0;
     const btn = document.getElementById('btn-next');
+    const btnDrift = document.getElementById('btn-drift');
     const chat = document.getElementById('chat-box');
     const riskBar = document.getElementById('risk-bar');
     const riskVal = document.getElementById('risk-val');
     
     btn.addEventListener('click', () => {
       if (step >= script.length) return;
-      
       const turn = script[step];
       
-      // Add message
       const msgEl = document.createElement('div');
-      msgEl.className = 'bg-slate-800 p-3 rounded-lg rounded-tl-none text-sm max-w-[85%] animate-[fadeIn_0.3s_ease-out]';
+      msgEl.className = 'bg-slate-800/80 border border-slate-700 p-4 rounded-lg rounded-tl-none text-sm max-w-[85%] animate-[fadeIn_0.3s_ease-out] shadow-md';
       msgEl.textContent = turn.msg;
       chat.appendChild(msgEl);
       
-      // Update Risk
-      riskBar.style.width = turn.risk + '%';
-      riskVal.textContent = turn.risk + '%';
+      riskBar.style.width = turn.pct + '%';
+      riskVal.textContent = turn.risk.toFixed(1);
       
-      // Update Color based on risk
-      if (turn.risk > 75) {
-        riskBar.className = 'h-full bg-rose-500 progress-bar-fill';
-        riskVal.className = 'mono text-rose-400 font-bold';
-      } else if (turn.risk > 40) {
-        riskBar.className = 'h-full bg-amber-400 progress-bar-fill';
-        riskVal.className = 'mono text-amber-400';
+      if (turn.pct > 80) {
+        riskBar.className = 'h-full bg-rose-500 progress-bar-fill shadow-[0_0_15px_rgba(225,29,72,0.8)]';
+        riskVal.className = 'mono text-rose-400 font-bold text-lg glow-text-red';
+      } else if (turn.pct > 50) {
+        riskBar.className = 'h-full bg-amber-400 progress-bar-fill shadow-[0_0_10px_rgba(251,191,36,0.5)]';
+        riskVal.className = 'mono text-amber-400 font-bold text-lg';
       }
       
-      // Light up indicator
-      document.getElementById('ind-' + turn.ind).classList.remove('opacity-30');
-      document.getElementById('ind-' + turn.ind).classList.add('border', 'border-cyan-500/50', 'bg-cyan-500/10');
+      document.getElementById('ind-' + turn.ind).className = 'text-xs p-3 rounded transition-all duration-300 flex justify-between border border-cyan-400 bg-cyan-900/40 text-cyan-300 shadow-[0_0_10px_rgba(6,182,212,0.2)]';
       
       step++;
       
-      // Trigger Intervention on last step
       if (step === script.length) {
         btn.disabled = true;
-        btn.className = 'w-full py-3 bg-slate-800 text-slate-500 rounded font-bold cursor-not-allowed';
-        btn.textContent = 'App Locked';
+        btn.className = 'w-full py-3 bg-slate-900 border border-slate-800 text-slate-600 rounded font-bold cursor-not-allowed text-sm';
+        btn.textContent = 'App Locked - Friction Active';
         
         const friction = document.getElementById('friction-box');
         friction.classList.remove('hidden');
         
-        let timeLeft = 5;
+        let timeLeft = 500;
         const cnt = document.getElementById('countdown');
         const timer = setInterval(() => {
           timeLeft--;
-          cnt.textContent = timeLeft;
+          cnt.textContent = (timeLeft/100).toFixed(2) + 's';
           if (timeLeft <= 0) {
             clearInterval(timer);
-            friction.classList.remove('animate-pulse');
-            friction.innerHTML = '<div class="text-emerald-400 font-bold text-sm">Session Terminated Safely.</div>';
-            btn.disabled = false;
-            btn.className = 'w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded font-bold transition mt-4';
-            btn.textContent = 'Reset Demo';
-            btn.onclick = () => location.reload();
+            friction.classList.add('hidden');
+            
+            // Enable Drift button
+            btnDrift.disabled = false;
+            btnDrift.className = 'w-full py-3 bg-emerald-600/20 border border-emerald-500/50 hover:bg-emerald-600/40 text-emerald-400 rounded font-bold transition text-sm shadow-[0_0_15px_rgba(16,185,129,0.3)]';
           }
-        }, 1000);
+        }, 10);
       }
+    });
+
+    btnDrift.addEventListener('click', () => {
+      btnDrift.disabled = true;
+      btnDrift.className = 'w-full py-3 bg-slate-900 border border-slate-800 text-slate-600 rounded font-bold cursor-not-allowed text-sm';
+      btnDrift.textContent = 'Updating...';
+      
+      // Scammer mutates
+      const msgEl = document.createElement('div');
+      msgEl.className = 'bg-slate-800/80 border border-rose-500/30 p-4 rounded-lg rounded-tl-none text-sm max-w-[85%] animate-[fadeIn_0.3s_ease-out] shadow-md mt-6';
+      msgEl.innerHTML = '<span class="text-rose-400 font-bold text-xs block mb-1">ZERO-DAY EVASION DETECTED</span>"ขอย้าย.ยอด.ไปพัก.ที่ บ.ช. กลางคับ"';
+      chat.appendChild(msgEl);
+      
+      setTimeout(() => {
+        document.getElementById('retrain-box').classList.remove('hidden');
+        setTimeout(() => {
+           btn.disabled = false;
+           btn.className = 'w-full py-3 bg-cyan-600 hover:bg-cyan-500 text-white rounded font-bold transition text-sm';
+           btn.textContent = 'Reset Environment';
+           btn.onclick = () => location.reload();
+        }, 3000);
+      }, 1000);
     });
   </script>
 </body>
