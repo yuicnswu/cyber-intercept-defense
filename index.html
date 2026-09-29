@@ -397,16 +397,37 @@ details p,details .body{margin:0;padding:0 16px 14px 34px;color:var(--muted)}
 
 <section class='slide' id='s7'><div class='wrap'>
 
-<div class='kicker'>07 / 08 · METRICS</div>
-<h2>มาตรวัดความสำเร็จ <em>(Evaluation Metrics)</em></h2>
-<div class='callout' style='margin-bottom: 24px;'>เราไม่ได้วัดแค่ค่า F1-Score พื้นฐาน แต่วัดผลกระทบที่เกิดในสภาพแวดล้อมที่เปลี่ยนแปลง (Dynamic Environment)</div>
-<div class='tablebox'><table class='t' style='width: 100%; text-align: left;'>
-<thead><tr><th>มาตรวัด (Metric)</th><th>เป้าหมายทางวิทยาศาสตร์</th><th>ผลลัพธ์ของ Aegis V10</th></tr></thead>
+<div class='kicker'>07 / 08 · EVALUATION METRICS</div>
+<h2>มาตรวัดความสำเร็จ <em>(The Evaluation Rubric)</em></h2>
+<div class='callout' style='margin-bottom: 24px;'>การทดสอบ Aegis V10 ต้องมีเกณฑ์ชี้วัดทางคณิตศาสตร์ที่ชัดเจน ว่าแบบไหนคือ "ผ่าน" (ใช้งานได้จริง) และแบบไหนคือ "ล้มเหลว"</div>
+<div class='tablebox'><table class='t' style='width: 100%; text-align: left; font-size: 14px;'>
+<thead><tr><th>มาตรวัด (Metric)</th><th>เกณฑ์ที่ผ่าน (Good / Pass)</th><th>จุดล้มเหลว (Fail)</th></tr></thead>
 <tbody>
-<tr><td><b>Sequential Lead Time</b></td><td>เวลาที่แจ้งเตือน <b>ก่อน</b> เกิดการโอนเงิน</td><td><span style='color:var(--emerald)'>แทรกแซงได้ทันทีที่ความเสี่ยงสะสมผ่านเกณฑ์ SPRT</span></td></tr>
-<tr><td><b>Backward Transfer (BWT)</b></td><td>พิสูจน์การลืมข้อมูลเก่า (ต้องได้ BWT &gt;= 0)</td><td><span style='color:var(--emerald)'>BWT = 0 (ไม่มี Catastrophic Forgetting)</span></td></tr>
-<tr><td><b>Attack Success Rate (ASR)</b></td><td>ความต้านทานต่อ Zero-Day Evasions</td><td><span style='color:var(--emerald)'>ป้องกันการโจมตีจาก HexStrike ได้อย่างสมบูรณ์</span></td></tr>
-<tr><td><b>Latency (Edge Inference)</b></td><td>ความเร็วบนโทรศัพท์มือถือ (Privacy-Preserving)</td><td><span style='color:var(--emerald)'>ประมวลผลเร็วกว่า 300ms (ผ่าน OpenVINO)</span></td></tr>
+<tr>
+  <td><b>1. Sequential Lead Time</b><br><span class='muted'>เวลาแจ้งเตือนก่อนความเสียหาย</span></td>
+  <td><span style='color:var(--emerald)'><b>&gt; 1 ขั้นตอน</b><br>เตือนก่อนที่เหยื่อจะกดยืนยันโอนเงิน หรือก่อนกรอกข้อมูลสำคัญ (ทันเวลา)</span></td>
+  <td><span style='color:var(--rose)'><b>&lt;= 0 ขั้นตอน</b><br>เตือนหลังจากโอนเงินไปแล้ว หรือเตือนพร่ำเพรื่อตั้งแต่ทักทาย (Alert Fatigue)</span></td>
+</tr>
+<tr>
+  <td><b>2. Backward Transfer (BWT)</b><br><span class='muted'>มาตรวัดการลืมข้อมูลเก่า</span></td>
+  <td><span style='color:var(--emerald)'><b>BWT &ge; 0</b><br>โมเดลจำวิธีป้องกันสแกมรูปแบบเก่าได้ 100% (ไม่มี Catastrophic Forgetting)</span></td>
+  <td><span style='color:var(--rose)'><b>BWT &lt; 0</b><br>ลืมข้อมูลเก่า จับสแกมใหม่ได้แต่สแกมเก่าหลุดเข้ามาในระบบ</span></td>
+</tr>
+<tr>
+  <td><b>3. Attack Success Rate</b><br><span class='muted'>ความแข็งแกร่ง (Robustness)</span></td>
+  <td><span style='color:var(--emerald)'><b>ASR &lt; 1%</b><br>ต้านทานข้อความหลบเลี่ยง (Zero-Day Evasions) จาก HexStrike ได้เกือบสมบูรณ์</span></td>
+  <td><span style='color:var(--rose)'><b>ASR &gt; 5%</b><br>คนร้ายแค่พิมพ์เว้นวรรค หรือเปลี่ยนคำสะกดนิดเดียว ก็ทะลุระบบได้</span></td>
+</tr>
+<tr>
+  <td><b>4. False Positive Rate</b><br><span class='muted'>อัตราการเตือนผิดพลาด</span></td>
+  <td><span style='color:var(--emerald)'><b>FPR &le; 0.1%</b><br>แชทปกติ 1,000 ครั้ง เตือนผิดไม่เกิน 1 ครั้ง (ผู้ใช้ยอมรับได้)</span></td>
+  <td><span style='color:var(--rose)'><b>FPR &gt; 1%</b><br>เตือนแชทปกติบ่อยเกินไป จนผู้ใช้รำคาญและปิดระบบทิ้ง</span></td>
+</tr>
+<tr>
+  <td><b>5. Edge Latency</b><br><span class='muted'>ความเร็วบนมือถือ</span></td>
+  <td><span style='color:var(--emerald)'><b>&lt; 300 ms</b><br>ประมวลผลเสร็จในเสี้ยววินาที ผู้ใช้รู้สึกเหมือนแชทเรียลไทม์ปกติ</span></td>
+  <td><span style='color:var(--rose)'><b>&gt; 1000 ms</b><br>ทำให้แอปแชทกระตุก ช้า และส่งผลเสียต่อ User Experience</span></td>
+</tr>
 </tbody></table></div>
 
 </div></section>
