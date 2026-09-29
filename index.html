@@ -270,10 +270,17 @@
 
   <!-- 10. LIVE DEMO (THE CLIMAX) -->
   <section class="py-32 px-6 border-t border-slate-800/50 min-h-screen flex flex-col justify-center bg-slate-950">
-    <div class="max-w-5xl mx-auto w-full">
+    <div class="max-w-6xl mx-auto w-full">
       <h2 class="text-4xl font-bold mb-4 text-center gs-reveal glow-text-cyan text-cyan-400">สถานการณ์จำลองทางคลินิก (Live Clinical Simulation)</h2>
-      <p class="text-slate-400 text-center mb-12 max-w-3xl mx-auto gs-reveal">ทดสอบการทำงานของเครื่องยนต์ SEW-BFAR ในการสร้างการหน่วงเวลา (Cognitive Friction) และวัฏจักรการเรียนรู้อัตโนมัติ (CSU Loop)</p>
+      <p class="text-slate-400 text-center mb-8 max-w-3xl mx-auto gs-reveal">ทดสอบการทำงานของเครื่องยนต์ SEW-BFAR และวัฏจักรการเรียนรู้อัตโนมัติ (CSU Loop) กับสแกม 3 รูปแบบ</p>
       
+      <!-- Scenario Selector -->
+      <div class="flex flex-wrap justify-center gap-4 mb-8 gs-reveal">
+        <button onclick="loadScenario('bank')" id="btn-sc-bank" class="px-6 py-2 rounded-full glass-card border-cyan-500 text-cyan-300 font-bold text-sm transition-all shadow-[0_0_15px_rgba(6,182,212,0.3)]">💳 แก๊งคอลเซ็นเตอร์ (บัตรเครดิต)</button>
+        <button onclick="loadScenario('delivery')" id="btn-sc-delivery" class="px-6 py-2 rounded-full glass-card border-slate-600 text-slate-400 hover:text-cyan-300 text-sm transition-all">📦 หลอกว่าพัสดุผิดกฎหมาย</button>
+        <button onclick="loadScenario('crypto')" id="btn-sc-crypto" class="px-6 py-2 rounded-full glass-card border-slate-600 text-slate-400 hover:text-cyan-300 text-sm transition-all">💔 หลอกรักชวนลงทุน (Romance Scam)</button>
+      </div>
+
       <div class="glass-card border-cyan-500/30 overflow-hidden flex flex-col md:flex-row shadow-[0_0_40px_rgba(6,182,212,0.15)] gs-reveal">
         <!-- Chat UI -->
         <div class="w-full md:w-3/5 p-6 bg-[#020617] flex flex-col min-h-[450px]">
@@ -296,7 +303,7 @@
         </div>
         
         <!-- Aegis Engine UI -->
-        <div class="w-full md:w-2/5 p-6 bg-slate-900 border-l border-slate-800 flex flex-col">
+        <div class="w-full md:w-2/5 p-6 bg-slate-900 border-l border-slate-800 flex flex-col relative">
           <div class="text-xs mono text-slate-500 mb-6 border-b border-slate-800 pb-2">AEGIS DIAGNOSTICS & TELEMETRY</div>
           
           <div class="mb-8">
@@ -310,31 +317,31 @@
           <div class="space-y-4 flex-1">
             <div class="text-[10px] text-slate-500 uppercase tracking-widest">Active Semantic Vectors</div>
             <div id="ind-auth" class="text-xs p-3 glass rounded opacity-30 transition-all duration-300 flex justify-between">
-              <span>Authority/Impersonation</span><span class="mono">v_1</span>
+              <span id="label-auth">Authority/Impersonation</span><span class="mono">v_1</span>
             </div>
             <div id="ind-urg" class="text-xs p-3 glass rounded opacity-30 transition-all duration-300 flex justify-between">
-              <span>Urgency/Coercion</span><span class="mono">v_2</span>
+              <span id="label-urg">Urgency/Coercion</span><span class="mono">v_2</span>
             </div>
             <div id="ind-fin" class="text-xs p-3 glass rounded opacity-30 transition-all duration-300 flex justify-between">
-              <span>Financial Action</span><span class="mono">v_3</span>
+              <span id="label-fin">Financial Action</span><span class="mono">v_3</span>
             </div>
           </div>
 
           <!-- Friction Overlay -->
-          <div id="friction-box" class="hidden mt-6 p-4 border border-rose-500 bg-rose-500/10 rounded-lg text-center shadow-[0_0_20px_rgba(225,29,72,0.2)]">
-            <div class="text-rose-500 text-3xl mb-2 animate-bounce">⚠️</div>
-            <div class="text-rose-400 font-bold text-sm mb-1 uppercase">ระบบแทรกแซงอัตโนมัติทำงาน</div>
-            <div class="text-xs text-rose-300 mb-3">ล็อกแอปพลิเคชันธนาคารเพื่อดึงสติ (Cognitive Friction)</div>
-            <div class="text-2xl font-bold text-white mono" id="countdown">5.00s</div>
+          <div id="friction-box" class="hidden absolute inset-0 m-6 p-6 border-2 border-rose-500 bg-rose-950/90 rounded-lg text-center flex flex-col justify-center items-center shadow-[0_0_40px_rgba(225,29,72,0.4)] backdrop-blur-sm z-10">
+            <div class="text-rose-500 text-5xl mb-4 animate-bounce">⚠️</div>
+            <div class="text-rose-400 font-bold text-lg mb-2 uppercase">ระบบแทรกแซงอัตโนมัติทำงาน</div>
+            <div class="text-sm text-rose-300 mb-6">ล็อกแอปพลิเคชันธนาคารเพื่อดึงสติ (Cognitive Friction Active)</div>
+            <div class="text-5xl font-bold text-white mono" id="countdown">5.00s</div>
           </div>
           
           <!-- Retrain Overlay -->
-          <div id="retrain-box" class="hidden mt-6 p-4 border border-emerald-500 bg-emerald-500/10 rounded-lg text-center shadow-[0_0_20px_rgba(16,185,129,0.2)]">
-            <div class="text-emerald-500 text-2xl mb-2 animate-spin">⚙️</div>
-            <div class="text-emerald-400 font-bold text-sm mb-1 uppercase">CSU Learning Loop Active</div>
-            <div class="text-[10px] text-emerald-300 mb-1">Replay Buffer Check ... OK (BWT &ge; 0)</div>
-            <div class="text-[10px] text-emerald-300 mb-1">LoRA Delta Weights ... Deployed</div>
-            <div class="text-xs font-bold text-white mt-2">Monotonic Safety Guaranteed</div>
+          <div id="retrain-box" class="hidden absolute inset-0 m-6 p-6 border-2 border-emerald-500 bg-emerald-950/90 rounded-lg text-center flex flex-col justify-center items-center shadow-[0_0_40px_rgba(16,185,129,0.4)] backdrop-blur-sm z-10">
+            <div class="text-emerald-500 text-5xl mb-4 animate-spin">⚙️</div>
+            <div class="text-emerald-400 font-bold text-lg mb-2 uppercase">CSU Learning Loop Active</div>
+            <div class="text-sm text-emerald-300 mb-2">Replay Buffer Check ... OK (BWT &ge; 0)</div>
+            <div class="text-sm text-emerald-300 mb-4">LoRA Delta Weights ... Deployed</div>
+            <div class="text-lg font-bold text-white mt-2">Monotonic Safety Guaranteed</div>
           </div>
         </div>
       </div>
@@ -391,23 +398,97 @@
       document.getElementById('arch-detail').classList.remove('hidden');
     }
 
-    const script = [
-      { msg: "สวัสดีครับ ติดต่อจากศูนย์บัตรเครดิต", risk: 2.1, pct: 20, ind: "auth" },
-      { msg: "พบยอดรูดบัตรผิดปกติ 45,000 บาทที่ต่างประเทศ", risk: 4.8, pct: 45, ind: "auth" },
-      { msg: "หากไม่ได้ทำรายการ กรุณารีบอายัดบัญชีด่วนภายใน 5 นาที", risk: 7.2, pct: 75, ind: "urg" },
-      { msg: "ให้โอนเงินทั้งหมดมาพักที่บัญชี ปปง. เพื่อความปลอดภัย", risk: 9.8, pct: 100, ind: "fin" }
-    ];
+    // Comprehensive Scam Scenarios
+    const scenarios = {
+      bank: {
+        labels: ["Authority/Impersonation", "Urgency/Coercion", "Financial Action"],
+        zeroDay: '<span class="text-rose-400 font-bold text-xs block mb-1">ZERO-DAY EVASION DETECTED</span>"ขอย้าย.ยอด.ไปพัก.ที่ บ.ช. กลางคับ"',
+        msgs: [
+          { msg: "สวัสดีครับ ติดต่อจากศูนย์บัตรเครดิต", risk: 2.1, pct: 20, ind: "auth" },
+          { msg: "พบยอดรูดบัตรผิดปกติ 45,000 บาทที่ต่างประเทศ", risk: 4.8, pct: 45, ind: "auth" },
+          { msg: "หากไม่ได้ทำรายการ กรุณารีบอายัดบัญชีด่วนภายใน 5 นาที", risk: 7.2, pct: 75, ind: "urg" },
+          { msg: "ให้โอนเงินทั้งหมดมาพักที่บัญชี ปปง. เพื่อความปลอดภัย", risk: 9.8, pct: 100, ind: "fin" }
+        ]
+      },
+      delivery: {
+        labels: ["Fake Notification", "Legal Threat", "Malicious Link"],
+        zeroDay: '<span class="text-rose-400 font-bold text-xs block mb-1">ZERO-DAY EVASION DETECTED</span>"กด 1ิงก์ เพื่0 ยืน ยัน.คดี. ด่วน!!"',
+        msgs: [
+          { msg: "แจ้งเตือนจากบริษัทขนส่งด่วนพัสดุของคุณ", risk: 1.5, pct: 15, ind: "auth" },
+          { msg: "พัสดุหมายเลข TH9928 ถูกระงับเนื่องจากตรวจพบสินค้าผิดกฎหมาย", risk: 4.2, pct: 42, ind: "auth" },
+          { msg: "ตำรวจกำลังตรวจสอบรายชื่อของคุณ กรุณาติดต่อเจ้าหน้าที่ด่วน", risk: 7.8, pct: 78, ind: "urg" },
+          { msg: "กรุณากดลิงก์นี้เพื่อชำระค่าปรับและยืนยันความบริสุทธิ์: http://thaipost-verify.com", risk: 9.5, pct: 95, ind: "fin" }
+        ]
+      },
+      crypto: {
+        labels: ["Romance/Trust Building", "Investment Opportunity", "Deposit Request"],
+        zeroDay: '<span class="text-rose-400 font-bold text-xs block mb-1">ZERO-DAY EVASION DETECTED</span>"ฝากเข้า เว็บ.นี้เลย กา รัน.ตี 100%"',
+        msgs: [
+          { msg: "สวัสดีค่ะ บังเอิญแอดไลน์มาผิด ยินดีที่ได้รู้จักนะคะ", risk: 0.5, pct: 5, ind: "auth" },
+          { msg: "ช่วงนี้เราได้กำไรจากพอร์ตคริปโตเยอะเลย อยากสอนให้คุณลองเล่นดู", risk: 3.5, pct: 35, ind: "urg" },
+          { msg: "วงในบอกว่าคืนนี้เหรียญจะขึ้นแรงมาก รีบเปิดพอร์ตด่วนเลยนะ!", risk: 6.8, pct: 68, ind: "urg" },
+          { msg: "ฝากเงินเข้าแพลตฟอร์มนี้เลย 100,000 บาท เดี๋ยวเราเทรดนำให้ การันตีกำไร!", risk: 9.2, pct: 92, ind: "fin" }
+        ]
+      }
+    };
     
+    let currentScen = 'bank';
     let step = 0;
+    let frictionTimer;
+    
     const btn = document.getElementById('btn-next');
     const btnDrift = document.getElementById('btn-drift');
     const chat = document.getElementById('chat-box');
     const riskBar = document.getElementById('risk-bar');
     const riskVal = document.getElementById('risk-val');
     
+    function loadScenario(scenKey) {
+      currentScen = scenKey;
+      step = 0;
+      clearInterval(frictionTimer);
+      
+      // Update Buttons UI
+      ['bank', 'delivery', 'crypto'].forEach(k => {
+        const b = document.getElementById('btn-sc-' + k);
+        if(k === scenKey) {
+          b.className = 'px-6 py-2 rounded-full glass-card border-cyan-500 text-cyan-300 font-bold text-sm transition-all shadow-[0_0_15px_rgba(6,182,212,0.3)]';
+        } else {
+          b.className = 'px-6 py-2 rounded-full glass-card border-slate-600 text-slate-400 hover:text-cyan-300 text-sm transition-all';
+        }
+      });
+      
+      // Reset Chat
+      chat.innerHTML = '';
+      riskBar.style.width = '0%';
+      riskBar.className = 'h-full bg-cyan-400 w-0 progress-bar-fill shadow-[0_0_10px_rgba(6,182,212,0.8)]';
+      riskVal.textContent = '0.0';
+      riskVal.className = 'mono text-cyan-400 font-bold text-lg';
+      
+      document.getElementById('friction-box').classList.add('hidden');
+      document.getElementById('retrain-box').classList.add('hidden');
+      
+      btn.disabled = false;
+      btn.className = 'w-full py-3 bg-cyan-600/20 border border-cyan-500/50 hover:bg-cyan-600/40 text-cyan-400 rounded font-bold transition text-sm';
+      btn.textContent = '[+] จำลองข้อความจากมิจฉาชีพ';
+      
+      btnDrift.disabled = true;
+      btnDrift.className = 'w-full py-3 bg-slate-800 text-slate-500 rounded font-bold transition text-sm cursor-not-allowed opacity-50';
+      btnDrift.textContent = 'กระตุ้น Concept Drift (อัปเดตโมเดล)';
+      
+      // Update Labels
+      document.getElementById('label-auth').textContent = scenarios[scenKey].labels[0];
+      document.getElementById('label-urg').textContent = scenarios[scenKey].labels[1];
+      document.getElementById('label-fin').textContent = scenarios[scenKey].labels[2];
+      
+      ['auth', 'urg', 'fin'].forEach(id => {
+         document.getElementById('ind-'+id).className = 'text-xs p-3 glass rounded opacity-30 transition-all duration-300 flex justify-between';
+      });
+    }
+    
     btn.addEventListener('click', () => {
-      if (step >= script.length) return;
-      const turn = script[step];
+      const scriptList = scenarios[currentScen].msgs;
+      if (step >= scriptList.length) return;
+      const turn = scriptList[step];
       
       const msgEl = document.createElement('div');
       msgEl.className = 'bg-slate-800/80 border border-slate-700 p-4 rounded-lg rounded-tl-none text-sm max-w-[85%] animate-[fadeIn_0.3s_ease-out] shadow-md';
@@ -429,29 +510,29 @@
       
       step++;
       
-      if (step === script.length) {
+      if (step === scriptList.length) {
         btn.disabled = true;
         btn.className = 'w-full py-3 bg-slate-900 border border-slate-800 text-slate-600 rounded font-bold cursor-not-allowed text-sm';
-        btn.textContent = 'App Locked - Friction Active';
+        btn.textContent = 'ระบบถูกล็อก (Friction Active)';
         
         const friction = document.getElementById('friction-box');
         friction.classList.remove('hidden');
         
         let timeLeft = 500;
         const cnt = document.getElementById('countdown');
-        const timer = setInterval(() => {
+        frictionTimer = setInterval(() => {
           timeLeft--;
           cnt.textContent = (timeLeft/100).toFixed(2) + 's';
           if (timeLeft <= 0) {
-            clearInterval(timer);
+            clearInterval(frictionTimer);
             friction.classList.add('hidden');
             
-            // Enable Drift button
             btnDrift.disabled = false;
             btnDrift.className = 'w-full py-3 bg-emerald-600/20 border border-emerald-500/50 hover:bg-emerald-600/40 text-emerald-400 rounded font-bold transition text-sm shadow-[0_0_15px_rgba(16,185,129,0.3)]';
           }
         }, 10);
       }
+      chat.scrollTop = chat.scrollHeight;
     });
 
     btnDrift.addEventListener('click', () => {
@@ -459,11 +540,11 @@
       btnDrift.className = 'w-full py-3 bg-slate-900 border border-slate-800 text-slate-600 rounded font-bold cursor-not-allowed text-sm';
       btnDrift.textContent = 'Updating Neural Weights...';
       
-      // Scammer mutates
       const msgEl = document.createElement('div');
       msgEl.className = 'bg-slate-800/80 border border-rose-500/30 p-4 rounded-lg rounded-tl-none text-sm max-w-[85%] animate-[fadeIn_0.3s_ease-out] shadow-md mt-6';
-      msgEl.innerHTML = '<span class="text-rose-400 font-bold text-xs block mb-1">ZERO-DAY EVASION DETECTED</span>"ขอย้าย.ยอด.ไปพัก.ที่ บ.ช. กลางคับ"';
+      msgEl.innerHTML = scenarios[currentScen].zeroDay;
       chat.appendChild(msgEl);
+      chat.scrollTop = chat.scrollHeight;
       
       setTimeout(() => {
         document.getElementById('retrain-box').classList.remove('hidden');
@@ -471,7 +552,7 @@
            btn.disabled = false;
            btn.className = 'w-full py-3 bg-cyan-600 hover:bg-cyan-500 text-white rounded font-bold transition text-sm';
            btn.textContent = 'Reset Simulation Environment';
-           btn.onclick = () => location.reload();
+           btn.onclick = () => loadScenario(currentScen);
         }, 4000);
       }, 1000);
     });
