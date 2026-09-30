@@ -1,570 +1,451 @@
 <!DOCTYPE html>
-<html lang="th" class="scroll-smooth">
+<html lang="th">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Aegis V10: Safety-Gated Continual Adaptation</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   
   <style>
-    body { background-color: #020617; color: #f8fafc; font-family: 'Anuphan', sans-serif; overflow-x: hidden; }
+    body { background-color: #02040a; color: #f8fafc; font-family: 'Anuphan', sans-serif; margin: 0; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
     .mono { font-family: 'JetBrains Mono', monospace; }
     
-    .glass { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(51, 65, 85, 0.5); }
-    .glass-card { background: linear-gradient(180deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%); border: 1px solid rgba(71, 85, 105, 0.5); border-radius: 12px; transition: transform 0.3s ease, box-shadow 0.3s ease; }
-    .glass-card.interactive:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(6, 182, 212, 0.2); border-color: rgba(6, 182, 212, 0.6); cursor: pointer; }
+    /* 16:9 Slide Deck Container */
+    #deck-container { 
+      width: 100vw; height: 56.25vw; /* 16:9 aspect ratio relative to width */
+      max-height: 100vh; max-width: 177.78vh; /* 16:9 aspect ratio relative to height */
+      position: relative; background: radial-gradient(circle at 50% 50%, #0a0f1a 0%, #02040a 100%);
+      box-shadow: 0 0 50px rgba(0,0,0,0.8); overflow: hidden;
+    }
     
-    .glow-text-cyan { text-shadow: 0 0 20px rgba(6, 182, 212, 0.5); }
-    .glow-text-emerald { text-shadow: 0 0 20px rgba(16, 185, 129, 0.5); }
+    .grid-bg { background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px); background-size: 40px 40px; position: absolute; inset: 0; z-index: 0; pointer-events: none;}
     
-    .grid-bg { background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px); background-size: 30px 30px; }
+    /* Slide Transitions */
+    .slide { position: absolute; inset: 0; padding: 4rem 5rem; display: flex; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform: scale(0.98); z-index: 1; }
+    .slide.active { opacity: 1; pointer-events: auto; transform: scale(1); z-index: 10; }
     
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: #020617; }
-    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    /* Staggered Animations inside Active Slide */
+    .slide.active .stagger-1 { animation: slideUpFade 0.6s ease forwards 0.1s; opacity: 0; }
+    .slide.active .stagger-2 { animation: slideUpFade 0.6s ease forwards 0.2s; opacity: 0; }
+    .slide.active .stagger-3 { animation: slideUpFade 0.6s ease forwards 0.3s; opacity: 0; }
+    .slide.active .stagger-4 { animation: slideUpFade 0.6s ease forwards 0.4s; opacity: 0; }
+    @keyframes slideUpFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* UI Elements */
+    .glass-card { background: linear-gradient(180deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%); border: 1px solid rgba(71, 85, 105, 0.5); border-radius: 12px; transition: all 0.3s ease; }
+    .interactive:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(6, 182, 212, 0.2); border-color: rgba(6, 182, 212, 0.6); cursor: pointer; }
     
-    .node-line { width: 2px; background: linear-gradient(180deg, #06b6d4 0%, transparent 100%); height: 60px; margin: 0 auto; }
-    .progress-bar-fill { transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+    .progress-bar { position: absolute; bottom: 0; left: 0; height: 4px; background: #06b6d4; transition: width 0.3s ease; z-index: 50; box-shadow: 0 0 10px rgba(6,182,212,0.8); }
+    .nav-btn { position: absolute; bottom: 2rem; z-index: 50; background: rgba(15,23,42,0.6); border: 1px solid rgba(71,85,105,0.5); padding: 0.5rem 1rem; border-radius: 8px; color: #94a3b8; cursor: pointer; backdrop-filter: blur(4px); transition: all 0.2s; }
+    .nav-btn:hover { color: #fff; border-color: #06b6d4; background: rgba(6,182,212,0.2); }
+    #prev-btn { right: 6rem; }
+    #next-btn { right: 2rem; }
+    
     .math-font { font-family: 'Times New Roman', Times, serif; font-style: italic; }
   </style>
 </head>
-<body class="grid-bg">
+<body>
 
-  <!-- 1. HERO -->
-  <section class="min-h-screen flex flex-col justify-center items-center text-center px-4 relative pt-10">
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-cyan-900/10 rounded-full blur-[150px] -z-10 pointer-events-none"></div>
-    <div class="gs-reveal max-w-4xl">
-      <p class="mono text-cyan-400 text-sm tracking-widest uppercase mb-6 border border-cyan-500/30 px-4 py-2 rounded-full inline-block bg-cyan-950/30">Scientific Formulation • Research Concept</p>
-      <h1 class="text-4xl md:text-6xl font-bold tracking-tight mb-6 leading-tight">
-        หยุดอาชญากรรมไซเบอร์ <br><span class="text-cyan-400 glow-text-cyan">ก่อนที่เงินจะถูกโอนออกจากบัญชี</span>
+<div id="deck-container">
+  <div class="grid-bg"></div>
+  
+  <!-- Navigation & Progress -->
+  <button id="prev-btn" class="nav-btn" onclick="prevSlide()">&#8592; Prev</button>
+  <button id="next-btn" class="nav-btn" onclick="nextSlide()">Next &#8594;</button>
+  <div class="progress-bar" id="progress"></div>
+  <div class="absolute top-6 right-8 z-50 text-xs mono text-slate-500 tracking-widest"><span id="slide-num">1</span> / 8</div>
+
+  <!-- SLIDE 1: HERO -->
+  <div class="slide active">
+    <div class="flex flex-col justify-center items-center h-full text-center relative stagger-1">
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-900/20 rounded-full blur-[100px] -z-10"></div>
+      <p class="mono text-cyan-400 text-xs tracking-widest uppercase mb-6 border border-cyan-500/30 px-4 py-1.5 rounded-full inline-block bg-cyan-950/30">Scientific Formulation • Research Concept</p>
+      <h1 class="text-5xl md:text-6xl font-bold tracking-tight mb-6 leading-tight stagger-2">
+        หยุดอาชญากรรมไซเบอร์ <br><span class="text-cyan-400 drop-shadow-[0_0_15px_rgba(6,182,212,0.6)]">ก่อนที่เงินจะถูกโอนออกจากบัญชี</span>
       </h1>
-      <p class="text-slate-300 text-lg md:text-xl mx-auto mb-6 leading-relaxed">
-        <strong>Aegis V10:</strong> สถาปัตยกรรมการเรียนรู้ต่อเนื่องภายใต้ประตูล็อกความปลอดภัย สำหรับการแทรกแซงสแกมเมอร์ในระดับพฤติกรรม (Safety-Gated Continual Adaptation)
+      <p class="text-slate-300 text-xl max-w-4xl mx-auto mb-6 leading-relaxed stagger-3">
+        <strong>Aegis V10:</strong> สถาปัตยกรรมการเรียนรู้ต่อเนื่องภายใต้ประตูล็อกความปลอดภัย สำหรับการแทรกแซงสแกมเมอร์ในระดับพฤติกรรม
       </p>
-      <p class="text-slate-500 text-sm max-w-3xl mx-auto mb-12 leading-relaxed">
-        การแก้ปัญหาเชิงทฤษฎี: โมเดลแบบคงที่ (Static Models) จะล้มเหลวทันทีเมื่อเจอกลยุทธ์ใหม่ <span class="text-slate-300">(Concept Drift)</span> ในขณะที่โมเดลที่เรียนรู้ตลอดเวลาโดยขาดการควบคุม จะลืมข้อมูลเก่า <span class="text-slate-300">(Catastrophic Forgetting)</span> Aegis V10 นำเสนอสถาปัตยกรรมทางคณิตศาสตร์ที่พิสูจน์ได้ว่าสามารถวิวัฒนาการได้อย่างปลอดภัยโดยสมบูรณ์ (Monotonic Safety)
-      </p>
-      <div class="glass-card p-6 inline-flex flex-col items-center max-w-md w-full border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.15)] relative overflow-hidden">
+      <div class="glass-card p-6 inline-flex flex-col items-center w-[400px] border-cyan-500/30 relative overflow-hidden stagger-4 mt-8">
         <div class="absolute inset-0 bg-cyan-500/5 animate-pulse"></div>
-        <div class="w-full flex justify-between text-xs mono text-slate-400 mb-2"><span>Semantic Risk Vector <span class="math-font">R(t)</span></span> <span class="text-cyan-400">Escalating...</span></div>
-        <div class="w-full h-1 bg-slate-800 rounded-full overflow-hidden">
+        <div class="w-full flex justify-between text-xs mono text-slate-400 mb-2"><span>Semantic Risk Vector <span class="math-font">R(t)</span></span> <span class="text-cyan-400 animate-pulse">Escalating...</span></div>
+        <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
           <div class="h-full bg-cyan-400 w-2/3 animate-[pulse_2s_ease-in-out_infinite]"></div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- 2. PROBLEM -->
-  <section class="py-24 px-6 border-t border-slate-800/50 relative">
-    <div class="max-w-6xl mx-auto gs-reveal">
-      <h2 class="text-3xl font-bold mb-4 text-center">ช่องโหว่เชิงบริบท <span class="text-slate-400 text-2xl">(The Contextual Blind Spot)</span></h2>
-      <p class="text-slate-400 text-center max-w-2xl mx-auto mb-16">เหตุผลเชิงโครงสร้างที่ระบบตรวจจับของธนาคารในปัจจุบัน "ช้าเกินไป" ทางคณิตศาสตร์</p>
+  <!-- SLIDE 2: THE SCALE OF THE PROBLEM -->
+  <div class="slide">
+    <div class="flex flex-col justify-center h-full">
+      <h2 class="text-3xl font-bold mb-2 stagger-1">วิกฤตอาชญากรรมไซเบอร์ระดับชาติ</h2>
+      <p class="text-slate-400 mb-8 stagger-1">สถิติความเสียหายจากศูนย์ปราบปรามอาชญากรรมทางเทคโนโลยี (AOC 1441)</p>
       
-      
-      <!-- STATISTICS BANNER -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 gs-reveal">
-        <div class="glass-card p-6 border-rose-500/30 text-center relative overflow-hidden">
-          <div class="absolute inset-0 bg-rose-500/5 animate-pulse"></div>
-          <div class="text-4xl font-bold text-rose-400 mb-2">65,715 <span class="text-xl">ล้านบาท</span></div>
-          <div class="text-xs text-slate-400 uppercase tracking-widest">มูลค่าความเสียหายสะสม (2565-2567)</div>
-          <div class="text-[10px] text-slate-500 mt-2">*สถิติจากศูนย์ปราบปรามอาชญากรรมฯ (AOC)</div>
+      <div class="grid grid-cols-3 gap-6 mb-10 stagger-2">
+        <div class="glass-card p-8 border-rose-500/40 text-center relative overflow-hidden">
+          <div class="absolute inset-0 bg-rose-500/10 animate-pulse"></div>
+          <div class="text-5xl font-bold text-rose-400 mb-3">65,715 <span class="text-2xl">ล้านบาท</span></div>
+          <div class="text-sm text-slate-400 uppercase tracking-widest">มูลค่าความเสียหายสะสม (2565-2567)</div>
         </div>
-        <div class="glass-card p-6 border-amber-500/30 text-center relative overflow-hidden">
-          <div class="absolute inset-0 bg-amber-500/5 animate-pulse"></div>
-          <div class="text-4xl font-bold text-amber-400 mb-2">80 <span class="text-xl">ล้านบาท</span></div>
-          <div class="text-xs text-slate-400 uppercase tracking-widest">อัตราการสูญเสียโดยเฉลี่ยต่อวัน</div>
-          <div class="text-[10px] text-slate-500 mt-2">*คดีสร้างความเสียหายสูงสุดคือ "หลอกให้ลงทุน"</div>
+        <div class="glass-card p-8 border-amber-500/40 text-center relative overflow-hidden">
+          <div class="absolute inset-0 bg-amber-500/10 animate-pulse"></div>
+          <div class="text-5xl font-bold text-amber-400 mb-3">80 <span class="text-2xl">ล้านบาท</span></div>
+          <div class="text-sm text-slate-400 uppercase tracking-widest">อัตราการสูญเสียเฉลี่ยต่อวัน</div>
         </div>
-        <div class="glass-card p-6 border-cyan-500/30 text-center relative overflow-hidden">
-          <div class="absolute inset-0 bg-cyan-500/5 animate-pulse"></div>
-          <div class="text-4xl font-bold text-cyan-400 mb-2">&lt; 30 <span class="text-xl">วินาที</span></div>
-          <div class="text-xs text-slate-400 uppercase tracking-widest">ความเร็วในการฟอกเงินผ่านบัญชีม้า</div>
-          <div class="text-[10px] text-slate-500 mt-2">*เงินถูกส่งออกนอกอำนาจศาลไทยทันที</div>
+        <div class="glass-card p-8 border-cyan-500/40 text-center relative overflow-hidden">
+          <div class="absolute inset-0 bg-cyan-500/10 animate-pulse"></div>
+          <div class="text-5xl font-bold text-cyan-400 mb-3">&lt; 30 <span class="text-2xl">วินาที</span></div>
+          <div class="text-sm text-slate-400 uppercase tracking-widest">เวลาในการฟอกเงินผ่านบัญชีม้า</div>
         </div>
       </div>
 
-      <div class="flex flex-col md:flex-row items-stretch justify-between glass-card p-8 relative">
-        <div class="text-center w-full md:w-1/3 mb-6 md:mb-0 px-4 glass-card interactive py-6">
-          <div class="text-3xl mb-4">💬</div>
-          <div class="font-bold text-lg text-slate-200">พื้นที่เชิงความหมาย <span class="math-font text-slate-400 text-sm">S(t)</span></div>
-          <div class="text-sm text-slate-400 mt-3 text-left">มิจฉาชีพใช้หลักจิตวิทยา, สร้างความกดดัน, และแอบอ้างอำนาจ (Authority) อย่างต่อเนื่อง ธนาคาร<b>ตาบอดสนิท</b>ในพื้นที่นี้เนื่องจากนโยบายความเป็นส่วนตัวและ E2E Encryption</div>
-        </div>
-        
-        <div class="flex items-center justify-center w-full md:w-1/4 relative py-8 md:py-0">
-          <div class="absolute inset-0 border-2 border-rose-500/30 rounded-xl bg-rose-500/5 animate-pulse"></div>
-          <div class="text-center relative z-10 px-4">
-            <div class="text-2xl mb-2">⚠️</div>
-            <div class="font-bold text-rose-400 text-lg uppercase tracking-wider">The Void</div>
-            <div class="text-xs text-rose-300 mt-2">Data Silos ขัดขวางการส่งผ่านบริบท กว่าเหยื่อจะรู้ตัว การแทรกแซงทางจิตวิทยาก็สมบูรณ์แล้ว</div>
+      <div class="glass-card p-6 border-rose-500/20 text-left relative overflow-hidden stagger-3">
+        <div class="flex items-center space-x-4">
+          <div class="text-4xl">🔎</div>
+          <div>
+            <h3 class="text-xl font-bold text-slate-200">The Contextual Blind Spot (ช่องโหว่ของธนาคาร)</h3>
+            <p class="text-sm text-slate-400 mt-2 leading-relaxed">ระบบ Fraud Detection ของธนาคารประเมินเฉพาะพื้นที่ธุรกรรม (จำนวนเงิน, IP) ซึ่งใช้เวลาเพียง 30 วินาทีในการโอนข้ามพรมแดน ระบบจึงมองว่าเป็น <b>"ธุรกรรมปกติ"</b> เพราะเหยื่อเป็นผู้ยืนยันตัวตนโอนด้วยตนเอง ทำให้ไม่สามารถยับยั้งความเสียหายได้ทันท่วงที</p>
           </div>
         </div>
-        
-        <div class="text-center w-full md:w-1/3 px-4 glass-card interactive py-6">
-          <div class="text-3xl mb-4">🏦</div>
-          <div class="font-bold text-lg text-slate-200">พื้นที่ธุรกรรม <span class="math-font text-slate-400 text-sm">T(x)</span></div>
-          <div class="text-sm text-slate-400 mt-3 text-left">Bank Fraud Detection ประเมินเพียงจำนวนเงิน, IP, และความเร็ว (Velocity) <b>ผลลัพธ์:</b> ธุรกรรมดูเหมือนถูกต้อง 100% เพราะผู้ใช้ที่ยืนยันตัวตนแล้วเป็นผู้กดโอนเงินด้วยตนเอง</div>
-        </div>
-      
-      <div class="mt-12 p-6 glass-card border-amber-500/30 text-left relative overflow-hidden gs-reveal">
-        <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 rounded-full blur-[50px] -z-10"></div>
-        <div class="flex flex-col md:flex-row gap-6 items-center">
-            <div class="w-full md:w-1/4 flex justify-center items-center flex-col border-r border-slate-700/50 pr-0 md:pr-4">
-                <div class="text-4xl mb-2">🔎</div>
-                <h3 class="text-lg font-bold text-amber-400 text-center">The Root Cause</h3>
-                <div class="text-[10px] text-slate-500 mt-1 uppercase tracking-widest text-center">Psychological Exploitation</div>
-            </div>
-            <div class="w-full md:w-3/4">
-                <p class="text-sm text-slate-300 leading-relaxed">
-                    อ้างอิงจากข้อมูลศูนย์ต่อต้านการหลอกลวงลงทุน <a href="https://www.sec.or.th/TH/Pages/SCAMCENTER-01-05.aspx" target="_blank" class="text-cyan-400 underline hover:text-cyan-300 font-bold">SEC Anti-Scam Center (ก.ล.ต.)</a> ต้นตอที่แท้จริงของการสูญเสียมหาศาลไม่ได้เกิดจากระบบธนาคารที่หละหลวม แต่เกิดจาก <b>"การโจมตีทางจิตวิทยา"</b> 
-                </p>
-                <p class="text-sm text-slate-300 leading-relaxed mt-2">
-                    เช่น <b>Romance Scam (หลอกให้รักแล้วชวนลงทุนคริปโทฯ)</b> มิจฉาชีพจะใช้เวลาสร้างความเชื่อใจ กระตุ้นความโลภและความกลัว ภายใน <span class="math-font text-slate-400">Semantic Space</span> จนเหยื่อถูกควบคุมเบ็ดเสร็จ และเป็นผู้โอนเงินด้วยความสมัครใจ (Authorized Push Payment Fraud) ซึ่งระบบตรวจจับทางการเงินไม่สามารถป้องกันได้หากไม่มีบริบทการสนทนา
-                </p>
-            </div>
-        </div>
       </div>
-
     </div>
-  </section>
+  </div>
 
-  <!-- 3. HOW AEGIS THINKS -->
-  <section class="py-24 px-6 bg-slate-900/40 border-t border-slate-800/50">
-    <div class="max-w-6xl mx-auto gs-reveal">
-      <div class="grid md:grid-cols-2 gap-12 items-center">
-        <div>
-          <h2 class="text-3xl font-bold mb-4">กระบวนการตัดสินใจด้วยคณิตศาสตร์: <br><span class="text-cyan-400">SEW-BFAR Engine</span></h2>
-          <p class="text-slate-400 mb-6">Aegis ทำลายข้อจำกัดของการจำแนกข้อความแบบแยกส่วน (Single-message classification) โดยประยุกต์ใช้ <strong>Sequential Probability Ratio Test (SPRT)</strong> เพื่อคำนวณความเสี่ยงสะสมจากภาพรวมของบทสนทนา</p>
-          
-          <div class="glass-card p-6 mb-6 bg-slate-950/80 interactive">
-            <div class="text-xs mono text-cyan-500 mb-2">MATHEMATICAL FORMULATION (SPRT)</div>
-            <div class="text-lg text-slate-300 text-center py-4">
-              <span class="math-font">Z<sub>n</sub> = Z<sub>n-1</sub> + log [ P(x<sub>n</sub> | &theta;<sub>scam</sub>) / P(x<sub>n</sub> | &theta;<sub>safe</sub>) ]</span>
-            </div>
-            <p class="text-xs text-slate-400"><span class="math-font">Z<sub>n</sub></span> คือค่า Cumulative Log-Likelihood Ratio หาก <span class="math-font">Z<sub>n</sub> &ge; Threshold</span>, ระบบจะเริ่มการแทรกแซงทันที วิธีการนี้ช่วยการันตีขอบเขตของ False Positive Rate (FPR) ในระดับทฤษฎี</p>
+  <!-- SLIDE 3: ROOT CAUSE -->
+  <div class="slide">
+    <div class="flex flex-col justify-center h-full">
+      <h2 class="text-3xl font-bold mb-2 stagger-1">ต้นตอของปัญหา <span class="text-xl text-slate-400 font-normal">(The Root Cause)</span></h2>
+      <p class="text-slate-400 mb-10 stagger-1">อ้างอิงจากฐานข้อมูล ก.ล.ต. (SEC Anti-Scam Center)</p>
+      
+      <div class="flex gap-8 items-stretch stagger-2 h-[50%]">
+        <div class="w-1/3 glass-card p-8 flex flex-col justify-center items-center text-center border-amber-500/30 hover:border-amber-500/60 transition">
+          <div class="text-6xl mb-4">🧠</div>
+          <h3 class="text-2xl font-bold text-amber-400 mb-2">Psychological Exploitation</h3>
+          <p class="text-sm text-slate-300">การโจมตีทางจิตวิทยา</p>
+        </div>
+        
+        <div class="w-2/3 glass-card p-8 flex flex-col justify-center">
+          <p class="text-lg text-slate-300 leading-relaxed mb-6">
+            ข้อมูลจาก <a href="#" class="text-cyan-400 underline font-bold">SEC Anti-Scam Center</a> ระบุว่าต้นตอการสูญเสีย ไม่ใช่ระบบธนาคารที่หละหลวม แต่คือการเจาะระบบความคิดมนุษย์ผ่าน <span class="text-amber-400 font-bold">Semantic Space</span> (พื้นที่การสนทนา)
+          </p>
+          <ul class="space-y-4 text-sm text-slate-400">
+            <li class="flex items-start"><span class="text-rose-500 mr-3">▪</span> <b>หลอกให้กลัว (Authority):</b> ปลอมเป็นตำรวจ สร้างความตื่นตระหนก ปิดกั้นเหตุผล</li>
+            <li class="flex items-start"><span class="text-rose-500 mr-3">▪</span> <b>หลอกให้รัก (Romance/Trust):</b> สร้างตัวตนปลอม ใช้เวลาฟูมฟักความเชื่อใจ</li>
+            <li class="flex items-start"><span class="text-rose-500 mr-3">▪</span> <b>หลอกให้โลภ (Investment/Greed):</b> อ้างผลตอบแทนคริปโทฯ สูงผิดปกติ กระตุ้น FOMO</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="mt-8 text-center stagger-3">
+        <p class="text-emerald-400 font-bold text-lg bg-emerald-900/20 py-3 px-6 inline-block rounded-full border border-emerald-500/30">
+          "วิธีเดียวที่จะหยุดวงจรนี้ได้ คือการตัดไฟตั้งแต่ต้นลมในพื้นที่แชต ก่อนที่เหยื่อจะแตะแอปธนาคาร"
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: MATHEMATICAL DECISION (SEW-BFAR) -->
+  <div class="slide">
+    <div class="flex flex-col justify-center h-full">
+      <h2 class="text-3xl font-bold mb-4 stagger-1">กระบวนการตัดสินใจด้วยคณิตศาสตร์</h2>
+      <p class="text-slate-400 mb-8 stagger-1">SEW-BFAR Engine & Sequential Probability Ratio Test (SPRT)</p>
+      
+      <div class="grid grid-cols-2 gap-10 items-center h-[60%] stagger-2">
+        <div class="glass-card p-8 bg-slate-950/80 h-full flex flex-col justify-center relative overflow-hidden">
+          <div class="absolute right-0 top-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-[40px]"></div>
+          <div class="text-xs mono text-cyan-500 mb-4 tracking-widest">MATHEMATICAL FORMULATION</div>
+          <div class="text-2xl text-slate-300 text-center py-6 border-y border-slate-700/50 my-4">
+            <span class="math-font">Z<sub>n</sub> = Z<sub>n-1</sub> + log <span class="text-cyan-400">[ P(x<sub>n</sub> | &theta;<sub>scam</sub>) / P(x<sub>n</sub> | &theta;<sub>safe</sub>) ]</span></span>
           </div>
+          <p class="text-sm text-slate-400 leading-relaxed mt-2">Aegis ทำลายข้อจำกัดของการจำแนกข้อความแบบแยกส่วน โดยประยุกต์ใช้ทฤษฎี SPRT คำนวณความเสี่ยงสะสม <span class="math-font">(Cumulative Log-Likelihood)</span> หากค่าเกิน Threshold ระบบจะเข้าแทรกแซงทันที</p>
         </div>
         
         <div class="space-y-4">
-          <div class="flex items-center space-x-4">
-            <div class="w-16 text-right mono text-xs text-slate-500">t=1</div>
-            <div class="flex-1 glass-card p-3 text-sm">"สวัสดีครับ ติดต่อจากศูนย์บัตรเครดิต"</div>
-            <div class="w-24 text-right mono text-xs text-cyan-400">Z = 1.2</div>
+          <div class="flex items-center space-x-4 glass-card p-4">
+            <div class="w-12 text-right mono text-xs text-slate-500">t=1</div>
+            <div class="flex-1 text-sm text-slate-300">"สวัสดีครับ ติดต่อจากศูนย์บัตรเครดิต"</div>
+            <div class="w-20 text-right mono text-xs text-cyan-400">Z=1.2</div>
           </div>
-          <div class="flex items-center space-x-4">
-            <div class="w-16 text-right mono text-xs text-slate-500">t=2</div>
-            <div class="flex-1 glass-card p-3 text-sm border-amber-500/30">"พบยอดรูดบัตรผิดปกติ 45,000 บาทที่ต่างประเทศ"</div>
-            <div class="w-24 text-right mono text-xs text-amber-400">Z = 4.8</div>
+          <div class="flex items-center space-x-4 glass-card p-4 border-amber-500/30">
+            <div class="w-12 text-right mono text-xs text-slate-500">t=2</div>
+            <div class="flex-1 text-sm text-slate-300">"พบยอดรูดบัตรผิดปกติ 45,000 ที่ตปท."</div>
+            <div class="w-20 text-right mono text-xs text-amber-400">Z=4.8</div>
           </div>
-          <div class="flex items-center space-x-4">
-            <div class="w-16 text-right mono text-xs text-slate-500">t=3</div>
-            <div class="flex-1 glass-card p-3 text-sm border-rose-500/50">"ให้โอนเงินทั้งหมดมาพักที่บัญชี ปปง. เพื่อความปลอดภัย"</div>
-            <div class="w-24 text-right mono text-xs text-rose-400 font-bold">Z = 9.5</div>
+          <div class="flex items-center space-x-4 glass-card p-4 border-rose-500/50">
+            <div class="w-12 text-right mono text-xs text-slate-500">t=3</div>
+            <div class="flex-1 text-sm text-slate-300">"ให้โอนเงินทั้งหมดมาพักที่ ปปง."</div>
+            <div class="w-20 text-right mono text-xs text-rose-400 font-bold">Z=9.5</div>
           </div>
-          <div class="flex justify-center mt-6">
-            <div class="bg-rose-500/10 border border-rose-500 text-rose-400 px-6 py-2 rounded font-bold text-sm shadow-[0_0_20px_rgba(225,29,72,0.2)]">
-              &sum; Z<sub>n</sub> > Threshold &rarr; TRIGGER INTERVENTION
-            </div>
+          <div class="bg-rose-500/20 border border-rose-500 text-rose-400 px-6 py-3 rounded-lg font-bold text-center shadow-[0_0_20px_rgba(225,29,72,0.3)] mt-6 animate-pulse">
+            &sum; Z<sub>n</sub> > Threshold &rarr; TRIGGER INTERVENTION (COGNITIVE FRICTION)
           </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- 4. INTERACTIVE ARCHITECTURE -->
-  <section class="py-24 px-6 border-t border-slate-800/50">
-    <div class="max-w-6xl mx-auto gs-reveal">
-      <h2 class="text-3xl font-bold mb-4 text-center">สถาปัตยกรรม Edge-Cloud Hybrid <br><span class="text-xl text-slate-400">(Interactive Architecture)</span></h2>
-      <p class="text-slate-400 text-center max-w-3xl mx-auto mb-12">คลิกที่โมดูลด้านล่างเพื่อดูเจาะลึกกลไกทางเทคนิคเบื้องหลัง Aegis V10</p>
+  <!-- SLIDE 5: CSU (SAFETY-GATES) -->
+  <div class="slide">
+    <div class="flex flex-col justify-center h-full">
+      <h2 class="text-3xl font-bold mb-4 stagger-1">Monotonic Safety Theorem</h2>
+      <p class="text-slate-400 mb-10 stagger-1 max-w-4xl">ประตูล็อกความปลอดภัย 6 มิติ (Certified Safe Update) ป้องกันปัญหา Catastrophic Forgetting โมเดลใหม่ (<span class="math-font">M<sub>new</sub></span>) ต้องดีกว่าหรือเท่ากับโมเดลเดิมในทุกมิติ</p>
       
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-sm">
-        <div class="glass-card interactive p-6 border-cyan-500/30 relative" onclick="showArch('edge')">
-          <div class="text-2xl mb-3">📱</div>
-          <h3 class="font-bold text-cyan-400 mb-2">Edge SLM</h3>
-          <p class="text-xs text-slate-400">โมเดลภาษาขนาดเล็ก (Small Language Model) ทำงานแบบ On-device</p>
-          <div class="mt-2 text-cyan-500 text-xs text-right">คลิกเพื่อดูข้อมูลเชิงลึก &rarr;</div>
+      <div class="grid grid-cols-3 gap-6 text-center stagger-2">
+        <div class="glass-card p-8 border-emerald-500/30 hover:bg-emerald-900/20 transition">
+          <div class="text-emerald-400 text-3xl mb-4">✓</div>
+          <div class="font-bold text-sm uppercase text-slate-200">Constrained Recall</div>
+          <div class="text-xs text-slate-500 mt-2">&ge; Baseline (94%)</div>
         </div>
-        
-        <div class="glass-card interactive p-6 border-amber-500/30 relative" onclick="showArch('cloud')">
-          <div class="text-2xl mb-3">🕸️</div>
-          <h3 class="font-bold text-amber-400 mb-2">Cloud Threat Graph</h3>
-          <p class="text-xs text-slate-400">ระบบรวบรวมภูมิคุ้มกันส่วนกลาง และ LLM Red-Teaming</p>
-          <div class="mt-2 text-amber-500 text-xs text-right">คลิกเพื่อดูข้อมูลเชิงลึก &rarr;</div>
+        <div class="glass-card p-8 border-emerald-500/30 hover:bg-emerald-900/20 transition">
+          <div class="text-emerald-400 text-3xl mb-4">✓</div>
+          <div class="font-bold text-sm uppercase text-slate-200">False Positive Rate</div>
+          <div class="text-xs text-slate-500 mt-2">FPR &le; 0.1%</div>
         </div>
-        
-        <div class="glass-card interactive p-6 border-rose-500/50 shadow-[0_0_15px_rgba(225,29,72,0.1)] relative" onclick="showArch('sew')">
-          <div class="text-2xl mb-3">⚖️</div>
-          <h3 class="font-bold text-rose-400 mb-2">SEW-BFAR Engine</h3>
-          <p class="text-xs text-slate-400">อัลกอริทึมวิเคราะห์อนุกรมเวลาเพื่อประเมินความเสี่ยงสะสม</p>
-          <div class="mt-2 text-rose-500 text-xs text-right">คลิกเพื่อดูข้อมูลเชิงลึก &rarr;</div>
+        <div class="glass-card p-8 border-emerald-500/30 hover:bg-emerald-900/20 transition">
+          <div class="text-emerald-400 text-3xl mb-4">✓</div>
+          <div class="font-bold text-sm uppercase text-slate-200">Latency</div>
+          <div class="text-xs text-slate-500 mt-2">Edge NPU &lt; 300ms</div>
         </div>
-
-        <div class="glass-card interactive p-6 border-emerald-500/50 bg-emerald-950/20 relative" onclick="showArch('csu')">
-          <div class="text-2xl mb-3">🧬</div>
-          <h3 class="font-bold text-emerald-400 mb-2">CSU (LoRA)</h3>
-          <p class="text-xs text-slate-400">กระบวนการเรียนรู้และอัปเดตโมเดลอย่างปลอดภัย (Safety-Gated)</p>
-          <div class="mt-2 text-emerald-500 text-xs text-right">คลิกเพื่อดูข้อมูลเชิงลึก &rarr;</div>
+        <div class="glass-card p-8 border-emerald-500/30 hover:bg-emerald-900/20 transition">
+          <div class="text-emerald-400 text-3xl mb-4">✓</div>
+          <div class="font-bold text-sm uppercase text-slate-200">Lead Time</div>
+          <div class="text-xs text-slate-500 mt-2">&ge; 1 Turn before transaction</div>
         </div>
-      </div>
-      
-      <!-- Interactive Detail Pane -->
-      <div id="arch-detail" class="mt-8 p-8 glass-card border-cyan-500/50 hidden animate-[fadeIn_0.3s_ease-out]">
-         <div class="flex justify-between items-start mb-4">
-           <h4 id="ad-title" class="text-2xl font-bold text-cyan-400"></h4>
-           <button onclick="document.getElementById('arch-detail').classList.add('hidden')" class="text-slate-500 hover:text-white">✕</button>
-         </div>
-         <p id="ad-desc" class="text-slate-300 leading-relaxed text-sm"></p>
-         <ul id="ad-list" class="mt-4 space-y-2 text-sm text-slate-400 list-disc list-inside marker:text-cyan-500"></ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- 5. HOW AEGIS LEARNS (CSU) -->
-  <section class="py-24 px-6 bg-slate-900/40 border-t border-slate-800/50">
-    <div class="max-w-6xl mx-auto gs-reveal">
-      <h2 class="text-3xl font-bold mb-4">ประตูล็อกความปลอดภัย 6 มิติ <br><span class="text-emerald-400 text-2xl">(Certified Safe Update Protocol)</span></h2>
-      <p class="text-slate-400 mb-12 max-w-3xl">เพื่อแก้ปัญหา Catastrophic Forgetting แบบถอนรากถอนโคน Aegis ใช้กฎ <strong>Monotonic Safety Theorem</strong>: โมเดลเวอร์ชันใหม่ (<span class="math-font">M<sub>new</sub></span>) จะต้องเหนือกว่าหรือเทียบเท่าโมเดลเดิม (<span class="math-font">M<sub>old</sub></span>) ใน 6 มิติทางสถิติ หากสอบตกแม้แต่มิติเดียว (เช่น Latency ช้าลง 50ms) การอัปเดตจะถูกทำลายทิ้งทันที</p>
-      
-      <div class="grid grid-cols-2 md:grid-cols-6 gap-4 text-center">
-        <div class="glass-card interactive p-4 border-emerald-500/50 hover:bg-emerald-900/30">
-          <div class="text-emerald-400 text-xl mb-2">✓</div>
-          <div class="font-bold text-xs uppercase text-slate-200">Recall</div>
-          <div class="text-[10px] text-slate-500 mt-1">&ge; Baseline</div>
+        <div class="glass-card p-8 border-emerald-500/30 hover:bg-emerald-900/20 transition">
+          <div class="text-emerald-400 text-3xl mb-4">✓</div>
+          <div class="font-bold text-sm uppercase text-slate-200">Adversarial Robustness</div>
+          <div class="text-xs text-slate-500 mt-2">ASR &lt; 1% (Zero-Day)</div>
         </div>
-        <div class="glass-card interactive p-4 border-emerald-500/50 hover:bg-emerald-900/30">
-          <div class="text-emerald-400 text-xl mb-2">✓</div>
-          <div class="font-bold text-xs uppercase text-slate-200">Hard Ham</div>
-          <div class="text-[10px] text-slate-500 mt-1">FPR &le; 0.1%</div>
-        </div>
-        <div class="glass-card interactive p-4 border-emerald-500/50 hover:bg-emerald-900/30">
-          <div class="text-emerald-400 text-xl mb-2">✓</div>
-          <div class="font-bold text-xs uppercase text-slate-200">Latency</div>
-          <div class="text-[10px] text-slate-500 mt-1">&lt; 300ms</div>
-        </div>
-        <div class="glass-card interactive p-4 border-emerald-500/50 hover:bg-emerald-900/30">
-          <div class="text-emerald-400 text-xl mb-2">✓</div>
-          <div class="font-bold text-xs uppercase text-slate-200">Lead Time</div>
-          <div class="text-[10px] text-slate-500 mt-1">&ge; 1 Turn</div>
-        </div>
-        <div class="glass-card interactive p-4 border-emerald-500/50 hover:bg-emerald-900/30">
-          <div class="text-emerald-400 text-xl mb-2">✓</div>
-          <div class="font-bold text-xs uppercase text-slate-200">Robustness</div>
-          <div class="text-[10px] text-slate-500 mt-1">ASR &lt; 1%</div>
-        </div>
-        <div class="glass-card interactive p-4 border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.2)] hover:bg-emerald-900/30">
-          <div class="text-emerald-400 text-xl mb-2">✓</div>
-          <div class="font-bold text-xs uppercase text-slate-200">Retention</div>
-          <div class="text-[10px] text-emerald-400 mt-1 font-bold">BWT &ge; 0</div>
+        <div class="glass-card p-8 border-emerald-500/50 bg-emerald-950/20 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+          <div class="text-emerald-400 text-3xl mb-4">✓</div>
+          <div class="font-bold text-sm uppercase text-slate-200">Knowledge Retention</div>
+          <div class="text-xs text-emerald-400 mt-2 font-bold">BWT &ge; 0</div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- 6. RESEARCH LAB ENVIRONMENT (NEW) -->
-  <section class="py-24 px-6 bg-[#020617] border-t border-slate-800/50">
-    <div class="max-w-6xl mx-auto gs-reveal">
-      <h2 class="text-3xl font-bold mb-4 text-center">ห้องปฏิบัติการวิจัย <span class="text-slate-400 text-2xl">(Research Lab Environment)</span></h2>
-      <p class="text-slate-400 text-center max-w-3xl mx-auto mb-12">สถาปัตยกรรมจำลองสำหรับการทดสอบอัลกอริทึมและประเมินผลในสภาพแวดล้อมควบคุม (Controlled Sandbox)</p>
+  <!-- SLIDE 6: RESEARCH LAB -->
+  <div class="slide">
+    <div class="flex flex-col justify-center h-full">
+      <h2 class="text-3xl font-bold mb-4 stagger-1">Research Lab Environment</h2>
+      <p class="text-slate-400 mb-8 stagger-1">สถาปัตยกรรมจำลองสำหรับการทดสอบอัลกอริทึมในสภาพแวดล้อมควบคุม</p>
       
-      <div class="glass-card flex flex-col md:flex-row overflow-hidden border-slate-700/50 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
-        <!-- Left: Lab Components -->
-        <div class="w-full md:w-1/3 bg-slate-900/80 p-6 border-r border-slate-700/50">
-          <h3 class="text-cyan-400 font-bold mb-4 text-sm uppercase tracking-widest">Experimental Setup</h3>
-          <div class="space-y-4">
-            <div class="p-4 glass rounded border-l-2 border-cyan-500 hover:bg-slate-800 transition">
-              <div class="text-xs text-slate-400 mb-1">Dataset Synthesis</div>
-              <div class="font-bold text-sm text-slate-200">HexStrike Red-Teaming</div>
-              <div class="text-[10px] text-slate-500 mt-1">สร้าง 100k+ Thai Synthetic Scam Transcripts</div>
-            </div>
-            <div class="p-4 glass rounded border-l-2 border-emerald-500 hover:bg-slate-800 transition">
-              <div class="text-xs text-slate-400 mb-1">Edge Hardware Simulation</div>
-              <div class="font-bold text-sm text-slate-200">OpenVINO / NPU Simulation</div>
-              <div class="text-[10px] text-slate-500 mt-1">ทดสอบ INT4 Quantization Memory Constraints</div>
-            </div>
-            <div class="p-4 glass rounded border-l-2 border-rose-500 hover:bg-slate-800 transition">
-              <div class="text-xs text-slate-400 mb-1">Adversarial Environment</div>
-              <div class="font-bold text-sm text-slate-200">Zero-Day Perturbation</div>
-              <div class="text-[10px] text-slate-500 mt-1">แทรก ZWJ, ช่องว่าง, พิมพ์ผิด (Stress-Test ASR)</div>
-            </div>
+      <div class="glass-card flex flex-row overflow-hidden border-slate-700/50 shadow-2xl h-[60%] stagger-2">
+        <!-- Left -->
+        <div class="w-1/3 bg-slate-900/80 p-6 border-r border-slate-700/50 flex flex-col justify-center space-y-6">
+          <div class="border-l-2 border-cyan-500 pl-4">
+            <div class="text-xs text-slate-400 mb-1">Dataset Synthesis</div>
+            <div class="font-bold text-sm text-slate-200">HexStrike Red-Teaming</div>
+          </div>
+          <div class="border-l-2 border-emerald-500 pl-4">
+            <div class="text-xs text-slate-400 mb-1">Hardware Simulation</div>
+            <div class="font-bold text-sm text-slate-200">OpenVINO / INT4 NPU</div>
+          </div>
+          <div class="border-l-2 border-rose-500 pl-4">
+            <div class="text-xs text-slate-400 mb-1">Adversarial Test</div>
+            <div class="font-bold text-sm text-slate-200">Zero-Day Perturbation</div>
           </div>
         </div>
-        
-        <!-- Right: Terminal Simulator -->
-        <div class="w-full md:w-2/3 p-0 flex flex-col bg-[#0a0a0a] relative">
+        <!-- Right Terminal -->
+        <div class="w-2/3 p-0 flex flex-col bg-[#0a0a0a] relative">
           <div class="bg-slate-800 px-4 py-2 flex items-center space-x-2 text-xs text-slate-400 border-b border-slate-700">
-            <div class="w-3 h-3 rounded-full bg-rose-500"></div>
-            <div class="w-3 h-3 rounded-full bg-amber-500"></div>
-            <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
-            <span class="ml-4 mono text-[10px]">aegis_lab@csu-cluster:~</span>
+            <div class="w-3 h-3 rounded-full bg-rose-500"></div><div class="w-3 h-3 rounded-full bg-amber-500"></div><div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+            <span class="ml-4 mono">aegis_lab@csu-cluster:~</span>
           </div>
-          <div class="p-6 font-mono text-sm text-slate-300 h-[300px] overflow-y-auto" id="lab-terminal">
-            <div class="text-cyan-400 mb-2">$ python run_eval.py --model aegis-v10 --dataset hexstrike-thai --drift true</div>
+          <div class="p-6 font-mono text-sm text-slate-300 overflow-y-auto flex-1" id="lab-term">
+            <div class="text-cyan-400 mb-2">$ python run_eval.py --model aegis-v10 --dataset hexstrike</div>
             <div id="term-content"></div>
             <div id="term-cursor" class="w-2 h-4 bg-slate-400 inline-block animate-pulse mt-1"></div>
           </div>
-          <button id="btn-run-lab" onclick="runLabSimulation()" class="absolute bottom-4 right-4 px-4 py-2 bg-cyan-900/30 hover:bg-cyan-800/50 text-cyan-400 text-xs font-bold rounded border border-cyan-700 transition">Run Benchmark Simulation</button>
+          <button onclick="runLab()" class="absolute bottom-4 right-4 px-4 py-2 bg-cyan-900/30 hover:bg-cyan-800/50 text-cyan-400 text-xs font-bold rounded border border-cyan-700 transition">Run Benchmark</button>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- 7. PROOF & EXPECTED PERFORMANCE -->
-  <section class="py-24 px-6 border-t border-slate-800/50">
-    <div class="max-w-6xl mx-auto gs-reveal">
-      <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
+  <!-- SLIDE 7: EXPECTED PERFORMANCE -->
+  <div class="slide">
+    <div class="flex flex-col justify-center h-full">
+      <h2 class="text-3xl font-bold mb-4 stagger-1">ผลการประเมินทางวิทยาศาสตร์ (Evaluation Rubric)</h2>
+      <p class="text-slate-400 mb-10 stagger-1">Pre-Clinical Simulated Targets ของสถาปัตยกรรม Aegis</p>
+      
+      <div class="grid grid-cols-2 gap-6 h-[50%] stagger-2">
+        <div class="glass-card p-8 flex flex-col justify-center items-center text-center">
+          <div class="text-xs text-slate-500 uppercase tracking-widest mb-4">Constrained Recall</div>
+          <div class="text-6xl font-bold text-cyan-400 mb-4">94.0<span class="text-3xl text-cyan-500/50">%</span></div>
+          <p class="text-sm text-slate-400 px-8">ความสามารถในการสกัดกั้น Zero-Day Evasions โดยควบคุม False Positive ให้คงที่</p>
+        </div>
+        
+        <div class="grid grid-rows-2 gap-6">
+          <div class="glass-card p-6 flex flex-col justify-center border-emerald-500/30">
+            <div class="flex justify-between items-center">
+              <div class="text-xs text-slate-500 uppercase tracking-widest">False Positive Rate (FPR)</div>
+              <div class="text-3xl font-bold text-emerald-400">&le; 0.1<span class="text-xl text-emerald-500/50">%</span></div>
+            </div>
+            <p class="text-xs text-slate-400 mt-2">ข้อจำกัดด้าน UX: ห้ามเตือนผิดพลาดเกิน 1 ครั้งจากการใช้งานปกติ 1,000 ครั้ง</p>
+          </div>
+          <div class="glass-card p-6 flex flex-col justify-center border-amber-500/30">
+            <div class="flex justify-between items-center">
+              <div class="text-xs text-slate-500 uppercase tracking-widest">Intervention Lead Time</div>
+              <div class="text-3xl font-bold text-amber-400">&ge; 1.5 <span class="text-xl text-amber-500/50">Turns</span></div>
+            </div>
+            <p class="text-xs text-slate-400 mt-2">แจ้งเตือนและหน่วงเวลาล่วงหน้าก่อนที่เหยื่อจะสแกนใบหน้าโอนเงิน</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: DEMO -->
+  <div class="slide">
+    <div class="flex flex-col justify-center h-full">
+      <div class="flex justify-between items-end mb-6 stagger-1">
         <div>
-          <h2 class="text-3xl font-bold mb-2">ผลการประเมินทางวิทยาศาสตร์</h2>
-          <p class="text-slate-400">เกณฑ์ชี้วัดความสำเร็จทางคณิตศาสตร์ (Evaluation Rubric) ของสถาปัตยกรรม Aegis</p>
+          <h2 class="text-3xl font-bold">Interactive Concept Demo</h2>
+          <p class="text-slate-400 mt-2 text-sm">การทำงานของ Cognitive Friction และ Concept Drift Adaptation</p>
         </div>
-        <div class="bg-rose-500/10 border border-rose-500/50 px-4 py-2 rounded text-rose-400 font-bold text-xs uppercase tracking-wider whitespace-nowrap">
-          * Pre-Clinical Simulated Targets
+        <div class="flex space-x-2">
+          <button id="btn-sc-bank" class="px-4 py-1.5 rounded glass-card border-cyan-500 text-cyan-300 font-bold text-xs" onclick="loadScen('bank')">Bank Scam</button>
+          <button id="btn-sc-delivery" class="px-4 py-1.5 rounded glass-card border-slate-600 text-slate-400 text-xs" onclick="loadScen('delivery')">Fake Delivery</button>
+          <button id="btn-sc-crypto" class="px-4 py-1.5 rounded glass-card border-slate-600 text-slate-400 text-xs" onclick="loadScen('crypto')">Romance/Crypto</button>
         </div>
       </div>
       
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="glass-card interactive p-6">
-          <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">Constrained Recall</div>
-          <div class="text-4xl font-bold text-cyan-400 mb-3">94.0<span class="text-2xl text-cyan-500/50">%</span></div>
-          <p class="text-xs text-slate-400">ความสามารถในการสกัดกั้น Zero-Day Evasions โดยต้องควบคุม False Positive ให้คงที่</p>
-        </div>
-        <div class="glass-card interactive p-6 border-emerald-500/30">
-          <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">False Positive Rate (FPR)</div>
-          <div class="text-4xl font-bold text-emerald-400 mb-3">&le; 0.1<span class="text-2xl text-emerald-500/50">%</span></div>
-          <p class="text-xs text-slate-400">ข้อจำกัดสำคัญด้าน UX: ต้องเตือนผิดพลาดไม่เกิน 1 ครั้งจากการใช้งานปกติ 1,000 ครั้ง</p>
-        </div>
-        <div class="glass-card interactive p-6">
-          <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">Intervention Lead Time</div>
-          <div class="text-4xl font-bold text-cyan-400 mb-3">&ge; 1 <span class="text-2xl text-cyan-500/50">Turn</span></div>
-          <p class="text-xs text-slate-400">ระบบต้องสามารถออกคำเตือนได้ <i>ก่อน</i> ที่ผู้ใช้จะกดยืนยันการโอนเงินในแอปธนาคารเสมอ</p>
-        </div>
-        <div class="glass-card interactive p-6">
-          <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">Adversarial ASR</div>
-          <div class="text-4xl font-bold text-cyan-400 mb-3">&lt; 1.0<span class="text-2xl text-cyan-500/50">%</span></div>
-          <p class="text-xs text-slate-400">Attack Success Rate: ความต้านทานต่อการโจมตีด้วยอักขระล่องหน (ZWJ) หรือการแทรกช่องว่าง</p>
-        </div>
-        <div class="glass-card interactive p-6 border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.1)]">
-          <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">Catastrophic Forgetting</div>
-          <div class="text-4xl font-bold text-emerald-400 mb-3">BWT &ge; 0</div>
-          <p class="text-xs text-slate-400"><b>Backward Transfer:</b> โมเดลต้องคงทักษะการตรวจจับสแกมรูปแบบเก่าไว้ได้ 100% หลังการ Retrain</p>
-        </div>
-        <div class="glass-card interactive p-6">
-          <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">Edge Latency</div>
-          <div class="text-4xl font-bold text-cyan-400 mb-3">&lt; 300<span class="text-2xl text-cyan-500/50">ms</span></div>
-          <p class="text-xs text-slate-400">ความเร็วในการประมวลผลบนชิปมือถือ (NPU) การันตีประสบการณ์ผู้ใช้ (UX) แบบเรียลไทม์</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 10. LIVE DEMO (THE CLIMAX) -->
-  <section class="py-32 px-6 border-t border-slate-800/50 min-h-screen flex flex-col justify-center bg-slate-950">
-    <div class="max-w-6xl mx-auto w-full">
-      <h2 class="text-4xl font-bold mb-4 text-center gs-reveal glow-text-cyan text-cyan-400">สถานการณ์จำลองทางคลินิก (Live Clinical Simulation)</h2>
-      <p class="text-slate-400 text-center mb-8 max-w-3xl mx-auto gs-reveal">ทดสอบการทำงานของเครื่องยนต์ SEW-BFAR และวัฏจักรการเรียนรู้อัตโนมัติ (CSU Loop) กับสแกม 3 รูปแบบ</p>
-      
-      <!-- Scenario Selector -->
-      <div class="flex flex-wrap justify-center gap-4 mb-8 gs-reveal">
-        <button onclick="loadScenario('bank')" id="btn-sc-bank" class="px-6 py-2 rounded-full glass-card border-cyan-500 text-cyan-300 font-bold text-sm transition-all shadow-[0_0_15px_rgba(6,182,212,0.3)]">💳 แก๊งคอลเซ็นเตอร์ (บัตรเครดิต)</button>
-        <button onclick="loadScenario('delivery')" id="btn-sc-delivery" class="px-6 py-2 rounded-full glass-card border-slate-600 text-slate-400 hover:text-cyan-300 text-sm transition-all">📦 หลอกว่าพัสดุผิดกฎหมาย</button>
-        <button onclick="loadScenario('crypto')" id="btn-sc-crypto" class="px-6 py-2 rounded-full glass-card border-slate-600 text-slate-400 hover:text-cyan-300 text-sm transition-all">💔 หลอกรักชวนลงทุน (Romance Scam)</button>
-      </div>
-
-      <div class="glass-card border-cyan-500/30 overflow-hidden flex flex-col md:flex-row shadow-[0_0_40px_rgba(6,182,212,0.15)] gs-reveal">
+      <div class="flex gap-6 h-[60%] stagger-2">
         <!-- Chat UI -->
-        <div class="w-full md:w-3/5 p-6 bg-[#020617] flex flex-col min-h-[450px]">
-          <div class="text-xs mono text-slate-500 mb-6 border-b border-slate-800 pb-2 flex justify-between">
-            <span>TARGET: USER_DEVICE_01</span>
-            <span class="text-cyan-500">LIVE CONNECTION</span>
+        <div class="w-1/2 glass-card flex flex-col overflow-hidden relative border-slate-700/50">
+          <div class="bg-slate-800 p-4 border-b border-slate-700 flex justify-between items-center">
+            <div class="font-bold text-sm text-slate-200">Live Transcript Analysis</div>
+            <div class="text-[10px] text-emerald-400 border border-emerald-500/50 px-2 py-1 rounded">On-Device SLM: Active</div>
           </div>
-          <div id="chat-box" class="flex-1 space-y-4 mb-6 overflow-y-auto">
-            <!-- Messages -->
+          <div id="chat-box" class="flex-1 p-4 overflow-y-auto space-y-4 bg-[#0B1120] text-sm flex flex-col"></div>
+          
+          <!-- Friction Overlay -->
+          <div id="friction-box" class="hidden absolute inset-0 bg-slate-900/95 backdrop-blur-sm z-10 flex flex-col items-center justify-center p-6 text-center border-2 border-rose-500 shadow-[inset_0_0_50px_rgba(225,29,72,0.2)]">
+            <div class="text-5xl mb-4">🛑</div>
+            <h3 class="text-xl font-bold text-rose-400 mb-2">COGNITIVE FRICTION TRIGGERED</h3>
+            <p class="text-slate-300 text-sm mb-4">ระบบตรวจพบความเสี่ยงระดับวิกฤต ระงับการทำธุรกรรมและการเข้าถึงแอปการเงินชั่วคราว เพื่อดึงสติผู้ใช้งาน</p>
+            <div class="text-3xl font-mono text-white mb-2" id="countdown">5.00s</div>
+            <div class="text-xs text-slate-500">Aegis Intervention System</div>
           </div>
           
-          <div class="grid grid-cols-2 gap-3 mt-auto">
-            <button id="btn-next" class="w-full py-3 bg-cyan-600/20 border border-cyan-500/50 hover:bg-cyan-600/40 text-cyan-400 rounded font-bold transition text-sm">
-              [+] จำลองข้อความจากมิจฉาชีพ
-            </button>
-            <button id="btn-drift" class="w-full py-3 bg-slate-800 text-slate-500 rounded font-bold transition text-sm cursor-not-allowed opacity-50" disabled>
-              กระตุ้น Concept Drift (อัปเดตโมเดล)
-            </button>
+          <div class="p-4 border-t border-slate-700 bg-slate-900">
+            <button id="btn-next-chat" class="w-full py-2.5 bg-cyan-600/20 border border-cyan-500/50 hover:bg-cyan-600/40 text-cyan-400 rounded font-bold transition text-xs">จำลองข้อความถัดไป</button>
+            <button id="btn-drift" class="w-full py-2.5 bg-slate-800 text-slate-500 rounded font-bold transition text-xs hidden mt-2">จำลอง Zero-Day Scam (Concept Drift)</button>
           </div>
         </div>
         
-        <!-- Aegis Engine UI -->
-        <div class="w-full md:w-2/5 p-6 bg-slate-900 border-l border-slate-800 flex flex-col relative">
-          <div class="text-xs mono text-slate-500 mb-6 border-b border-slate-800 pb-2">AEGIS DIAGNOSTICS & TELEMETRY</div>
-          
-          <div class="mb-8">
-            <div class="flex justify-between text-xs mb-2"><span>Cumulative Risk <span class="math-font">&sum; Z<sub>n</sub></span></span> <span id="risk-val" class="mono text-cyan-400 font-bold text-lg">0.0</span></div>
-            <div class="h-2 bg-slate-800 rounded-full overflow-hidden">
-              <div id="risk-bar" class="h-full bg-cyan-400 w-0 progress-bar-fill shadow-[0_0_10px_rgba(6,182,212,0.8)]"></div>
+        <!-- Risk UI -->
+        <div class="w-1/2 flex flex-col space-y-4">
+          <div class="glass-card p-6 border-slate-700/50 flex-1">
+            <h4 class="text-sm font-bold text-slate-300 mb-4">Cumulative Risk <span class="math-font text-slate-500 text-xs ml-2">SPRT</span></h4>
+            <div class="flex items-end space-x-4 mb-2">
+              <div class="text-4xl mono font-bold text-cyan-400" id="risk-val">0.0</div>
+              <div class="text-xs text-slate-500 mb-1">/ 10.0 Threshold</div>
             </div>
-            <div class="text-[10px] text-slate-500 text-right mt-1">Threshold: 9.0 (Critical Limit)</div>
-          </div>
-          
-          <div class="space-y-4 flex-1">
-            <div class="text-[10px] text-slate-500 uppercase tracking-widest">Active Semantic Vectors</div>
-            <div id="ind-auth" class="text-xs p-3 glass rounded opacity-30 transition-all duration-300 flex justify-between">
-              <span id="label-auth">Authority/Impersonation</span><span class="mono">v_1</span>
-            </div>
-            <div id="ind-urg" class="text-xs p-3 glass rounded opacity-30 transition-all duration-300 flex justify-between">
-              <span id="label-urg">Urgency/Coercion</span><span class="mono">v_2</span>
-            </div>
-            <div id="ind-fin" class="text-xs p-3 glass rounded opacity-30 transition-all duration-300 flex justify-between">
-              <span id="label-fin">Financial Action</span><span class="mono">v_3</span>
+            <div class="h-3 w-full bg-slate-800 rounded-full overflow-hidden mt-4">
+              <div id="risk-bar" class="h-full bg-cyan-400 w-0 transition-all duration-500 ease-out shadow-[0_0_10px_rgba(6,182,212,0.8)]"></div>
             </div>
           </div>
-
-          <!-- Friction Overlay -->
-          <div id="friction-box" class="hidden absolute inset-0 m-6 p-6 border-2 border-rose-500 bg-rose-950/90 rounded-lg text-center flex flex-col justify-center items-center shadow-[0_0_40px_rgba(225,29,72,0.4)] backdrop-blur-sm z-10">
-            <div class="text-rose-500 text-5xl mb-4 animate-bounce">⚠️</div>
-            <div class="text-rose-400 font-bold text-lg mb-2 uppercase">ระบบแทรกแซงอัตโนมัติทำงาน</div>
-            <div class="text-sm text-rose-300 mb-6">ล็อกแอปพลิเคชันธนาคารเพื่อดึงสติ (Cognitive Friction Active)</div>
-            <div class="text-5xl font-bold text-white mono" id="countdown">5.00s</div>
-          </div>
-          
-          <!-- Retrain Overlay -->
-          <div id="retrain-box" class="hidden absolute inset-0 m-6 p-6 border-2 border-emerald-500 bg-emerald-950/90 rounded-lg text-center flex flex-col justify-center items-center shadow-[0_0_40px_rgba(16,185,129,0.4)] backdrop-blur-sm z-10">
-            <div class="text-emerald-500 text-5xl mb-4 animate-spin">⚙️</div>
-            <div class="text-emerald-400 font-bold text-lg mb-2 uppercase">CSU Learning Loop Active</div>
-            <div class="text-sm text-emerald-300 mb-2">Replay Buffer Check ... OK (BWT &ge; 0)</div>
-            <div class="text-sm text-emerald-300 mb-4">LoRA Delta Weights ... Deployed</div>
-            <div class="text-lg font-bold text-white mt-2">Monotonic Safety Guaranteed</div>
+          <div class="glass-card p-6 border-slate-700/50 flex-1">
+            <h4 class="text-sm font-bold text-slate-300 mb-4">Semantic Indicators</h4>
+            <div class="space-y-2" id="indicators">
+              <div id="ind-auth" class="text-[11px] p-2.5 glass rounded opacity-30 flex justify-between">
+                <span id="label-auth">Impersonation / Authority</span><span class="mono">R1</span>
+              </div>
+              <div id="ind-urg" class="text-[11px] p-2.5 glass rounded opacity-30 flex justify-between">
+                <span id="label-urg">Urgency / Fear</span><span class="mono">R2</span>
+              </div>
+              <div id="ind-fin" class="text-[11px] p-2.5 glass rounded opacity-30 flex justify-between">
+                <span id="label-fin">Financial Transfer Request</span><span class="mono">R3</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <script>
-    gsap.registerPlugin(ScrollTrigger);
-    gsap.utils.toArray('.gs-reveal').forEach(function(elem) {
-      gsap.fromTo(elem, 
-        { y: 30, opacity: 0 }, 
-        {
-          scrollTrigger: { trigger: elem, start: "top 85%" },
-          y: 0, opacity: 1, duration: 0.8, ease: "power3.out"
-        }
-      );
+</div>
+
+<script>
+  /* Navigation Logic */
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  
+  function updateNav() {
+    slides.forEach((s, i) => {
+      if(i === currentSlide) s.classList.add('active');
+      else s.classList.remove('active');
     });
+    document.getElementById('progress').style.width = ((currentSlide + 1) / total * 100) + '%';
+    document.getElementById('slide-num').innerText = currentSlide + 1;
+    
+    document.getElementById('prev-btn').style.opacity = currentSlide === 0 ? '0.3' : '1';
+    document.getElementById('next-btn').style.opacity = currentSlide === total - 1 ? '0.3' : '1';
+  }
 
-    // Architecture Interactive Data
-    const archData = {
-      edge: {
-        title: "Edge SLM (On-Device Inference)",
-        desc: "Aegis V10 ประมวลผลข้อความทั้งหมดบนอุปกรณ์ของผู้ใช้ผ่านโมเดลภาษาขนาดเล็ก (Small Language Model) ที่ถูกบีบอัดด้วยเทคนิค 4-bit Quantization บนเฟรมเวิร์ก OpenVINO",
-        bullets: ["รักษาความลับ 100% (Zero Data Leakage)", "เข้ารหัสข้อความดิบให้เป็นเวกเตอร์มิติสูง (High-dimensional Semantic Vectors)", "ตอบสนองในเวลาไม่ถึง 300 มิลลิวินาที (Low Latency)"]
-      },
-      cloud: {
-        title: "Cloud Threat Graph & Red-Teaming",
-        desc: "ระบบจัดเก็บภูมิคุ้มกันส่วนกลาง ที่รวบรวมลักษณะรูปแบบของสแกมเมอร์ในระดับองค์รวม ทำงานร่วมกับ LLM Red-Teaming (HexStrike) เพื่อสร้างการโจมตีสังเคราะห์ (Synthetic Evasions)",
-        bullets: ["ใช้ Vector Database จัดการ Topological representation", "ตรวจจับ Concept Drift ด้วยการคำนวณ Jensen-Shannon Divergence", "สร้าง Zero-day scams เพื่อ Pre-train โมเดลก่อนเกิดความเสียหายจริง"]
-      },
-      sew: {
-        title: "SEW-BFAR Decision Engine",
-        desc: "เครื่องยนต์ประเมินความเสี่ยงเชิงพฤติกรรม (Sequential Evidence Window) ที่รับ Semantic Vectors มาคำนวณด้วยสมการ SPRT (Sequential Probability Ratio Test)",
-        bullets: ["ประเมินค่า Cumulative Log-Likelihood Ratio ของการสนทนาทั้งหมด", "แก้ปัญหา Single-message context loss", "กระตุ้น Cognitive Friction อย่างแม่นยำก่อนเกิดการสูญเสียทางการเงิน"]
-      },
-      csu: {
-        title: "Certified Safe Update (CSU via LoRA)",
-        desc: "ระบบวิวัฒนาการอัตโนมัติที่อัปเดตโมเดลโดยใช้ Parameter-Efficient Fine-Tuning (PEFT/LoRA) ควบคู่กับประตูล็อกความปลอดภัย 6 มิติ",
-        bullets: ["รับประกัน Monotonic Safety (โมเดลใหม่ต้องไม่ด้อยกว่าเดิม)", "ใช้ Replay Buffer ขจัดปัญหา Catastrophic Forgetting", "อัปเดตเฉพาะ Delta Weights ทำให้ไฟล์มีขนาดเล็ก (หลัก KB)"]
-      }
-    };
+  function nextSlide() { if(currentSlide < total - 1) { currentSlide++; updateNav(); } }
+  function prevSlide() { if(currentSlide > 0) { currentSlide--; updateNav(); } }
 
-    function showArch(node) {
-      const data = archData[node];
-      document.getElementById('ad-title').textContent = data.title;
-      document.getElementById('ad-desc').textContent = data.desc;
-      const ul = document.getElementById('ad-list');
-      ul.innerHTML = '';
-      data.bullets.forEach(b => {
-        const li = document.createElement('li');
-        li.textContent = b;
-        ul.appendChild(li);
-      });
-      document.getElementById('arch-detail').classList.remove('hidden');
-    }
+  window.addEventListener('keydown', (e) => {
+    if(e.key === 'ArrowRight' || e.key === 'ArrowDown') nextSlide();
+    if(e.key === 'ArrowLeft' || e.key === 'ArrowUp') prevSlide();
+  });
+  updateNav();
 
-    // Terminal Lab Simulator
-    const terminalLines = [
-      "[INFO] Initializing Experimental Lab Environment...",
-      "[INFO] Loading Baseline Model (M_old)... <span class='text-emerald-400'>OK</span>",
-      "[INFO] Generating 1,500 Zero-Day Evasions via HexStrike...",
-      "[WARN] Concept Drift Detected (Jensen-Shannon Div = 0.84)",
-      "----------------------------------------",
-      "> Testing Baseline (M_old) against Zero-Day Dataset...",
-      "> M_old Recall: <span class='text-rose-400'>45.2% (FAILED)</span>",
-      "> Triggering CSU Loop...",
-      "----------------------------------------",
-      "[SYSTEM] PEFT LoRA Retraining (Epoch 1/5) - Loss: 2.451",
-      "[SYSTEM] PEFT LoRA Retraining (Epoch 3/5) - Loss: 0.932",
-      "[SYSTEM] PEFT LoRA Retraining (Epoch 5/5) - Loss: 0.104",
-      "----------------------------------------",
-      "> Testing Candidate (M_new)...",
-      "> [CSU GATE 1] Recall: <span class='text-emerald-400'>94.0% (PASS)</span>",
-      "> [CSU GATE 2] Hard Ham FPR: <span class='text-emerald-400'>0.08% (PASS)</span>",
-      "> [CSU GATE 6] Backward Transfer (BWT): <span class='text-emerald-400'>0.98 &ge; 0 (PASS)</span>",
-      "<span class='text-cyan-400 font-bold'>[SUCCESS] Update Certified Safe. Deploying to Edge...</span>"
+  /* Lab Simulator Logic */
+  function runLab() {
+    const lines = [
+      "> Initializing HexStrike Dataset (100k samples)...",
+      "> Loading Aegis V10 (INT4) on OpenVINO target: NPU",
+      "> Starting Evaluation Loop (Baseline)...",
+      "Recall: 94.2% | FPR: 0.08% | Latency: 120ms [PASS]",
+      "<span class='text-amber-400'>> Injecting Zero-Day Perturbations (Concept Drift)</span>",
+      "<span class='text-rose-400'>Alert: Recall dropped to 72.1% (Drift detected)</span>",
+      "> Triggering CSU (LoRA Retraining)...",
+      "Epoch 1: Loss 0.42 | Epoch 2: Loss 0.18 | Epoch 3: Loss 0.05",
+      "> Testing against 6 Safety Gates...",
+      "<span class='text-emerald-400'>Gate 1 (Recall): PASS</span>",
+      "<span class='text-emerald-400'>Gate 2 (FPR): PASS</span>",
+      "<span class='text-emerald-400'>Gate 6 (BWT): PASS (+0.02)</span>",
+      "<span class='text-cyan-400 font-bold'>[SYSTEM] Weights safely updated. Monotonic Safety Verified.</span>"
     ];
+    const content = document.getElementById('term-content');
+    content.innerHTML = '';
+    let i = 0;
+    const interval = setInterval(() => {
+      if(i >= lines.length) { clearInterval(interval); return; }
+      content.innerHTML += `<div>${lines[i]}</div>`;
+      document.getElementById('lab-term').scrollTop = document.getElementById('lab-term').scrollHeight;
+      i++;
+    }, 400);
+  }
 
-    function runLabSimulation() {
-      const btn = document.getElementById('btn-run-lab');
-      btn.disabled = true;
-      btn.textContent = "Running...";
-      btn.classList.add("opacity-50", "cursor-not-allowed");
-      
-      const tc = document.getElementById('term-content');
-      tc.innerHTML = '';
-      
-      let delay = 0;
-      terminalLines.forEach((line, index) => {
-        setTimeout(() => {
-          const p = document.createElement('div');
-          p.className = "mb-1 text-slate-400";
-          p.innerHTML = line;
-          tc.appendChild(p);
-          document.getElementById('lab-terminal').scrollTop = document.getElementById('lab-terminal').scrollHeight;
-          
-          if(index === terminalLines.length - 1) {
-            btn.textContent = "Simulation Complete";
-          }
-        }, delay);
-        
-        // Add variable delay to simulate real processing
-        delay += (Math.random() * 400) + 200;
-        if(line.includes("Retraining")) delay += 600;
-        if(line.includes("Testing")) delay += 800;
-      });
-    }
-
-    // Comprehensive Scam Scenarios
-    const scenarios = {
+  /* Demo Logic */
+  const scenarios = {
       bank: {
-        labels: ["Authority/Impersonation", "Urgency/Coercion", "Financial Action"],
-        zeroDay: '<span class="text-rose-400 font-bold text-xs block mb-1">ZERO-DAY EVASION DETECTED</span>"ขอย้าย.ยอด.ไปพัก.ที่ บ.ช. กลางคับ"',
+        labels: ["Impersonation / Authority", "Urgency / Fear", "Financial Transfer Request"],
         msgs: [
-          { msg: "สวัสดีครับ ติดต่อจากศูนย์บัตรเครดิต", risk: 2.1, pct: 20, ind: "auth" },
-          { msg: "พบยอดรูดบัตรผิดปกติ 45,000 บาทที่ต่างประเทศ", risk: 4.8, pct: 45, ind: "auth" },
-          { msg: "หากไม่ได้ทำรายการ กรุณารีบอายัดบัญชีด่วนภายใน 5 นาที", risk: 7.2, pct: 75, ind: "urg" },
-          { msg: "ให้โอนเงินทั้งหมดมาพักที่บัญชี ปปง. เพื่อความปลอดภัย", risk: 9.8, pct: 100, ind: "fin" }
+          { msg: "สวัสดีครับ ติดต่อจากศูนย์บัตรเครดิต", risk: 1.2, pct: 12, ind: "auth" },
+          { msg: "พบยอดรูดซื้อสินค้าผิดปกติ 45,000 บาทที่ต่างประเทศ", risk: 4.8, pct: 48, ind: "urg" },
+          { msg: "หากไม่ได้ทำรายการ ให้โอนเงินทั้งหมดมาพักที่บัญชี ปปง. ด่วนที่สุด", risk: 9.5, pct: 95, ind: "fin" }
         ]
       },
       delivery: {
-        labels: ["Fake Notification", "Legal Threat", "Malicious Link"],
-        zeroDay: '<span class="text-rose-400 font-bold text-xs block mb-1">ZERO-DAY EVASION DETECTED</span>"กด 1ิงก์ เพื่0 ยืน ยัน.คดี. ด่วน!!"',
+        labels: ["Fake Delivery / Legal Threat", "Panic Inducement", "Penalty Payment Request"],
         msgs: [
-          { msg: "แจ้งเตือนจากบริษัทขนส่งด่วนพัสดุของคุณ", risk: 1.5, pct: 15, ind: "auth" },
           { msg: "พัสดุหมายเลข TH9928 ถูกระงับเนื่องจากตรวจพบสินค้าผิดกฎหมาย", risk: 4.2, pct: 42, ind: "auth" },
           { msg: "ตำรวจกำลังตรวจสอบรายชื่อของคุณ กรุณาติดต่อเจ้าหน้าที่ด่วน", risk: 7.8, pct: 78, ind: "urg" },
-          { msg: "กรุณากดลิงก์นี้เพื่อชำระค่าปรับและยืนยันความบริสุทธิ์: http://thaipost-verify.com", risk: 9.5, pct: 95, ind: "fin" }
+          { msg: "กรุณากดลิงก์นี้เพื่อชำระค่าปรับและยืนยันความบริสุทธิ์", risk: 9.5, pct: 95, ind: "fin" }
         ]
       },
       crypto: {
         labels: ["Romance/Trust Building", "Investment Opportunity", "Deposit Request"],
-        zeroDay: '<span class="text-rose-400 font-bold text-xs block mb-1">ZERO-DAY EVASION DETECTED</span>"ฝากเข้า เว็บ.นี้เลย กา รัน.ตี 100%"',
         msgs: [
           { msg: "สวัสดีค่ะ บังเอิญแอดไลน์มาผิด ยินดีที่ได้รู้จักนะคะ", risk: 0.5, pct: 5, ind: "auth" },
           { msg: "ช่วงนี้เราได้กำไรจากพอร์ตคริปโตเยอะเลย อยากสอนให้คุณลองเล่นดู", risk: 3.5, pct: 35, ind: "urg" },
@@ -577,127 +458,76 @@
     let currentScen = 'bank';
     let step = 0;
     let frictionTimer;
-    
-    const btn = document.getElementById('btn-next');
-    const btnDrift = document.getElementById('btn-drift');
-    const chat = document.getElementById('chat-box');
-    const riskBar = document.getElementById('risk-bar');
-    const riskVal = document.getElementById('risk-val');
-    
-    function loadScenario(scenKey) {
-      currentScen = scenKey;
-      step = 0;
-      clearInterval(frictionTimer);
-      
-      // Update Buttons UI
+
+    function loadScen(scenKey) {
+      currentScen = scenKey; step = 0; clearInterval(frictionTimer);
       ['bank', 'delivery', 'crypto'].forEach(k => {
         const b = document.getElementById('btn-sc-' + k);
-        if(k === scenKey) {
-          b.className = 'px-6 py-2 rounded-full glass-card border-cyan-500 text-cyan-300 font-bold text-sm transition-all shadow-[0_0_15px_rgba(6,182,212,0.3)]';
-        } else {
-          b.className = 'px-6 py-2 rounded-full glass-card border-slate-600 text-slate-400 hover:text-cyan-300 text-sm transition-all';
-        }
+        b.className = k === scenKey ? 'px-4 py-1.5 rounded glass-card border-cyan-500 text-cyan-300 font-bold text-xs shadow-[0_0_15px_rgba(6,182,212,0.3)]' : 'px-4 py-1.5 rounded glass-card border-slate-600 text-slate-400 text-xs';
       });
       
-      // Reset Chat
-      chat.innerHTML = '';
-      riskBar.style.width = '0%';
-      riskBar.className = 'h-full bg-cyan-400 w-0 progress-bar-fill shadow-[0_0_10px_rgba(6,182,212,0.8)]';
-      riskVal.textContent = '0.0';
-      riskVal.className = 'mono text-cyan-400 font-bold text-lg';
+      document.getElementById('chat-box').innerHTML = '';
+      document.getElementById('risk-bar').style.width = '0%';
+      document.getElementById('risk-bar').className = 'h-full bg-cyan-400 w-0 transition-all';
+      document.getElementById('risk-val').textContent = '0.0';
+      document.getElementById('risk-val').className = 'text-4xl mono font-bold text-cyan-400';
       
       document.getElementById('friction-box').classList.add('hidden');
-      document.getElementById('retrain-box').classList.add('hidden');
+      document.getElementById('btn-next-chat').classList.remove('hidden');
       
-      btn.disabled = false;
-      btn.className = 'w-full py-3 bg-cyan-600/20 border border-cyan-500/50 hover:bg-cyan-600/40 text-cyan-400 rounded font-bold transition text-sm';
-      btn.textContent = '[+] จำลองข้อความจากมิจฉาชีพ';
-      
-      btnDrift.disabled = true;
-      btnDrift.className = 'w-full py-3 bg-slate-800 text-slate-500 rounded font-bold transition text-sm cursor-not-allowed opacity-50';
-      btnDrift.textContent = 'กระตุ้น Concept Drift (อัปเดตโมเดล)';
-      
-      // Update Labels
       document.getElementById('label-auth').textContent = scenarios[scenKey].labels[0];
       document.getElementById('label-urg').textContent = scenarios[scenKey].labels[1];
       document.getElementById('label-fin').textContent = scenarios[scenKey].labels[2];
       
       ['auth', 'urg', 'fin'].forEach(id => {
-         document.getElementById('ind-'+id).className = 'text-xs p-3 glass rounded opacity-30 transition-all duration-300 flex justify-between';
+         document.getElementById('ind-'+id).className = 'text-[11px] p-2.5 glass rounded opacity-30 flex justify-between';
       });
     }
-    
-    btn.addEventListener('click', () => {
+
+    document.getElementById('btn-next-chat').addEventListener('click', () => {
       const scriptList = scenarios[currentScen].msgs;
       if (step >= scriptList.length) return;
       const turn = scriptList[step];
       
-      const msgEl = document.createElement('div');
-      msgEl.className = 'bg-slate-800/80 border border-slate-700 p-4 rounded-lg rounded-tl-none text-sm max-w-[85%] animate-[fadeIn_0.3s_ease-out] shadow-md';
-      msgEl.textContent = turn.msg;
-      chat.appendChild(msgEl);
+      const chat = document.getElementById('chat-box');
+      chat.innerHTML += `<div class="bg-slate-800/80 border border-slate-700 p-3 rounded-lg rounded-tl-none text-xs max-w-[85%] self-start animate-[slideUpFade_0.3s_ease-out]">${turn.msg}</div>`;
       
+      const riskBar = document.getElementById('risk-bar');
+      const riskVal = document.getElementById('risk-val');
       riskBar.style.width = turn.pct + '%';
       riskVal.textContent = turn.risk.toFixed(1);
       
       if (turn.pct > 80) {
-        riskBar.className = 'h-full bg-rose-500 progress-bar-fill shadow-[0_0_15px_rgba(225,29,72,0.8)]';
-        riskVal.className = 'mono text-rose-400 font-bold text-lg glow-text-red';
+        riskBar.className = 'h-full bg-rose-500 transition-all shadow-[0_0_15px_rgba(225,29,72,0.8)]';
+        riskVal.className = 'text-4xl mono font-bold text-rose-400 drop-shadow-[0_0_10px_rgba(225,29,72,0.5)]';
       } else if (turn.pct > 50) {
-        riskBar.className = 'h-full bg-amber-400 progress-bar-fill shadow-[0_0_10px_rgba(251,191,36,0.5)]';
-        riskVal.className = 'mono text-amber-400 font-bold text-lg';
+        riskBar.className = 'h-full bg-amber-400 transition-all shadow-[0_0_10px_rgba(251,191,36,0.5)]';
+        riskVal.className = 'text-4xl mono font-bold text-amber-400';
       }
       
-      document.getElementById('ind-' + turn.ind).className = 'text-xs p-3 rounded transition-all duration-300 flex justify-between border border-cyan-400 bg-cyan-900/40 text-cyan-300 shadow-[0_0_10px_rgba(6,182,212,0.2)]';
+      document.getElementById('ind-' + turn.ind).className = 'text-[11px] p-2.5 rounded flex justify-between border border-cyan-400 bg-cyan-900/40 text-cyan-300 shadow-[0_0_10px_rgba(6,182,212,0.2)] transition-all';
       
       step++;
       
       if (step === scriptList.length) {
-        btn.disabled = true;
-        btn.className = 'w-full py-3 bg-slate-900 border border-slate-800 text-slate-600 rounded font-bold cursor-not-allowed text-sm';
-        btn.textContent = 'ระบบถูกล็อก (Friction Active)';
-        
-        const friction = document.getElementById('friction-box');
-        friction.classList.remove('hidden');
+        document.getElementById('btn-next-chat').classList.add('hidden');
+        document.getElementById('friction-box').classList.remove('hidden');
         
         let timeLeft = 500;
-        const cnt = document.getElementById('countdown');
         frictionTimer = setInterval(() => {
           timeLeft--;
-          cnt.textContent = (timeLeft/100).toFixed(2) + 's';
+          document.getElementById('countdown').textContent = (timeLeft/100).toFixed(2) + 's';
           if (timeLeft <= 0) {
             clearInterval(frictionTimer);
-            friction.classList.add('hidden');
-            
-            btnDrift.disabled = false;
-            btnDrift.className = 'w-full py-3 bg-emerald-600/20 border border-emerald-500/50 hover:bg-emerald-600/40 text-emerald-400 rounded font-bold transition text-sm shadow-[0_0_15px_rgba(16,185,129,0.3)]';
+            document.getElementById('friction-box').classList.add('hidden');
+            document.getElementById('btn-next-chat').classList.remove('hidden');
+            document.getElementById('btn-next-chat').textContent = 'Reset Simulation';
+            document.getElementById('btn-next-chat').onclick = () => { loadScen(currentScen); document.getElementById('btn-next-chat').onclick = null; }
           }
         }, 10);
       }
       chat.scrollTop = chat.scrollHeight;
     });
-
-    btnDrift.addEventListener('click', () => {
-      btnDrift.disabled = true;
-      btnDrift.className = 'w-full py-3 bg-slate-900 border border-slate-800 text-slate-600 rounded font-bold cursor-not-allowed text-sm';
-      btnDrift.textContent = 'Updating Neural Weights...';
-      
-      const msgEl = document.createElement('div');
-      msgEl.className = 'bg-slate-800/80 border border-rose-500/30 p-4 rounded-lg rounded-tl-none text-sm max-w-[85%] animate-[fadeIn_0.3s_ease-out] shadow-md mt-6';
-      msgEl.innerHTML = scenarios[currentScen].zeroDay;
-      chat.appendChild(msgEl);
-      chat.scrollTop = chat.scrollHeight;
-      
-      setTimeout(() => {
-        document.getElementById('retrain-box').classList.remove('hidden');
-        setTimeout(() => {
-           btn.disabled = false;
-           btn.className = 'w-full py-3 bg-cyan-600 hover:bg-cyan-500 text-white rounded font-bold transition text-sm';
-           btn.textContent = 'Reset Simulation Environment';
-           btn.onclick = () => loadScenario(currentScen);
-        }, 4000);
-      }, 1000);
-    });
-  </script>
+</script>
 </body>
 </html>
